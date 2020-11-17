@@ -195,7 +195,7 @@
 
 
 					//SOLICITAR DESPACHOS NUEVOS (para eso necesito el ultimo despacho recibido)
-					axios.post('http://mipuchito.com/api/get-despachos-web', {piso_venta_id: this.id, ultimo_despacho: ultimoDespacho}).then(response => {//DEL LADO DE LA WEB
+					axios.post('http://127.0.0.1:9000//api/get-despachos-web', {piso_venta_id: this.id, ultimo_despacho: ultimoDespacho}).then(response => {//DEL LADO DE LA WEB
 
 						nuevosDespachos = response.data;
 						console.log(nuevosDespachos)
@@ -230,7 +230,7 @@
 						this.sincron.despachos = true;
 						}
 						//PEDIR DE LA WEB LOS DESPACHOS QUE NO ESTAN CONFIRMADOS
-						axios.get('http://mipuchito.com/api/get-despachos-sin-confirmacion/'+this.id).then(response => {//DEL LADO DE LA WEB
+						axios.get('http://127.0.0.1:9000//api/get-despachos-sin-confirmacion/'+this.id).then(response => {//DEL LADO DE LA WEB
 
 						despachosSinConfirmar = response.data;
 						//console.log(response.data);
@@ -241,7 +241,7 @@
 								despachosConfirmados = response.data
 								//console.log(response.data);
 								//GUARDAR LOS DATOS ANTERIORES EN LA WEB
-								axios.post('http://mipuchito.com/api/actualizar-confirmados', {despachos: despachosConfirmados, piso_venta_id: this.id}).then(response => {//DEL LADO DE LA WEB PARA ACTUALIZAR LAS CONFIRMACIONES
+								axios.post('http://127.0.0.1:9000//api/actualizar-confirmados', {despachos: despachosConfirmados, piso_venta_id: this.id}).then(response => {//DEL LADO DE LA WEB PARA ACTUALIZAR LAS CONFIRMACIONES
 									this.cambiar()
 									this.sincro_exitosa = true
 								console.log(response);
@@ -369,7 +369,7 @@
 
 
 					//SOLICITAR DESPACHOS NUEVOS (para eso necesito el ultimo despacho recibido)
-					axios.post('http://mipuchito.com/api/get-despachos-web', {piso_venta_id: this.id, ultimo_despacho: ultimoDespacho}).then(response => {//DEL LADO DE LA WEB
+					axios.post('http://127.0.0.1:9000//api/get-despachos-web', {piso_venta_id: this.id, ultimo_despacho: ultimoDespacho}).then(response => {//DEL LADO DE LA WEB
 
 						nuevosDespachos = response.data;
 						console.log(nuevosDespachos)
@@ -400,7 +400,7 @@
 						this.alert_message = "No hay despachos para sincronizar"
 						}
 						//PEDIR DE LA WEB LOS DESPACHOS QUE NO ESTAN CONFIRMADOS
-						axios.get('http://mipuchito.com/api/get-despachos-sin-confirmacion/'+this.id).then(response => {//DEL LADO DE LA WEB
+						axios.get('http://127.0.0.1:9000//api/get-despachos-sin-confirmacion/'+this.id).then(response => {//DEL LADO DE LA WEB
 
 						despachosSinConfirmar = response.data;
 						//console.log(response.data);
@@ -411,7 +411,7 @@
 								despachosConfirmados = response.data
 								//console.log(response.data);
 								//GUARDAR LOS DATOS ANTERIORES EN LA WEB
-								axios.post('http://mipuchito.com/api/actualizar-confirmados', {despachos: despachosConfirmados, piso_venta_id: this.id}).then(response => {//DEL LADO DE LA WEB PARA ACTUALIZAR LAS CONFIRMACIONES
+								axios.post('http://127.0.0.1:9000//api/actualizar-confirmados', {despachos: despachosConfirmados, piso_venta_id: this.id}).then(response => {//DEL LADO DE LA WEB PARA ACTUALIZAR LAS CONFIRMACIONES
 
 								console.log(response);
 								this.alert_success = true;

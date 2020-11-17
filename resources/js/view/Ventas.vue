@@ -618,7 +618,7 @@ export default{
 							if (ventas.length > 0) {
 
 							//EN ESE CASO REGISTRAMOS LAS VENTAS EN LA WEB
-							axios.post('http://mipuchito.com/api/registrar-ventas', {ventas: ventas, piso_venta_id: piso_venta_id}).then(response => {
+							axios.post('http://127.0.0.1:9000//api/registrar-ventas', {ventas: ventas, piso_venta_id: piso_venta_id}).then(response => {
 
 								console.log('cuarta peticion')
 								if (response.data == true) {
@@ -658,7 +658,7 @@ export default{
 				});
 
 				//ACTUALIZAR MONTO EN LA WEB
-				axios.put('http://mipuchito.com/api/actualizar-dinero-piso-venta/'+this.id, {dinero: this.piso_venta_selected.dinero}).then(response => {//EN LA WEB
+				axios.put('http://127.0.0.1:9000//api/actualizar-dinero-piso-venta/'+this.id, {dinero: this.piso_venta_selected.dinero}).then(response => {//EN LA WEB
 					console.log('5ta peticion');
 					//SINC
 					this.sincron.montos = true;

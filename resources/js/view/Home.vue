@@ -163,7 +163,7 @@
 
 					if (inventario.length > 0) {
 
-						axios.post('http://mipuchito.com/api/get-inventories', {
+						axios.post('http://127.0.0.1:9000//api/get-inventories', {
 							inventario: inventario,
 							piso_venta: this.id  }).then(response => {
 
@@ -175,7 +175,7 @@
 								console.log(response);
 								//ACTUALIZAMOS LOS PRECIOS
 
-								axios.get('http://mipuchito.com/api/get-precios-inventory/'+this.id).then(response => {//WdEB
+								axios.get('http://127.0.0.1:9000//api/get-precios-inventory/'+this.id).then(response => {//WdEB
 
 									console.log(response)
 									let inventory = response.data.inventory
@@ -208,7 +208,7 @@
 						console.log("no hay productos para anclar")
 						//ACTUALIZAMOS LOS PRECIOS
 
-						axios.get('http://mipuchito.com/api/get-precios-inventory/'+this.id).then(response => {//WEB
+						axios.get('http://127.0.0.1:9000//api/get-precios-inventory/'+this.id).then(response => {//WEB
 
 							console.log(response)
 							let inventory = response.data.inventory
@@ -289,7 +289,7 @@
 					let piso_venta_id = response.data;
 					//console.log(piso_venta_id)
 					//OBTENEMOS DE LA WEB LA ULTIMA VENTA QUE TIENE REGISTRADA CON NUESTRO PISO DE VENTA
-					axios.get('http://mipuchito.com/api/ultima-venta/'+piso_venta_id).then(response => {//WEB
+					axios.get('http://127.0.0.1:9000//api/ultima-venta/'+piso_venta_id).then(response => {//WEB
 
 						let ultima_venta = response.data.id_extra
 						//console.log(ultima_venta)
@@ -304,7 +304,7 @@
 
 
 							//EN ESE CASO REGISTRAMOS LAS VENTAS EN LA WEB
-							axios.post('http://mipuchito.com/api/registrar-ventas', {ventas: ventas, piso_venta_id: piso_venta_id}).then(response => {
+							axios.post('http://127.0.0.1:9000//api/registrar-ventas', {ventas: ventas, piso_venta_id: piso_venta_id}).then(response => {
 
 								console.log(response.data)
 								if (response.data == true) {
@@ -345,7 +345,7 @@
 				});
 
 				//ACTUALIZAR MONTO EN LA WEB
-				axios.put('http://mipuchito.com/api/actualizar-dinero-piso-venta/'+this.id, {dinero: this.piso_venta_selected.dinero}).then(response => {//EN LA WEB
+				axios.put('http://127.0.0.1:9000//api/actualizar-dinero-piso-venta/'+this.id, {dinero: this.piso_venta_selected.dinero}).then(response => {//EN LA WEB
 
 					console.log(response);
 					//SINC
@@ -360,7 +360,7 @@
 				//ACTUALIZAR VACIADAS DE CAJA
 
 				//SOLICITAMOS EL ULTIMO QUE TENGA
-				axios.get('http://mipuchito.com/api/ultima-vaciada-caja/'+this.id).then(response => {//WEB
+				axios.get('http://127.0.0.1:9000//api/ultima-vaciada-caja/'+this.id).then(response => {//WEB
 					console.log(response)
 					let ultima_caja = response.data;
 					if(ultima_caja == null){
@@ -374,7 +374,7 @@
 
 						if (cajas.length > 0) {
 
-							axios.post('http://mipuchito.com/api/registrar-cajas', {cajas: cajas}).then(response => {//WEB
+							axios.post('http://127.0.0.1:9000//api/registrar-cajas', {cajas: cajas}).then(response => {//WEB
 
 								console.log(response)
 								//SINC
@@ -416,7 +416,7 @@
 				axios.post('/api/sincronizacion', {id: this.id}).then(response => {
 					console.log(response);
 
-					axios.post('http://mipuchito.com/api/sincronizacion', {id: this.id}).then(response => {//WEB
+					axios.post('http://127.0.0.1:9000//api/sincronizacion', {id: this.id}).then(response => {//WEB
 						console.log(response);
 						//SINC
 						this.sincron.sincronizacion = true;
@@ -437,7 +437,7 @@
 			},
 			actualizar_monto(){
 
-				axios.put('http://mipuchito.com/api/actualizar-dinero-piso-venta/'+this.id, {dinero: this.piso_venta_selected.dinero}).then(response => {//EN LA WEB
+				axios.put('http://127.0.0.1:9000//api/actualizar-dinero-piso-venta/'+this.id, {dinero: this.piso_venta_selected.dinero}).then(response => {//EN LA WEB
 
 					console.log(response);
 				}).catch(e => {
@@ -448,7 +448,7 @@
 			actualizar_caja(){
 				console.log("funcionando")
 				//SOLICITAMOS EL ULTIMO QUE TENGA
-				axios.get('http://mipuchito.com/api/ultima-vaciada-caja/'+this.id).then(response => {//WEB
+				axios.get('http://127.0.0.1:9000//api/ultima-vaciada-caja/'+this.id).then(response => {//WEB
 					console.log(response)
 					let ultima_caja = response.data;
 					if(ultima_caja == null){
@@ -462,7 +462,7 @@
 
 						if (cajas.length > 0) {
 
-							axios.post('http://mipuchito.com/api/registrar-cajas', {cajas: cajas}).then(response => {//WEB
+							axios.post('http://127.0.0.1:9000//api/registrar-cajas', {cajas: cajas}).then(response => {//WEB
 
 								console.log(response)
 							}).catch(e => {
@@ -493,7 +493,7 @@
 					console.log(ventas.length)
 					if (ventas.length > 0) {
 						//ACTUALIZAMOS LOS ANULADOS EN LA WEB
-						axios.post('http://mipuchito.com/api/actualizar-anulados', {ventas: ventas, piso_venta: this.id}).then(response => {//WEB
+						axios.post('http://127.0.0.1:9000//api/actualizar-anulados', {ventas: ventas, piso_venta: this.id}).then(response => {//WEB
 
 							console.log(response);
 							//VOLVEMOS A ACTUALIZAR EN LOCAL
