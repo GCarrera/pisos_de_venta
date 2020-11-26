@@ -67,47 +67,34 @@
 								<td v-if="despacho.confirmado == null" class="small font-weight-bold">No se ah confirmado</td>
 								<td v-else class="small font-weight-bold">{{despacho.confirmado == 1 ? "confirmado" : "negado"}}</td>
 								<td>
-									<button class="btn btn-primary" data-toggle="modal" data-target="#modalVer">Ver</button>
+									<button type="button" class="btn btn-primary" @click="showModalDetalles(despacho.id)">Ver</button>
+									<!--<button class="btn btn-primary" data-toggle="modal" data-target="#modalVer">Ver</button>-->
 									<button class="btn btn-success" v-if="despacho.confirmado == null" @click="confirmar(despacho.id, index)">confirmar</button>
 									<button class="btn btn-danger" v-if="despacho.confirmado == null" @click="negar(despacho.id, index)">Negar</button>
 								</td>
 
 								<!-- Modal PARA VER LOS DETALLES -->
-								<div class="modal fade" id="modalVer" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-								  	<div class="modal-dialog">
-								    	<div class="modal-content">
-								      		<div class="modal-header">
-								        		<h5 class="modal-title" id="exampleModalLabel">Detalles</h5>
-								        		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-								          		<span aria-hidden="true">&times;</span>
-								        		</button>
-								      		</div>
-								      		<div class="modal-body">
+								<b-modal :id="'modal-detalles-'+despacho.id" size="lg" :title="'Detalles del Despacho'">
 
-								      		<table class="table table-bordered">
-											<thead>
-												<tr>
-													<th>Producto</th>
-													<th>cantidad</th>
-												</tr>
-											</thead>
-											<tbody>
-												<tr v-for="(product, index) in despacho.productos" :key="index">
-													<td>{{product.product_name}}</td>
-													<td v-if="product.pivot.tipo == 1">al menor</td>
-													<td v-if="product.pivot.tipo == 2">al mayor</td>
-													<td>{{product.pivot.cantidad}}</td>
-												</tr>
-											</tbody>
-										</table>
+									<table class="table table-bordered table-sm">
+										<thead>
+											<tr>
+												<th>Producto</th>
+												<th>Cantidad</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr v-for="(product, index) in despacho.productos" :key="index">
+												<td>{{product.product_name}}</td>
+												<td v-if="product.pivot.tipo == 1">al menor</td>
+												<td v-if="product.pivot.tipo == 2">al mayor</td>
+												<td>{{product.pivot.cantidad}}</td>
+											</tr>
+										</tbody>
+									</table>
 
-								      		</div>
-								      		<div class="modal-footer">
-								        		<button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
-								      		</div>
-								    	</div>
-								  	</div>
-								</div>
+								</b-modal>
+
 							</tr>
 
 							<tr v-if="despachos == []">
@@ -156,6 +143,9 @@
 			}
 		},
 		methods:{
+			showModalDetalles(id){
+				this.$bvModal.show("modal-detalles-"+id)
+			},
 			sincronizar(){
 				this.error=false
 				this.cambiar()
