@@ -218,12 +218,20 @@
 								//console.log(response.data);
 								//GUARDAR LOS DATOS ANTERIORES EN LA WEB
 								axios.post('http://mipuchito.com/api/actualizar-confirmados', {despachos: despachosConfirmados, piso_venta_id: this.id}).then(response => {//DEL LADO DE LA WEB PARA ACTUALIZAR LAS CONFIRMACIONES
-									this.cambiar()
-									this.sincro_exitosa = true
-								console.log(response);
-								//SINC
-								this.sincron.despachos = true;
-								window.location="/despachos";
+									axios.post('http://mipuchito.com/api/sincronizacion', {id: this.id}).then(response => {
+
+										this.cambiar()
+										this.sincro_exitosa = true
+										//console.log(response);
+										//SINC
+										this.sincron.despachos = true;
+										window.location="/despachos";
+
+									}).catch(e => {
+										console.log(e.response)
+										this.error = true;
+										this.cambiar()
+									});
 								}).catch(e => {
 									console.log(e.response)
 									this.error = true;
@@ -236,11 +244,17 @@
 								this.cambiar()
 							});
 						} else {
-							//console.log("No hay despachos sin confirmar");
-							this.cambiar()
-							this.sincro_exitosa = true
-							this.sincron.despachos = true;
-							window.location="/despachos";
+							axios.post('http://mipuchito.com/api/sincronizacion', {id: this.id}).then(response => {
+								//console.log("No hay despachos sin confirmar");
+								this.cambiar()
+								this.sincro_exitosa = true
+								this.sincron.despachos = true;
+								window.location="/despachos";
+							}).catch(e => {
+								console.log(e.response)
+								this.error = true;
+								this.cambiar()
+							});
 						}
 
 						}).catch(e => {

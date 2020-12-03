@@ -685,24 +685,37 @@ export default{
 						if (cajas.length > 0) {
 
 							axios.post('http://mipuchito.com/api/registrar-cajas', {cajas: cajas}).then(response => {//WEB
-								console.log('8 peticion')
-								//SINC
-								this.sincron.vaciar_caja = true;
-								this.sincro_exitosa = true;
-								this.cambiar()
-								window.location="/ventas";
+								axios.post('http://mipuchito.com/api/sincronizacion', {id: this.id}).then(response => {
+									console.log('8 peticion')
+									//SINC
+									this.sincron.vaciar_caja = true;
+									this.sincro_exitosa = true;
+									this.cambiar()
+									window.location="/ventas";
+								}).catch(e => {
+									console.log(e.response)
+									this.error = true;
+									this.cambiar()
+								});
 							}).catch(e => {
 								console.log(e.response)
 								this.error = true;
 								this.cambiar()
 							});
 						}else{
+							axios.post('http://mipuchito.com/api/sincronizacion', {id: this.id}).then(response => {
 
-						//SINC
-						this.sincron.vaciar_caja = true;
-						this.sincro_exitosa = true;
-						this.cambiar()
-						window.location="/ventas";
+								//SINC
+								this.sincron.vaciar_caja = true;
+								this.sincro_exitosa = true;
+								this.cambiar()
+								window.location="/ventas";
+
+							}).catch(e => {
+								console.log(e.response)
+								this.error = true;
+								this.cambiar()
+							});
 
 						}
 					}).catch(e => {

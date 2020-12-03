@@ -283,8 +283,14 @@
 										this.get_inventario();
 			   							this.get_id();
 									 	this.cambiar()
-		       							this.sincro_exitosa = true
-		       							window.location="/inventario";
+										axios.post('http://mipuchito.com/api/sincronizacion', {id: this.id}).then(response => {
+	       							this.sincro_exitosa = true
+	       							window.location="/inventario";
+										}).catch(e => {
+											console.log(e.response)
+											this.error = true;
+											this.cambiar()
+										});
 									}).catch(e => {
 										console.log(e.response)
 										this.error = true;
