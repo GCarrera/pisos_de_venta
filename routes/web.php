@@ -37,13 +37,16 @@ Route::get('/home', 'HomeController@index')->name('home');
 //RUTA DE PRUEBAS
 Route::get('/prueba', 'InventarioController@prueba');
 
+//RUTA DOLAR
+Route::post('/establecer_dolar', 'PisoVentasController@establecer_dolar');
+
 
 //RUTAS APIS
 Route::prefix('api')->group(function(){
 	//USUARIO
 	Route::get('/get-id', 'UsersController@get_id');
 	Route::get('/get-piso-venta', 'UsersController@get_piso_venta');
-	Route::post('/vaciar-caja', 'UsersController@vaciar_caja');	
+	Route::post('/vaciar-caja', 'UsersController@vaciar_caja');
 	//INVENTARIO
 	Route::get('/get-inventario', 'InventarioController@get_inventario');
 	Route::get('/ultimo-inventory', 'InventarioController@ultimo_inventory');
@@ -97,6 +100,7 @@ Route::prefix('api')->group(function(){
 	//RESUMEN
 	Route::get('/get-piso-ventas', 'PisoVentasController@get_piso_ventas');
 	Route::get('/resumen', 'PisoVentasController@resumen');
+	Route::get('/resumen-dia', 'PisoVentasController@resumen_dia');
 	Route::get('/ventas-compras', 'PisoVentasController@ventas_compras');
 	Route::get('/despachos-retiros/{id}', 'PisoVentasController@despachos_retiros');
 	Route::get('/productos-piso-venta/{id}', 'PisoVentasController@productos_piso_venta');

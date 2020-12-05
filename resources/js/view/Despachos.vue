@@ -11,17 +11,17 @@
 		    	<div class="col-md-3">
 					<div class="card shadow">
 						<div class="card-header text-center">
-							<span>sincronizar Despachos</span>
+							<span>Sincronizar Despachos</span>
 						</div>
 						<div class="card-body">
 							<div v-if="piso_venta_selected.length != 0" style="font-size: 1em;" class="mt-3">
 								<span><span class="font-weight-bold">PV:</span> {{piso_venta_selected.nombre}}</span> <br>
 								<!-- <span><span class="font-weight-bold">Lugar:</span> {{piso_venta_selected.ubicacion}}</span> <br> -->
-								<span><span class="font-weight-bold">Dinero:</span> {{formattedCurrencyValue}}</span> <br>
+								<span><span class="font-weight-bold">Caja:</span> {{formattedCurrencyValue}}</span> <br>
 
 							</div>
 								<hr>
-									<span class="font-weight-bold" > Last Update : </span> <span v-if="sincronizacion !== null">{{sincronizacion}}</span> <br>
+									<span class="font-weight-bold" > Ultima Actualización: </span> <span v-if="sincronizacion !== null">{{sincronizacion}}</span> <br>
 									<!-- <span class="font-weight-bold" >Ultima vez que vacio la caja: </span><span  v-if="caja !== null">{{caja}}</span> <br> -->
 								<hr>
 							<button class="btn btn-primary btn-block" @click="sincronizar">
@@ -204,6 +204,7 @@
 							//window.location="/despachos";
 						}
 						//PEDIR DE LA WEB LOS DESPACHOS QUE NO ESTAN CONFIRMADOS
+						//axios.get('http://mipuchitoex.com/api/get-despachos-sin-confirmacion/'+this.id).then(response => {//DEL LADO DE LA WEB
 						axios.get('http://mipuchito.com/api/get-despachos-sin-confirmacion/'+this.id).then(response => {//DEL LADO DE LA WEB
 
 						despachosSinConfirmar = response.data;

@@ -43,10 +43,10 @@ class VentasController extends Controller
     		$fecha_i = new Carbon($request->fecha_i);
     		$fecha_f = new Carbon($request->fecha_f);
 
-    		$ventas = Venta::with(['detalle'])->where('piso_venta_id', $usuario)->whereDate('created_at','>=', $fecha_i)->whereDate('created_at','<=', $fecha_f)->orderBy('id', 'desc')->paginate(20);
+    		$ventas = Venta::with(['detalle'])->where('piso_venta_id', $usuario)->whereDate('created_at','>=', $fecha_i)->whereDate('created_at','<=', $fecha_f)->orderBy('id', 'desc')->paginate(30);
     	}else{
 
-    		$ventas = Venta::with(['detalle'])->where('piso_venta_id', $usuario)->orderBy('id', 'desc')->paginate(20);
+    		$ventas = Venta::with(['detalle'])->where('piso_venta_id', $usuario)->orderBy('id', 'desc')->paginate(30);
     	}
 
         return response()->json($ventas);

@@ -10,17 +10,17 @@
 				<div class="col-md-3">
 					<div class="card shadow">
 						<div class="card-header text-center">
-							<span>sincronizar inventario</span>
+							<span>Sincronizar Inventario</span>
 						</div>
 						<div class="card-body">
 							<div v-if="piso_venta_selected.length != 0" style="font-size: 1em;" class="mt-3">
 								<span><span class="font-weight-bold">PV:</span> {{piso_venta_selected.nombre}}</span> <br>
 								<!-- <span><span class="font-weight-bold">Lugar:</span> {{piso_venta_selected.ubicacion}}</span> <br> -->
-								<span><span class="font-weight-bold">Dinero:</span> {{formattedCurrencyValue}}</span> <br>
+								<span><span class="font-weight-bold">Caja:</span> {{formattedCurrencyValue}}</span> <br>
 
 							</div>
 								<hr>
-									<span class="font-weight-bold" > Last Update : </span> <span v-if="sincronizacion !== null">{{sincronizacion}}</span> <br>
+									<span class="font-weight-bold" > Ultima Actualización: </span> <span v-if="sincronizacion !== null">{{sincronizacion}}</span> <br>
 									<!-- <span class="font-weight-bold" >Ultima vez que vacio la caja: </span><span  v-if="caja !== null">{{caja}}</span> <br> -->
 								<hr>
 							<button class="btn btn-primary btn-block" @click="sincronizar">
@@ -191,16 +191,18 @@
 					//console.log(response.data)
 					let ultimoInventory = response.data
 					//TRAEMOS DE LA WEB TODOS LOS PRODUCTOS APARTIR DEL ULTIMO ID
+					//axios.get('http://mipuchitoex.com/api/get-inventory/'+ultimoInventory).then(response => {//WEB
 					axios.get('http://mipuchito.com/api/get-inventory/'+ultimoInventory).then(response => {//WEB
 
 						//console.log(response)
 						let productos = response.data
 						//REGISTRAMOS LOS NUEVOS PRODUCTOS
 						if (productos.length > 0) {
-
+							//console.log(productos);
 							console.log("hay que registrar")
 							axios.post('/api/registrar-inventory', {productos: productos}).then(response => {
 
+								console.log(response.data);
 								if (response.data == true) {
 									console.log("productos registrados exitosamente")
 
@@ -285,7 +287,7 @@
 									 	this.cambiar()
 										axios.post('http://mipuchito.com/api/sincronizacion', {id: this.id}).then(response => {
 	       							this.sincro_exitosa = true
-	       							window.location="/inventario";
+	       							//window.location="/inventario";
 										}).catch(e => {
 											console.log(e.response)
 											this.error = true;
@@ -367,15 +369,16 @@
 					let ultimoInventory = response.data
 					//TRAEMOS DE LA WEB TODOS LOS PRODUCTOS APARTIR DEL ULTIMO ID
 					axios.get('http://mipuchito.com/api/get-inventory/'+ultimoInventory).then(response => {//WEB
-
-						//console.log(response)
+						console.log('respues');
+						console.log(response)
 						let productos = response.data
+						console.log(productos);
 						//REGISTRAMOS LOS NUEVOS PRODUCTOS
 						if (productos.length > 0) {
 
 							console.log("hay que registrar")
 							axios.post('/api/registrar-inventory', {productos: productos}).then(response => {
-
+								console.log(response);
 								if (response.data == true) {
 									console.log("productos registrados exitosamente")
 									this.alert_message = "productos registrados exitosamente"

@@ -13,12 +13,12 @@
 						<div v-if="piso_venta_selected != null" style="font-size: 1em;" class="mt-3">
 							<span><span class="font-weight-bold">PV:</span> {{piso_venta_selected.nombre}}</span> <br>
 							<!-- <span><span class="font-weight-bold">Lugar:</span> {{piso_venta_selected.ubicacion}}</span> <br> -->
-							<span><span class="font-weight-bold">Dinero:</span> {{formattedCurrencyValue}}</span> <br>
+							<span><span class="font-weight-bold">Caja:</span> {{formattedCurrencyValue}}</span> <br>
 
 						</div>
 							<hr>
 							<!-- <span class="font-weight-bold" >Ultima vez que sincronizo: </span> <span v-if="sincronizacion !== null">{{sincronizacion}}</span> <br> -->
-							<span class="font-weight-bold" >Last Update: </span><span  v-if="caja !== null">{{caja}}</span> <br>
+							<span class="font-weight-bold" >Ultima Actualización: </span><span  v-if="caja !== null">{{caja}}</span> <br>
 							<hr>
 
 							<button type="button" class="btn btn-primary btn-block mb-2" data-toggle="modal" data-target="#vaciar-caja">
@@ -38,22 +38,25 @@
 			</div>
 			<div class="col-md-9" >
 
-				<h1 class="text-center font-italic">Resumen del mes:</h1>
+				<h1 class="text-center font-italic">Resumen de Semana:</h1>
 				<!--DATOS GLOBALES-->
 				<div class="row text-white text-center">
 					<div class="col-md-3" style="line-height: 5em; font-size: 1.5em;">
-						<div class="bg-dark rounded shadow">Ventas: {{count.ventas}}</div>
+						<!--<div class="bg-dark rounded shadow">Ventas: {{count.ventas}}</div>-->
+						<a href="/ventas" class="btn bg-dark btn-lg text-white" tabindex="-1" role="button" aria-disabled="true">Ventas: {{count.ventas}}</a>
 
 					</div>
 					<div class="col-md-3" style="line-height: 5em; font-size: 1.5em;">
-						<div class="bg-dark rounded shadow">Compras: {{count.compras}}</div>
+						<!--<div class="bg-dark rounded shadow">Compras: {{count.compras}}</div>-->
+						<a href="#" class="btn bg-dark btn-lg text-white" tabindex="-1" role="button" aria-disabled="true">Compras: {{count.compras}}</a>
 					</div>
 					<div class="col-md-3" style="line-height: 5em; font-size: 1.5em;">
-						<div class="bg-dark rounded shadow">Despachos: {{count.despachos}}</div>
+						<!--<div class="bg-dark rounded shadow">Despachos: {{count.despachos}}</div>-->
+						<a href="/despachos" class="btn bg-dark btn-lg text-white" tabindex="-1" role="button" aria-disabled="true">Despachos: {{count.despachos}}</a>
 					</div>
 					<div class="col-md-3" style="line-height: 5em; font-size: 1.5em;">
-						<div class="bg-dark rounded shadow">Retiros: {{count.retiros}}</div>
-
+						<!--<div class="bg-dark rounded shadow">Retiros: {{count.retiros}}</div>-->
+						<a href="#" class="btn bg-dark btn-lg text-white" tabindex="-1" role="button" aria-disabled="true">Retiros: {{count.retiros}}</a>
 					</div>
 				</div>
 				<!--TABLAS DE VENTAS Y COMPRAS-->

@@ -31,17 +31,18 @@
 			<div class="col-md-3">
 				<div class="card shadow">
 					<div class="card-header text-center">
-						<span>sincronizar inventario</span>
+						<span>Sincronizar Ventas</span>
 					</div>
 					<div class="card-body">
 						<div v-if="piso_venta_selected.length != 0" style="font-size: 1em;" class="mt-3">
 							<span><span class="font-weight-bold">PV:</span> {{piso_venta_selected.nombre}}</span> <br>
 							<!-- <span><span class="font-weight-bold">Lugar:</span> {{piso_venta_selected.ubicacion}}</span> <br> -->
-							<span><span class="font-weight-bold">Dinero:</span> {{formattedCurrencyValue}}</span> <br>
+							<!--<span><span class="font-weight-bold">Ventas Realizadas:</span> {{formattedCurrencyValue}}</span> <br>-->
+							<span><span class="font-weight-bold">Ventas Realizadas:</span> {{count.ventas}}</span> <br>
 
 						</div>
 						<hr>
-						<span class="font-weight-bold" > Last Update: </span> <span v-if="sincronizacion !== null">{{sincronizacion}}</span> <br>
+						<span class="font-weight-bold" > Ultima Actualización: </span> <span v-if="sincronizacion !== null">{{sincronizacion}}</span> <br>
 						<!-- <span class="font-weight-bold" >Ultima vez que vacio la caja: </span><span  v-if="caja !== null">{{caja}}</span> <br> -->
 						<hr>
 						<button class="btn btn-primary btn-block" @click="sincronizar">
@@ -489,6 +490,12 @@
 export default{
 	data(){
 		return{
+			count:{
+				ventas: 0,
+				compras: 0,
+				despachos: 0,
+				retiros: 0
+			},
 			ventas: [],
 			piso_venta_selected:[],
 			loading:false,
@@ -548,6 +555,17 @@ export default{
 		}
 	},
 	methods:{
+		resumen_dia(){
+
+			axios.get('/api/resumen-dia').then(response => {
+				console.log("Respuesta resumen dia ");
+				console.log(response.data);
+				this.count = response.data;
+
+			}).catch(e => {
+				console.log(e.response)
+			});
+		},
 		sync_anulados(){
 			console.log("desde el metodo anulado")
 			let ventas = [];
@@ -1142,6 +1160,7 @@ export default{
 			this.get_id()
 			this.get_ventas()
 			this.get_piso_venta()
+			this.resumen_dia();
 		}
 }
 </script>

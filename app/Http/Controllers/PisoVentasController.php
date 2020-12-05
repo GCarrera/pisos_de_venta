@@ -10,6 +10,7 @@ use App\Despacho;
 use Carbon\Carbon;
 use App\Inventario_piso_venta;
 use App\Vaciar_caja;
+use App\Dolar;
 
 class PisoVentasController extends Controller
 {
@@ -29,12 +30,38 @@ class PisoVentasController extends Controller
     {
         $usuario = Auth::user()->piso_venta->id;
     	$date = Carbon::now();
-    	$mes = $date->month;
+    	$mes = $date->month; //--> mes
+    	//$mes = $date->week; //--> semana
 
-    	$ventas = Venta::where('piso_venta_id', $usuario)->where('type', 1)->whereMonth('created_at', $mes)->count();
+    	/*$ventas = Venta::where('piso_venta_id', $usuario)->where('type', 1)->whereWeek('created_at', $mes)->count();
+    	$compras = Venta::where('piso_venta_id', $usuario)->where('type', 2)->whereWeek('created_at', $mes)->count();
+    	$despachos = Despacho::where('piso_venta_id', $usuario)->where('type', 1)->whereWeek('created_at', $mes)->count();
+    	$retiros = Despacho::where('piso_venta_id', $usuario)->where('type', 2)->whereWeek('created_at', $mes)->count();*/
+
+      $ventas = Venta::where('piso_venta_id', $usuario)->where('type', 1)->whereMonth('created_at', $mes)->count();
     	$compras = Venta::where('piso_venta_id', $usuario)->where('type', 2)->whereMonth('created_at', $mes)->count();
     	$despachos = Despacho::where('piso_venta_id', $usuario)->where('type', 1)->whereMonth('created_at', $mes)->count();
     	$retiros = Despacho::where('piso_venta_id', $usuario)->where('type', 2)->whereMonth('created_at', $mes)->count();
+
+    	return response()->json([
+    							'ventas' => $ventas,
+    							'compras' => $compras,
+    							'despachos' => $despachos,
+    							'retiros' => $retiros
+    							]);
+    }
+
+    public function resumen_dia()// funcion carga el resumen de ventas compras despachos de la vista home
+    {
+        $usuario = Auth::user()->piso_venta->id;
+    	$date = Carbon::now();
+    	//$mes = $date->month; --> mes
+    	$mes = $date->day; //--> semana
+
+    	$ventas = Venta::where('piso_venta_id', $usuario)->where('type', 1)->whereDay('created_at', $mes)->count();
+    	$compras = Venta::where('piso_venta_id', $usuario)->where('type', 2)->whereDay('created_at', $mes)->count();
+    	$despachos = Despacho::where('piso_venta_id', $usuario)->where('type', 1)->whereDay('created_at', $mes)->count();
+    	$retiros = Despacho::where('piso_venta_id', $usuario)->where('type', 2)->whereDay('created_at', $mes)->count();
 
     	return response()->json([
     							'ventas' => $ventas,
@@ -97,4 +124,13 @@ class PisoVentasController extends Controller
 
         return response()->json($caja);
     }
+    public function establecer_dolar(Request $request)
+  	{
+  		$dolar = new Dolar();
+
+  		$dolar->price = $request->precio;
+  		$dolar->save();
+
+  		return redirect()->back()->with('success', 'Nuevo precio del dolar establecido.');
+  	}
 }

@@ -83,6 +83,11 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('despachos.index') }}">Despachos <font-awesome-icon :icon="['fas', 'cart-arrow-down']"/></a>
                         </li>
+                        <li class="nav-item">
+                          <a type="button" class="nav-link" data-toggle="modal" data-target="#modal-dolar">
+                            Dolar $
+                          </a>
+                        </li>
                         <!--
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('despachos.almacen.index') }}">Despachos almacen</a>
@@ -125,6 +130,34 @@
         </nav>
 
         <main class="py-4">
+          <!-- Modal DEL DOLAR -->
+          <div class="modal fade" id="modal-dolar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            	<div class="modal-dialog">
+              	<div class="modal-content">
+                		<div class="modal-header">
+          	        	<h5 class="modal-title" id="exampleModalLabel">Precio del dolar</h5>
+          	        	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          	          	<span aria-hidden="true">&times;</span>
+          	        	</button>
+                		</div>
+          	      	<div class="modal-body">
+
+          			<p class="text-center">Establesca un nuevo precio.</p>
+
+          			<form action="establecer_dolar" method="post">
+          				@csrf
+          				<div class="text-center">
+          				<input type="text" placeholder="Ejem: 310000" name="precio">
+          				BS
+          				<button class="btn btn-primary" type="submit">Establecer</button>
+          				</div>
+          			</form>
+
+          	      	</div>
+
+              	</div>
+            	</div>
+          </div>
             @yield('content')
         </main>
     </div>

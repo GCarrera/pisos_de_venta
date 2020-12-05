@@ -15,41 +15,41 @@ class UsersTableSeeder extends Seeder
     {
         //
         $usuario = User::create([
-        		'name' => 'usuario-1',
-        		'email' => 'usuario1@gmail.com',
-        		'password' => bcrypt("12345678")	
+        		'name' => 'abastoi',
+        		'email' => 'abastoi@gmail.com',
+        		'password' => bcrypt("abastoi")
         		]);
 
         $piso_Venta = Piso_venta::create([
-        					'nombre' => 'mi puchito 1',
-        					'ubicacion' => 'centro cagua',
+        					'nombre' => 'Abasto I',
+        					'ubicacion' => 'Centro de Cagua',
         					'dinero' => 0,
         					'user_id' => $usuario->id
         					]);
 
 
         $usuario = User::create([
-        		'name' => 'usuario-2',
-        		'email' => 'usuario2@gmail.com',
-        		'password' => bcrypt("12345678")	
+        		'name' => 'mipuchitoca',
+        		'email' => 'mipuchitoca@gmail.com',
+        		'password' => bcrypt("mipuchito")
         		]);
 
         $piso_Venta = Piso_venta::create([
-        					'nombre' => 'mi puchito 2',
-        					'ubicacion' => 'la segundera',
+        					'nombre' => 'Mi Puchito C.A.',
+        					'ubicacion' => 'La Segundera',
         					'dinero' => 0,
         					'user_id' => $usuario->id
         					]);
 
         $usuario = User::create([
-        		'name' => 'usuario-3',
-        		'email' => 'usuario3@gmail.com',
-        		'password' => bcrypt("12345678")	
+        		'name' => 'abastoiii',
+        		'email' => 'abastoiii@gmail.com',
+        		'password' => bcrypt("abastoiii")
         		]);
 
         $piso_Venta = Piso_venta::create([
-        					'nombre' => 'mi puchito 3',
-        					'ubicacion' => 'cagua la villa',
+        					'nombre' => 'Abasto III',
+        					'ubicacion' => 'Cagua - La Villa',
         					'dinero' => 0,
         					'user_id' => $usuario->id
         					]);
