@@ -68,7 +68,7 @@
 							<tr v-for="(producto, index) in productos" :key="index">
 								<td>{{producto.inventario.name}}</td>
 								<td>{{producto.cantidad}}</td>
-								<td>{{new Intl.NumberFormat("de-DE", {minimumFractionDigits: 2}).format(producto.inventario.precio.total_menor)}}</td>
+								<td>{{new Intl.NumberFormat("de-DE", {minimumFractionDigits: 2}).format(producto.inventario.precio.total_menor*dolar)}}</td>
 								<td>
 									<button type="button" class="btn btn-primary" @click="showModalDetalles(producto.id)">Ver</button>
 									<!--<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#verDetalles">Detalles</button>-->
@@ -96,7 +96,7 @@
 
 											<tr>
 												<td>Total</td>
-												<td>{{new Intl.NumberFormat("de-DE", {minimumFractionDigits: 2}).format(producto.inventario.precio.total_menor)}}</td>
+												<td>{{new Intl.NumberFormat("de-DE", {minimumFractionDigits: 2}).format(producto.inventario.precio.total_menor*dolar)}}</td>
 
 											</tr>
 
@@ -144,6 +144,7 @@
 				id:'',
 				error: false,
 				piso_venta_selected:[],
+				dolar:0,
 				page: "",
 				currentPage: 0,
 				per_page: 0,
@@ -192,7 +193,7 @@
 					let ultimoInventory = response.data
 					//TRAEMOS DE LA WEB TODOS LOS PRODUCTOS APARTIR DEL ULTIMO ID
 					//axios.get('http://mipuchitoex.com/api/get-inventory/'+ultimoInventory).then(response => {//WEB
-					axios.get('http://mipuchito.com/api/get-inventory/'+ultimoInventory).then(response => {//WEB
+					axios.get('http://mipuchito/api/get-inventory/'+ultimoInventory).then(response => {//WEB
 
 						//console.log(response)
 						let productos = response.data
@@ -228,7 +229,7 @@
 
 							if (inventario.length > 0) {
 								//LOS BUSCAMOS EN LA WEB A VER SI SE LE ASIGNO UN INVENTORY_ID
-								axios.post('http://mipuchito.com/api/get-inventories', {inventario: inventario, piso_venta: this.id}).then(response => {
+								axios.post('http://mipuchito/api/get-inventories', {inventario: inventario, piso_venta: this.id}).then(response => {
 
 									console.log(response);
 									let nuevoInventario = response.data;
@@ -238,7 +239,7 @@
 										console.log(response);
 										//ACTUALIZAMOS LOS PRECIOS
 
-										axios.get('http://mipuchito.com/api/get-precios-inventory/'+this.id).then(response => {//WEB
+										axios.get('http://mipuchito/api/get-precios-inventory/'+this.id).then(response => {//WEB
 
 											console.log(response)
 											let inventory = response.data.inventory
@@ -271,7 +272,7 @@
 								console.log("no hay productos para anclar")
 								//ACTUALIZAMOS LOS PRECIOS
 
-								axios.get('http://mipuchito.com/api/get-precios-inventory/'+this.id).then(response => {//WEB
+								axios.get('http://mipuchito/api/get-precios-inventory/'+this.id).then(response => {//WEB
 
 									console.log(response)
 									let inventory = response.data.inventory
@@ -285,7 +286,7 @@
 										this.get_inventario();
 			   							this.get_id();
 									 	this.cambiar()
-										axios.post('http://mipuchito.com/api/sincronizacion', {id: this.id}).then(response => {
+										axios.post('http://mipuchito/api/sincronizacion', {id: this.id}).then(response => {
 	       							this.sincro_exitosa = true
 	       							//window.location="/inventario";
 										}).catch(e => {
@@ -324,6 +325,14 @@
 		    cambiar(){
 				console.log("btn cambio")
 				this.loading = !this.loading;
+			},
+			get_dolar() {
+				axios.get('/api/get-dolar').then(response =>{
+					console.log(response)
+					this.dolar = response.data.dolar;
+				}).catch(e => {
+					console.log(e.response);
+				});
 			},
 			get_piso_venta(){
 
@@ -368,7 +377,7 @@
 					//console.log(response.data)
 					let ultimoInventory = response.data
 					//TRAEMOS DE LA WEB TODOS LOS PRODUCTOS APARTIR DEL ULTIMO ID
-					axios.get('http://mipuchito.com/api/get-inventory/'+ultimoInventory).then(response => {//WEB
+					axios.get('http://mipuchito/api/get-inventory/'+ultimoInventory).then(response => {//WEB
 						console.log('respues');
 						console.log(response)
 						let productos = response.data
@@ -394,7 +403,7 @@
 
 						//ACTUALIZAMOS LOS PRECIOS
 
-						axios.get('http://mipuchito.com/api/get-precios-inventory').then(response => {//WEB
+						axios.get('http://mipuchito/api/get-precios-inventory').then(response => {//WEB
 
 							console.log(response)
 							let articulos = response.data
@@ -447,8 +456,8 @@
        	 		if(!this.piso_venta_selected.dinero){
        	 		 return "0.00"
        	 		}
-           	 	let n = new Intl.NumberFormat("de-DE").format(this.piso_venta_selected.dinero)
-				let a = "Bs " + n +",00"
+           	 	let n = new Intl.NumberFormat("de-DE", {minimumFractionDigits: 2}).format(this.piso_venta_selected.dinero)
+				let a = "Bs " + n; //+",00"
 				return a
         	},
 		},
@@ -456,7 +465,8 @@
 			//console.log(this.productos)
 			this.get_inventario();
 			this.get_id();
-			this.get_piso_venta()
+			this.get_piso_venta();
+			this.get_dolar();
 
 		},
 

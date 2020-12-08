@@ -85,7 +85,7 @@ class InventarioController extends Controller
 
                 if ($producto['product'] != null) {
 
-                  $dolar = Dolar::orderby('id','DESC')->first();
+                  /*$dolar = Dolar::orderby('id','DESC')->first();
                   $datadolar = $dolar['price'];
 
 
@@ -105,25 +105,25 @@ class InventarioController extends Controller
                   //= $producto['product']['oferta'];
                   //= $producto['product']['inventory_id'];*/
 
-                  $cost = round($cost, 2);
+                  /*$cost = round($cost, 2);
                   $retail_total_price = round($retail_total_price, 2);
                   $wholesale_packet_price = round($wholesale_packet_price, 2);
                   $wholesale_total_individual_price = round($wholesale_total_individual_price, 2);
-                  $wholesale_total_packet_price = round($wholesale_total_packet_price, 2);
+                  $wholesale_total_packet_price = round($wholesale_total_packet_price, 2);*/
 
                   try {
 
                     $product = new Product();
-                    $product->cost = $cost;
+                    $product->cost = $producto['product']['cost'];
                     $product->iva_percent = $producto['product']['iva_percent'];
                     $product->retail_margin_gain = $producto['product']['retail_margin_gain'];
-                    $product->retail_total_price = $retail_total_price;
+                    $product->retail_total_price = $producto['product']['retail_total_price'];
                     $product->retail_iva_amount = $producto['product']['retail_iva_amount'];
                     $product->image = $producto['product']['image'];
                     $product->wholesale_margin_gain = $producto['product']['wholesale_margin_gain'];
-                    $product->wholesale_packet_price = $wholesale_packet_price;
-                    $product->wholesale_total_individual_price = $wholesale_total_individual_price;
-                    $product->wholesale_total_packet_price = $wholesale_total_packet_price;
+                    $product->wholesale_packet_price = $producto['product']['wholesale_packet_price'];
+                    $product->wholesale_total_individual_price = $producto['product']['wholesale_total_individual_price'];
+                    $product->wholesale_total_packet_price = $producto['product']['wholesale_total_packet_price'];
                     $product->wholesale_iva_amount = $producto['product']['wholesale_iva_amount'];
                     $product->oferta = $producto['product']['oferta'];
                     $product->inventory_id = $producto['product']['inventory_id'];
@@ -188,7 +188,7 @@ class InventarioController extends Controller
 
                 if ($inventario['id'] != null) {
 
-                  $dolar = Dolar::orderby('id','DESC')->first();
+                  /*$dolar = Dolar::orderby('id','DESC')->first();
                   $datadolar = $dolar['price'];
 
 
@@ -207,22 +207,22 @@ class InventarioController extends Controller
                   //= $producto['product']['oferta'];
                   //= $producto['product']['inventory_id'];*/
 
-                  $cost = round($cost, 2);
+                  /*/$cost = round($cost, 2);
                   $retail_total_price = round($retail_total_price, 2);
                   $wholesale_packet_price = round($wholesale_packet_price, 2);
                   $wholesale_total_individual_price = round($wholesale_total_individual_price, 2);
-                  $wholesale_total_packet_price = round($wholesale_total_packet_price, 2);
+                  $wholesale_total_packet_price = round($wholesale_total_packet_price, 2);*/
 
                   //return response()->json($wholesale_packet_price);
 
                     $precio = Precio::where('inventario_id', $inventario['id'])->orderBy('id', 'desc')->first();
-                    $precio->costo = $cost;
+                    $precio->costo = $producto['product']['cost'];
                     $precio->iva_porc = $producto['product']['iva_percent'];
                     $precio->iva_menor = $producto['product']['retail_iva_amount'];
                     $precio->sub_total_menor = $producto['product']['retail_total_price'] - $producto['product']['retail_iva_amount'];
-                    $precio->total_menor = $retail_total_price;
+                    $precio->total_menor = $producto['product']['retail_total_price'];
                     $precio->iva_mayor = $producto['product']['wholesale_iva_amount'] * $producto['qty_per_unit'];
-                    $precio->sub_total_mayor = $wholesale_packet_price;
+                    $precio->sub_total_mayor = $producto['product']['wholesale_packet_price'];
                     $precio->total_mayor = $precio->sub_total_mayor + $precio->iva_mayor;
                     $precio->oferta = $producto['product']['oferta'];
                     $precio->save();

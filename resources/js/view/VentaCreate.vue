@@ -126,6 +126,7 @@
 				inventario: [],
 				productos: [],//LISTA DE PRODUCTOS QUE VOY A AGREGAR
 				iva:"",
+				dolar:0,
 				articulo: {
 					id: 0,
 					nombre: "",
@@ -142,7 +143,7 @@
 		        showDismissibleAlert: false,
 		        selectedValue: null,
 						labelSearch: "Buscar",
-						labelNot: "No se encontro nada",
+						labelNot: 'No se encontro nada',
 						labelTit: "Nada seleccionado"
 			}
 		},
@@ -164,6 +165,14 @@
 					});
 				}).catch(e => {
 
+				});
+			},
+			get_dolar() {
+				axios.get('/api/get-dolar').then(response =>{
+					console.log(response)
+					this.dolar = response.data.dolar;
+				}).catch(e => {
+					console.log(e.response);
 				});
 			},
 			establecer_nombre(id, compra){//COLOCAR EL NOMBRE AL PRODUCTO QUE ESTOY AGREGANDO
@@ -216,6 +225,11 @@
 					this.articulo.iva *= this.articulo.cantidad
 					this.articulo.total *= this.articulo.cantidad
 
+					//AGREGAR PRECIO DOLAR AQUI
+					this.articulo.sub_total *= this.dolar
+					this.articulo.iva *= this.dolar
+					this.articulo.total *= this.dolar
+
 					this.productos.push(this.articulo);
 					console.log(this.productos)
 
@@ -244,6 +258,7 @@
 				// 	    this.type
 
 				// 	)
+				//AGREGAR PRECIO DOLAR AQUI
 				axios.post('/api/ventas',
 					{venta:
 						{
@@ -301,6 +316,7 @@
 		created(){
 
 			this.get_datos();
+			this.get_dolar();
 		},
 		computed:{
 			sub_total_total(){
@@ -332,14 +348,18 @@
 			// 	return n
 			// },
 			mostar_sub_total(){
-				let n = new Intl.NumberFormat("de-DE").format(this.sub_total_total)
-				let a = n +",00"
-				return a
+				//AGREGAR PRECIO DOLAR AQUI
+				let n = new Intl.NumberFormat("de-DE", {minimumFractionDigits: 2}).format(this.sub_total_total*this.dolar)
+				//let a = n +",00"
+				return n
 			},
 			mostar_total_total(){
-				let n = new Intl.NumberFormat("de-DE").format(this.total_total)
-				let a = n +",00"
-				return a
+				console.log("funcion mostrar_total_total");
+				console.log(this.total_total);
+				//AGREGAR PRECIO DOLAR AQUI
+				let n = new Intl.NumberFormat("de-DE", {minimumFractionDigits: 2}).format(this.total_total)
+				//let a = n +",00"
+				return n
 			},
 
 			total_total(){

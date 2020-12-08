@@ -46,6 +46,7 @@ Route::prefix('api')->group(function(){
 	//USUARIO
 	Route::get('/get-id', 'UsersController@get_id');
 	Route::get('/get-piso-venta', 'UsersController@get_piso_venta');
+	Route::get('/get-dolar', 'UsersController@get_dolar');
 	Route::post('/vaciar-caja', 'UsersController@vaciar_caja');
 	//INVENTARIO
 	Route::get('/get-inventario', 'InventarioController@get_inventario');

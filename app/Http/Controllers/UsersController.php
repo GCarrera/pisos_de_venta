@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Piso_venta;
 use App\Sincronizacion;
 use App\Vaciar_caja;
+use App\Dolar;
 use DB;
 
 class UsersController extends Controller
@@ -33,8 +34,15 @@ class UsersController extends Controller
     	return response()->json(['piso_venta' => $piso_venta, 'sincronizacion' => $sincronizacion, 'caja' => $caja]);
     }
 
+    public function get_dolar()
+    {
+      $dolar = Dolar::orderby('id','DESC')->first();
+      $datadolar = $dolar['price'];
+      return response()->json(['dolar' => $datadolar]);
+    }
+
     public function vaciar_caja()
-    {   
+    {
         try{
 
             DB::beginTransaction();
