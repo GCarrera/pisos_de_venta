@@ -200,7 +200,6 @@ class InventarioController extends Controller
                   //= $producto['product']['image'];
                   //= $producto['product']['wholesale_margin_gain'];
                   $wholesale_packet_price = round($producto['product']['wholesale_packet_price'], 2)*$datadolar;
-                  //return response()->json($wholesale_packet_price);
                   $wholesale_total_individual_price = $producto['product']['wholesale_total_individual_price']*$datadolar;
                   $wholesale_total_packet_price = round($producto['product']['wholesale_total_packet_price'], 2)*$datadolar;
                   //$arrayErrors = array($cost, $retail_total_price, $wholesale_packet_price, $wholesale_total_individual_price, $wholesale_total_packet_price, $datadolar);
@@ -213,6 +212,8 @@ class InventarioController extends Controller
                   $wholesale_packet_price = round($wholesale_packet_price, 2);
                   $wholesale_total_individual_price = round($wholesale_total_individual_price, 2);
                   $wholesale_total_packet_price = round($wholesale_total_packet_price, 2);
+
+                  //return response()->json($wholesale_packet_price);
 
                     $precio = Precio::where('inventario_id', $inventario['id'])->orderBy('id', 'desc')->first();
                     $precio->costo = $cost;

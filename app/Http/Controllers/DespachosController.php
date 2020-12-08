@@ -161,6 +161,10 @@ class DespachosController extends Controller
                 $registro->save();
 
                 foreach ($despacho['productos'] as $producto) {
+                  $inventarioval = Inventory::select('id')->where('id', $producto['pivot']['inventory_id'])->exists();
+                  //return response()->json($inventarioval);
+                  if ($inventarioval) {
+                    // SI EXITE EL PRODUCTO EN INVENTARIO
                     //REGISTRAMOS LOS PRODUCTOS
                     $detalles = new Despacho_detalle();
                     $detalles->despacho_id = $registro->id;
@@ -217,6 +221,17 @@ class DespachosController extends Controller
                         }
                         */
                     }
+                  } else {
+                    // SI NO EXISTE EL PRODUCTO EN INVENTARIO
+                    // ENVIAR ERROR DE SINCRONIZAR INVENTARIO PRIMERO
+                    $error = "Productos nuevos en Despachos. Por Favor Sincronice Inventario Primero";
+                    return response()->json($error);
+
+                  }
+
+
+                  //return response()->json($inventarioval);
+
 
                 }
             }

@@ -575,6 +575,7 @@ export default{
 				let ventas = response.data;
 				if (ventas.length > 0) {
 					//ACTUALIZAMOS LOS ANULADOS EN LA WEB
+					//axios.post('http://mipuchitoex.com/api/actualizar-anulados', {ventas: ventas, piso_venta: this.id}).then(response => {//WEB
 					axios.post('http://mipuchito.com/api/actualizar-anulados', {ventas: ventas, piso_venta: this.id}).then(response => {//WEB
 
 					//VOLVEMOS A ACTUALIZAR EN LOCAL

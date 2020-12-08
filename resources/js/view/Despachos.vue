@@ -7,6 +7,8 @@
 
 		    <b-alert show variant="danger" fade dismissible v-if="error == true">ah ocurrido un error</b-alert>
 
+				<b-alert show variant="danger" fade dismissible v-if="alert_error == true">{{error_message}}</b-alert>
+
 		    <div class="row">
 		    	<div class="col-md-3">
 					<div class="card shadow">
@@ -128,7 +130,9 @@
 				piso_venta_selected:[],
 				alert_success: false,
 				alert_message : "",
+				error_message : "",
 				alert_success:false,
+				alert_error: false,
 				sincro_exitosa:false,
 				error:false,
 					sincron:{
@@ -180,12 +184,16 @@
 							console.log("hey if");
 							//REGISTRAR LOS DESPACHOS RECIBIDOS
 							axios.post('/api/registrar-despachos-piso-venta', {despachos: nuevosDespachos}).then(response => {//
-
+								console.log('registrar-despachos-piso-venta');
 								console.log(response);//SI REGISTRA DEBERIA DAR TRUE
 								if (response.data == true) {
 
 									//SINC
 									this.sincron.despachos = true;
+								} else {
+									this.alert_error = true;
+									this.error_message = response.data;
+									this.cambiar()
 								}
 							}).catch(e => {
 								console.log(e.response)
@@ -263,6 +271,7 @@
 							this.error = true;
 							this.cambiar()
 						});
+						//FIN SEGUNDA PETICION
 
 					}).catch(e => {
 						console.log(e.response);
