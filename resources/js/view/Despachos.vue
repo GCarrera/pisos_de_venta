@@ -228,19 +228,25 @@
 								//GUARDAR LOS DATOS ANTERIORES EN LA WEB
 								axios.post('http://mipuchito/api/actualizar-confirmados', {despachos: despachosConfirmados, piso_venta_id: this.id}).then(response => {//DEL LADO DE LA WEB PARA ACTUALIZAR LAS CONFIRMACIONES
 									axios.post('http://mipuchito/api/sincronizacion', {id: this.id}).then(response => {
+										axios.post('/api/sincronizacion', {id: this.id}).then(response => {
 
-										this.cambiar()
-										//console.log(response);
-										//SINC
-										this.sincron.despachos = true;
-										console.log('error message');
-										console.log(this.error_message);
-										if (this.error_message == null) {
-											console.log('vacio');
-											this.sincro_exitosa = true
-											window.location="/despachos";
-										}
+											this.cambiar()
+											//console.log(response);
+											//SINC
+											this.sincron.despachos = true;
+											console.log('error message');
+											console.log(this.error_message);
+											if (this.error_message == null) {
+												console.log('vacio');
+												this.sincro_exitosa = true
+												window.location="/despachos";
+											}
 
+										}).catch(e => {
+											console.log(e.response)
+											this.error = true;
+											this.cambiar()
+										});
 									}).catch(e => {
 										console.log(e.response)
 										this.error = true;
@@ -259,16 +265,22 @@
 							});
 						} else {
 							axios.post('http://mipuchito/api/sincronizacion', {id: this.id}).then(response => {
-								//console.log("No hay despachos sin confirmar");
-								this.cambiar()
-								this.sincron.despachos = true;
-								console.log('error message');
-								console.log(this.error_message);
-								if (this.error_message == null) {
-									console.log('no error');
-									this.sincro_exitosa = true
-									window.location="/despachos";
-								}
+								axios.post('/api/sincronizacion', {id: this.id}).then(response => {
+									//console.log("No hay despachos sin confirmar");
+									this.cambiar()
+									this.sincron.despachos = true;
+									console.log('error message');
+									console.log(this.error_message);
+									if (this.error_message == null) {
+										console.log('no error');
+										this.sincro_exitosa = true
+										window.location="/despachos";
+									}
+								}).catch(e => {
+									console.log(e.response)
+									this.error = true;
+									this.cambiar()
+								});
 							}).catch(e => {
 								console.log(e.response)
 								this.error = true;

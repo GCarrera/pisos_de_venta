@@ -30,18 +30,18 @@ class PisoVentasController extends Controller
     {
         $usuario = Auth::user()->piso_venta->id;
     	$date = Carbon::now();
-    	$mes = $date->month; //--> mes
-    	//$mes = $date->week; //--> semana
+    	//$mes = $date->month; //--> mes
+    	//$mes = $date->weekOfYear; //--> semana
 
-    	/*$ventas = Venta::where('piso_venta_id', $usuario)->where('type', 1)->whereWeek('created_at', $mes)->count();
-    	$compras = Venta::where('piso_venta_id', $usuario)->where('type', 2)->whereWeek('created_at', $mes)->count();
-    	$despachos = Despacho::where('piso_venta_id', $usuario)->where('type', 1)->whereWeek('created_at', $mes)->count();
-    	$retiros = Despacho::where('piso_venta_id', $usuario)->where('type', 2)->whereWeek('created_at', $mes)->count();*/
+    	$ventas = Venta::where('piso_venta_id', $usuario)->where('type', 1)->whereBetween('created_at', [Carbon::parse('last monday')->startOfDay(), Carbon::parse('next sunday')->endOfDay(),])->count();
+    	$compras = Venta::where('piso_venta_id', $usuario)->where('type', 2)->whereBetween('created_at', [Carbon::parse('last monday')->startOfDay(), Carbon::parse('next sunday')->endOfDay(),])->count();
+    	$despachos = Despacho::where('piso_venta_id', $usuario)->where('type', 1)->whereBetween('created_at', [Carbon::parse('last monday')->startOfDay(), Carbon::parse('next sunday')->endOfDay(),])->count();
+    	$retiros = Despacho::where('piso_venta_id', $usuario)->where('type', 2)->whereBetween('created_at', [Carbon::parse('last monday')->startOfDay(), Carbon::parse('next sunday')->endOfDay(),])->count();
 
-      $ventas = Venta::where('piso_venta_id', $usuario)->where('type', 1)->whereMonth('created_at', $mes)->count();
+      /*$ventas = Venta::where('piso_venta_id', $usuario)->where('type', 1)->whereMonth('created_at', $mes)->count();
     	$compras = Venta::where('piso_venta_id', $usuario)->where('type', 2)->whereMonth('created_at', $mes)->count();
     	$despachos = Despacho::where('piso_venta_id', $usuario)->where('type', 1)->whereMonth('created_at', $mes)->count();
-    	$retiros = Despacho::where('piso_venta_id', $usuario)->where('type', 2)->whereMonth('created_at', $mes)->count();
+    	$retiros = Despacho::where('piso_venta_id', $usuario)->where('type', 2)->whereMonth('created_at', $mes)->count();*/
 
     	return response()->json([
     							'ventas' => $ventas,

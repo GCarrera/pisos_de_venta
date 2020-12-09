@@ -277,6 +277,7 @@
 						console.log('el mensaje',this.error_message)
 						this.error = true;
 						this.showAlert();
+						window.location="/ventas/create";
 
 					}else{
 						this.cantidad_disponible = null

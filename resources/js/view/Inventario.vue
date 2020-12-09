@@ -287,8 +287,14 @@
 			   							this.get_id();
 									 	this.cambiar()
 										axios.post('http://mipuchito/api/sincronizacion', {id: this.id}).then(response => {
-	       							this.sincro_exitosa = true
-	       							//window.location="/inventario";
+											axios.post('/api/sincronizacion', {id: this.id}).then(response => {
+		       							this.sincro_exitosa = true
+		       							window.location="/inventario";
+											}).catch(e => {
+												console.log(e.response)
+												this.error = true;
+												this.cambiar()
+											});
 										}).catch(e => {
 											console.log(e.response)
 											this.error = true;
