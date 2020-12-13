@@ -15,12 +15,12 @@ class CreateDetalleVentasTable extends Migration
     {
         Schema::create('detalle_ventas', function (Blueprint $table) {
             $table->bigIncrements('id');
-            
+
             $table->unsignedBigInteger('inventario_id');
             $table->integer('cantidad');
-            $table->decimal('sub_total', 12);
+            $table->decimal('sub_total', 20, 2);
             $table->integer('iva');
-            $table->decimal('total', 12, 2);
+            $table->decimal('total', 20, 2);
             //$table->enum('tipo', ['1', '2'])->comment('1:al-menor,2:al-mayor')->nullable();
             $table->unsignedBigInteger('venta_id');
             $table->timestamps();

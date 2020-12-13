@@ -16,7 +16,7 @@ class CreateVaciarCajasTable extends Migration
         Schema::create('vaciar_cajas', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('piso_venta_id');
-            $table->decimal('monto', 10, 2);
+            $table->decimal('monto', 20, 2);
             $table->bigInteger('id_extra')->nullable();
             $table->timestamps();
 

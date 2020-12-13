@@ -15,9 +15,9 @@ class CreateVentasTable extends Migration
     {
         Schema::create('ventas', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->decimal('sub_total', 12, 2)->nullable();
+            $table->decimal('sub_total', 20, 2)->nullable();
             $table->integer('iva')->nullable();
-            $table->decimal('total', 12, 2)->nullable();
+            $table->decimal('total', 20, 2)->nullable();
             $table->unsignedBigInteger('piso_venta_id');
             $table->enum('type', ['1', '2'])->comment('1:venta,2:compra');
             $table->bigInteger('id_extra')->nullable();
