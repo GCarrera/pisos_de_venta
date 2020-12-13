@@ -142,6 +142,7 @@
                 		</div>
           	      	<div class="modal-body">
 
+          			<p class="text-center">Monto Actual: <span id="spanDolarAct"></span>.</p>
           			<p class="text-center">Establesca un nuevo precio.</p>
 
           			<form action="establecer_dolar" method="post">
@@ -162,4 +163,22 @@
         </main>
     </div>
 </body>
+<script src="{{ asset('js/jquery-3.4.1.min.js') }}"></script>
+<script type="text/javascript">
+  $(document).ready( function () {
+
+    $.get({
+      url : `api/get-dolar`
+    })
+    .done((data) => {
+      $('#spanDolarAct').text(new Intl.NumberFormat("de-DE", {minimumFractionDigits: 2}).format(data.dolar));
+      //console.log(data);
+    })
+    .fail((err)=> {
+      console.log(err)
+      toastr.error('Ha ocurrido un error.')
+    })
+
+  } );
+</script>
 </html>
