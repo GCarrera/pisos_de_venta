@@ -43,20 +43,20 @@
 				<div class="row text-white text-center">
 					<div class="col-md-3" style="line-height: 5em; font-size: 1.5em;">
 						<!--<div class="bg-dark rounded shadow">Ventas: {{count.ventas}}</div>-->
-						<a href="/ventas" class="btn bg-dark btn-lg text-white" tabindex="-1" role="button" aria-disabled="true">Ventas: {{count.ventas}}</a>
+						<a href="/ventas" class="btn bg-dark text-white" tabindex="-1" role="button" aria-disabled="true">Ventas: {{count.ventas}}</a>
 
 					</div>
 					<div class="col-md-3" style="line-height: 5em; font-size: 1.5em;">
 						<!--<div class="bg-dark rounded shadow">Compras: {{count.compras}}</div>-->
-						<a href="#" class="btn bg-dark btn-lg text-white" tabindex="-1" role="button" aria-disabled="true">Compras: {{count.compras}}</a>
+						<a href="#" class="btn bg-dark text-white" tabindex="-1" role="button" aria-disabled="true">Compras: {{count.compras}}</a>
 					</div>
 					<div class="col-md-3" style="line-height: 5em; font-size: 1.5em;">
 						<!--<div class="bg-dark rounded shadow">Despachos: {{count.despachos}}</div>-->
-						<a href="/despachos" class="btn bg-dark btn-lg text-white" tabindex="-1" role="button" aria-disabled="true">Despachos: {{count.despachos}}</a>
+						<a href="/despachos" class="btn bg-dark text-white" tabindex="-1" role="button" aria-disabled="true">Despachos: {{count.despachos}}</a>
 					</div>
 					<div class="col-md-3" style="line-height: 5em; font-size: 1.5em;">
 						<!--<div class="bg-dark rounded shadow">Retiros: {{count.retiros}}</div>-->
-						<a href="#" class="btn bg-dark btn-lg text-white" tabindex="-1" role="button" aria-disabled="true">Retiros: {{count.retiros}}</a>
+						<a href="#" class="btn bg-dark text-white" tabindex="-1" role="button" aria-disabled="true">Retiros: {{count.retiros}}</a>
 					</div>
 				</div>
 				<!--TABLAS DE VENTAS Y COMPRAS-->
