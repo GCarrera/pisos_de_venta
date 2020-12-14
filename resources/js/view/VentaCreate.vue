@@ -49,7 +49,7 @@
 
 							<div class="form-group col-md-3">
 								<label for="cantidad">Cantidad:</label>
-								<input type="number" name="cantidad" id="cantidad" placeholder="Cantidad" class="form-control" v-model="articulo.cantidad" ref="cantidad" v-on:keyup.enter="agregar_producto_enter()">
+								<input type="number" name="cantidad" id="cantidad" placeholder="Cantidad" class="form-control" v-model="articulo.cantidad" ref="cantidad" v-on:keyup.enter="agregar_producto_enter">
 							</div>
 
 							<div class="form-group col-md-3">
@@ -148,6 +148,13 @@
 			}
 		},
 		methods:{
+			agregar_producto_enter(){
+				if (this.articulo.id != 0 && this.articulo.cantidad != ""){
+					//console.log("holis");
+
+					this.agregar_producto();
+				}
+			},
 			setFocus(){
 				this.$refs.cantidad.focus();
 			},
@@ -375,7 +382,7 @@
 
 				return total;
 			},
-			agregar_producto_enter(){
+			agregar_producto_enteritos: function(){
 				if (this.articulo.id != 0 && this.articulo.cantidad != ""){
 
 					this.agregar_producto();
