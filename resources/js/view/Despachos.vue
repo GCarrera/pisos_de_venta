@@ -41,7 +41,7 @@
 		    <div class="col-md-9">
 			<div class="card shadow">
 				<div class="card-body">
-					<h1 class="text-center">Despachos-pisos</h1>
+					<h1 class="text-center">Despachos</h1>
 					<div class="mb-3">
 						<div class="row justify-content-between">
 							<div class="col-12 col-md-2">
@@ -57,21 +57,21 @@
 						<thead>
 							<tr>
 								<th>Fecha</th>
-								<th>tipo</th>
-								<th>Confirmado</th>
+								<th>Tipo</th>
+								<th>Estado</th>
 								<th>Acciones</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr v-for="(despacho, index) in despachos" :key="index">
 								<td>{{despacho.created_at}} {{despacho.id}}</td>
-								<th>{{despacho.type == 1? "despacho" : "retiro"}}</th>
-								<td v-if="despacho.confirmado == null" class="small font-weight-bold">No se ah confirmado</td>
-								<td v-else class="small font-weight-bold">{{despacho.confirmado == 1 ? "confirmado" : "negado"}}</td>
+								<th>{{despacho.type == 1? "Despacho" : "Retiro"}}</th>
+								<td v-if="despacho.confirmado == null" class="font-weight-bold">Pendiente</td>
+								<td v-else class="font-weight-bold">{{despacho.confirmado == 1 ? "Confirmado" : "Negado"}}</td>
 								<td>
 									<button type="button" class="btn btn-primary" @click="showModalDetalles(despacho.id)">Ver</button>
 									<!--<button class="btn btn-primary" data-toggle="modal" data-target="#modalVer">Ver</button>-->
-									<button class="btn btn-success" v-if="despacho.confirmado == null" @click="confirmar(despacho.id, index)">confirmar</button>
+									<button class="btn btn-success" v-if="despacho.confirmado == null" @click="confirmar(despacho.id, index)">Confirmar</button>
 									<button class="btn btn-danger" v-if="despacho.confirmado == null" @click="negar(despacho.id, index)">Negar</button>
 								</td>
 
