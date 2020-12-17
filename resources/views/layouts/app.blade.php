@@ -145,7 +145,7 @@
           			<p class="text-center">Monto Actual: <span id="spanDolarAct"></span>.</p>
           			<p class="text-center">Establesca un nuevo precio.</p>
 
-          			<form action="establecer_dolar" method="post">
+          			<form action="{{ action('PisoVentasController@establecer_dolar') }}" method="post">
           				@csrf
           				<div class="text-center">
           				<input type="text" placeholder="Ejem: 310000" name="precio">
@@ -168,7 +168,7 @@
   $(document).ready( function () {
 
     $.get({
-      url : `api/get-dolar`
+      url : `/api/get-dolar`
     })
     .done((data) => {
       $('#spanDolarAct').text(new Intl.NumberFormat("de-DE", {minimumFractionDigits: 2}).format(data.dolar));
