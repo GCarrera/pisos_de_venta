@@ -17,7 +17,8 @@ class CreateDetalleVentasTable extends Migration
             $table->bigIncrements('id');
 
             $table->unsignedBigInteger('inventario_id');
-            $table->integer('cantidad');
+            $table->decimal('cantidad', 20, 2);
+            //$table->integer('cantidad');
             $table->decimal('sub_total', 20, 2);
             $table->integer('iva');
             $table->decimal('total', 20, 2);
