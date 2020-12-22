@@ -256,8 +256,8 @@
 			},
 			vender(){
 				this.error = false;
-				console.log('estoy en el vender')
-				// console.log(this.productos)
+				console.log('estoy en el vender');
+				console.log(this.productos);
 				// console.log(
 				// 		 this.sub_total,
 				// 	 	 this.iva,
@@ -295,6 +295,10 @@
 					  	showConfirmButton: false,
 					  	timer: 1500
 					})
+					setTimeout(function () {
+						window.location = "/ventas/create";
+					}, 1500);
+					//window.location = "/ventas/create";
 					// setTimeout((1500) => {
 					// 	  window.location = "/ventas/create";
 					// }, ms)

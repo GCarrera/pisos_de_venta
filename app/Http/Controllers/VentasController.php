@@ -91,7 +91,7 @@ class VentasController extends Controller
 		        $detalles->iva = $producto['iva'];
 		        $detalles->total = $producto['total'];
 	            $detalles->save();
-	            settype($producto['cantidad'],"integer");
+	            //settype($producto['cantidad'],"integer");
 
 	            //RESTAMOS DEL STOCK
 	            $inventario = Inventario_piso_venta::where('piso_venta_id', $usuario)->where('inventario_id', $producto['id'])->orderBy('id', 'desc')->first();
@@ -100,7 +100,7 @@ class VentasController extends Controller
 
 	            // $data= ['resta' =>$resta, 'cantidad inventario' => $inventario->cantidad, 'cantidad de producto'=> $producto['cantidad']];
 	            //VALICACION POR SI NO HAY SUFICIENTES PRODUCTOS
-	            if ($resta <= 0) {
+	            if ($resta <= 0.000) {
 
 	            	return response()->json(['errors' => 'no hay suficientes productos en el inventario']);
 	            	DB::rollback();
