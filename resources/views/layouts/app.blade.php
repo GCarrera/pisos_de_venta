@@ -168,7 +168,7 @@
   $(document).ready( function () {
 
     $.get({
-      url : `/api/get-dolar`
+      url : `http://localhost/pisos_de_venta/public/api/get-dolar`
     })
     .done((data) => {
       $('#spanDolarAct').text(new Intl.NumberFormat("de-DE", {minimumFractionDigits: 2}).format(data.dolar));
