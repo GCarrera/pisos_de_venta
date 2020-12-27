@@ -209,7 +209,7 @@
 						if (nuevosDespachos.length > 0) {
 
 							//REGISTRAR LOS DESPACHOS RECIBIDOS
-							axios.post('http://localhost/pisos_de_venta/api/registrar-despachos-piso-venta', {despachos: nuevosDespachos}).then(response => {//
+							axios.post('http://localhost/pisos_de_venta/public/api/registrar-despachos-piso-venta', {despachos: nuevosDespachos}).then(response => {//
 
 								console.log(response);//SI REGISTRA DEBERIA DAR TRUE
 								if (response.data == true) {
@@ -236,7 +236,7 @@
 						//console.log(response.data);
 						if (despachosSinConfirmar.length > 0) {
 							//PEDIR LOS DATOS EN LOCAL DE LOS QUE NO ESTAN CONFIRMADOS EN LA WEB
-							axios.post('http://localhost/pisos_de_venta/api/get-despachos-confirmados', {despachos: despachosSinConfirmar}).then(response => {//
+							axios.post('http://localhost/pisos_de_venta/public/api/get-despachos-confirmados', {despachos: despachosSinConfirmar}).then(response => {//
 
 								despachosConfirmados = response.data
 								//console.log(response.data);
@@ -323,7 +323,7 @@
 			},
 			confirmar(id, index){
 
-				axios.post('http://localhost/pisos_de_venta/api/confirmar-despacho', {id: id}).then(response => {
+				axios.post('http://localhost/pisos_de_venta/public/api/confirmar-despacho', {id: id}).then(response => {
 
 					console.log(response)
 					this.despachos.splice(index, 1, response.data);
@@ -333,7 +333,7 @@
 			},
 			negar(id, index){
 
-				axios.post('http://localhost/pisos_de_venta/api/negar-despacho', {id: id}).then(response => {
+				axios.post('http://localhost/pisos_de_venta/public/api/negar-despacho', {id: id}).then(response => {
 
 					console.log(response.data)
 					this.despachos.splice(index, 1, response.data);
@@ -383,7 +383,7 @@
 						if (nuevosDespachos.length > 0) {
 
 							//REGISTRAR LOS DESPACHOS RECIBIDOS
-							axios.post('http://localhost/pisos_de_venta/api/registrar-despachos-piso-venta', {despachos: nuevosDespachos}).then(response => {//
+							axios.post('http://localhost/pisos_de_venta/public/api/registrar-despachos-piso-venta', {despachos: nuevosDespachos}).then(response => {//
 
 								console.log(response);//SI REGISTRA DEBERIA DAR TRUE
 								if (response.data == true) {
@@ -406,7 +406,7 @@
 						//console.log(response.data);
 						if (despachosSinConfirmar.length > 0) {
 							//PEDIR LOS DATOS EN LOCAL DE LOS QUE NO ESTAN CONFIRMADOS EN LA WEB
-							axios.post('http://localhost/pisos_de_venta/api/get-despachos-confirmados', {despachos: despachosSinConfirmar}).then(response => {//
+							axios.post('http://localhost/pisos_de_venta/public/api/get-despachos-confirmados', {despachos: despachosSinConfirmar}).then(response => {//
 
 								despachosConfirmados = response.data
 								//console.log(response.data);
@@ -438,10 +438,10 @@
 				})
 
 				//SICRONIZACION
-				axios.post('http://localhost/pisos_de_venta/api/sincronizacion', {id: this.id}).then(response => {
+				axios.post('http://localhost/pisos_de_venta/public/api/sincronizacion', {id: this.id}).then(response => {
 					console.log(response);
 
-					axios.post('http://localhost/pisos_de_venta/api/sincronizacion', {id: this.id}).then(response => {//WEB
+					axios.post('http://localhost/pisos_de_venta/public/api/sincronizacion', {id: this.id}).then(response => {//WEB
 						console.log(response);
 
 					}).catch(e => {

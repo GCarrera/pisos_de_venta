@@ -291,7 +291,7 @@
 			comprar(){
 
 				this.error = false;
-				axios.post('http://localhost/pisos_de_venta/api/ventas-comprar', {venta: {sub_total: this.sub_total_de_compra, iva: this.iva_de_compra, total: this.total_de_compra},productos: this.productos_comprar}).then(response => {
+				axios.post('http://localhost/pisos_de_venta/public/api/ventas-comprar', {venta: {sub_total: this.sub_total_de_compra, iva: this.iva_de_compra, total: this.total_de_compra},productos: this.productos_comprar}).then(response => {
 					console.log(response.data)
 						window.location = "/ventas";
 						//this.articulo_compra = {nombre: "", cantidad: "", sub_total: "", iva: "", total: "", unidad: "", costo: null, iva_porc: null, margen_ganancia: null};

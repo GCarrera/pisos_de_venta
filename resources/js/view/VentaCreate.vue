@@ -266,7 +266,7 @@
 
 				// 	)
 				//AGREGAR PRECIO DOLAR AQUI
-				axios.post('http://localhost/pisos_de_venta/api/ventas',
+				axios.post('http://localhost/pisos_de_venta/public/api/ventas',
 					{venta:
 						{
 							sub_total: this.sub_total,

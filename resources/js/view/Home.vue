@@ -173,7 +173,7 @@
 							console.log(response);
 							let nuevoInventario = response.data;
 
-							axios.post('http://localhost/pisos_de_venta/api/actualizar-inventory-id', {inventario: nuevoInventario}).then(response => {
+							axios.post('http://localhost/pisos_de_venta/public/api/actualizar-inventory-id', {inventario: nuevoInventario}).then(response => {
 
 								console.log(response);
 								//ACTUALIZAMOS LOS PRECIOS
@@ -184,7 +184,7 @@
 									let inventory = response.data.inventory
 									let inventario = response.data.inventario
 
-									axios.post('http://localhost/pisos_de_venta/api/actualizar-precios-inventory', {productos: inventory, precios: inventario}).then(response => {
+									axios.post('http://localhost/pisos_de_venta/public/api/actualizar-precios-inventory', {productos: inventory, precios: inventario}).then(response => {
 
 										console.log(response.data)
 										//SINC
@@ -217,7 +217,7 @@
 							let inventory = response.data.inventory
 							let inventario = response.data.inventario
 
-							axios.post('http://localhost/pisos_de_venta/api/actualizar-precios-inventory', {productos: inventory, precios: inventario}).then(response => {
+							axios.post('http://localhost/pisos_de_venta/public/api/actualizar-precios-inventory', {productos: inventory, precios: inventario}).then(response => {
 
 								console.log(response.data)
 								//SINC
@@ -270,7 +270,7 @@
 			},
 			vaciar_caja(){
 
-				axios.post('http://localhost/pisos_de_venta/api/vaciar-caja').then(response => {
+				axios.post('http://localhost/pisos_de_venta/public/api/vaciar-caja').then(response => {
 
 					console.log(response.data);
 
@@ -416,7 +416,7 @@
 
 
 				//SICRONIZACION
-				axios.post('http://localhost/pisos_de_venta/api/sincronizacion', {id: this.id}).then(response => {
+				axios.post('http://localhost/pisos_de_venta/public/api/sincronizacion', {id: this.id}).then(response => {
 					console.log(response);
 
 					axios.post('http://mipuchito.com/api/sincronizacion', {id: this.id}).then(response => {//WEB
@@ -500,7 +500,7 @@
 
 							console.log(response);
 							//VOLVEMOS A ACTUALIZAR EN LOCAL
-							axios.post('http://localhost/pisos_de_venta/api/actualizar-anulados-local').then(response => {
+							axios.post('http://localhost/pisos_de_venta/public/api/actualizar-anulados-local').then(response => {
 								//SINC
 								this.sincron.anulados = true
 								console.log(response)
