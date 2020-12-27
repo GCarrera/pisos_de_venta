@@ -153,7 +153,7 @@
 			},
 			get_ventas(id){
 
-				axios.get('/api/ventas-compras', {params:{fecha_i: this.fecha_inicial, fecha_f: this.fecha_final}}).then(response => {
+				axios.get('http://localhost/pisos_de_venta/public/api/ventas-compras', {params:{fecha_i: this.fecha_inicial, fecha_f: this.fecha_final}}).then(response => {
 					
 					this.ventas = response.data.data;
 					this.pagination = response.data;
@@ -167,7 +167,7 @@
 			},
 			getKeeps(page){
 
-				axios.get('/api/ventas-compras/'+'?page='+page).then(response => {
+				axios.get('http://localhost/pisos_de_venta/public/api/ventas-compras/'+'?page='+page).then(response => {
 					console.log(response.data)
 					this.ventas = response.data.data;
 					this.pagination = response.data;

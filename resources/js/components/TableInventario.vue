@@ -136,7 +136,7 @@
 		methods:{
 			get_productos(id){
 
-				axios.get('/api/productos-piso-venta/'+id).then(response => {
+				axios.get('http://localhost/pisos_de_venta/public/api/productos-piso-venta/'+id).then(response => {
 					
 					this.productos = response.data.data;
 					this.pagination = response.data;
@@ -147,7 +147,7 @@
 			},
 			getKeeps(page){
 
-				axios.get('/api/productos-piso-venta/'+this.id+'?page='+page).then(response => {
+				axios.get('http://localhost/pisos_de_venta/public/api/productos-piso-venta/'+this.id+'?page='+page).then(response => {
 					console.log(response.data)
 					this.productos = response.data.data;
 					this.pagination = response.data;

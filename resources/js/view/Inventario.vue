@@ -188,7 +188,7 @@
 
 				//PRECIOS
 				//ULTIMO PRODUCTO DE INVENTORY REGISTRADO
-				axios.get('/api/ultimo-inventory').then(response => {
+				axios.get('http://localhost/pisos_de_venta/public/api/ultimo-inventory').then(response => {
 					//console.log(response.data)
 					let ultimoInventory = response.data
 					//TRAEMOS DE LA WEB TODOS LOS PRODUCTOS APARTIR DEL ULTIMO ID
@@ -223,7 +223,7 @@
 						//ACTUALIZAMOS LOS PRECIOS
 						//ANCLAR PRODUCTOS A UN INVENTORY_ID
 						//OBTENEMOS DE LOS PISOS TODOS LOS QUE INVENTORY_ID == NUll
-						axios.get('/api/get-inventories-id').then(response => {
+						axios.get('http://localhost/pisos_de_venta/public/api/get-inventories-id').then(response => {
 							console.log(response);
 							let inventario = response.data;
 
@@ -333,7 +333,7 @@
 				this.loading = !this.loading;
 			},
 			get_dolar() {
-				axios.get('/api/get-dolar').then(response =>{
+				axios.get('http://localhost/pisos_de_venta/public/api/get-dolar').then(response =>{
 					console.log(response)
 					this.dolar = response.data.dolar;
 				}).catch(e => {
@@ -342,7 +342,7 @@
 			},
 			get_piso_venta(){
 
-				axios.get('/api/get-piso-venta').then(response =>{
+				axios.get('http://localhost/pisos_de_venta/public/api/get-piso-venta').then(response =>{
 					console.log(response)
 					this.piso_venta_selected = response.data.piso_venta;
 					this.sincronizacion = response.data.sincronizacion.created_at;
@@ -353,7 +353,7 @@
 			},
 			get_inventario(){
 
-				axios.get('/api/get-inventario', {params:{search: this.search}}).then(response => {
+				axios.get('http://localhost/pisos_de_venta/public/api/get-inventario', {params:{search: this.search}}).then(response => {
 					//console.log(response.data);
 					this.per_page = response.data.per_page;
 					this.total_paginas = response.data.total;
@@ -366,7 +366,7 @@
 			},
 			paginar(event){
 
-				axios.get('/api/get-inventario?page='+event).then(response => {
+				axios.get('http://localhost/pisos_de_venta/public/api/get-inventario?page='+event).then(response => {
 					console.log(response.data)
 					this.per_page = response.data.per_page;
 					this.total_paginas = response.data.total;
@@ -379,7 +379,7 @@
 			refrescar(){
 				this.alert_success = false;
 				//ULTIMO PRODUCTO DE INVENTORY REGISTRADO
-				axios.get('/api/ultimo-inventory').then(response => {
+				axios.get('http://localhost/pisos_de_venta/public/api/ultimo-inventory').then(response => {
 					//console.log(response.data)
 					let ultimoInventory = response.data
 					//TRAEMOS DE LA WEB TODOS LOS PRODUCTOS APARTIR DEL ULTIMO ID
@@ -448,7 +448,7 @@
 			},
 			get_id(){
 
-				axios.get('/api/get-id').then(response => {
+				axios.get('http://localhost/pisos_de_venta/public/api/get-id').then(response => {
 
 					this.id = response.data;
 

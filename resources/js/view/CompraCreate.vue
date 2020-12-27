@@ -307,7 +307,7 @@
 			},
 			get_datos(){
 				//SOLICITO LOS PISOS DE VENTAS Y PRODUCTOS
-				axios.get('/api/ventas-datos-create').then(response => {
+				axios.get('http://localhost/pisos_de_venta/public/api/ventas-datos-create').then(response => {
 
 					console.log(response);
 					this.inventario = response.data

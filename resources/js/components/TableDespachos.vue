@@ -116,7 +116,7 @@
 		methods:{
 			get_despachos(id){
 
-				axios.get('/api/despachos-retiros/'+id, {params:{fecha_i: this.fecha_inicial, fecha_f: this.fecha_final}}).then(response => {
+				axios.get('http://localhost/pisos_de_venta/public/api/despachos-retiros/'+id, {params:{fecha_i: this.fecha_inicial, fecha_f: this.fecha_final}}).then(response => {
 
 					this.despachos = response.data.data;
 					this.pagination = response.data;
@@ -126,7 +126,7 @@
 			},
 			getKeeps(page){
 
-				axios.get('/api/despachos-retiros/'+this.id+'?page='+page, {params:{fecha_i: this.fecha_inicial, fecha_f: this.fecha_final}}).then(response => {
+				axios.get('http://localhost/pisos_de_venta/public/api/despachos-retiros/'+this.id+'?page='+page, {params:{fecha_i: this.fecha_inicial, fecha_f: this.fecha_final}}).then(response => {
 					console.log(response.data)
 					this.despachos = response.data.data;
 					this.pagination = response.data;

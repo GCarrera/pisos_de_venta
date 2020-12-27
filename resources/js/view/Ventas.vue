@@ -557,7 +557,7 @@ export default{
 	methods:{
 		resumen_dia(){
 
-			axios.get('/api/resumen-dia').then(response => {
+			axios.get('http://localhost/pisos_de_venta/public/api/resumen-dia').then(response => {
 				console.log("Respuesta resumen dia ");
 				console.log(response.data);
 				this.count = response.data;
@@ -571,7 +571,7 @@ export default{
 			let ventas = [];
 		   //ANULADOS
 		   //OBTENEMOS LOS PRODCUTOS QUE HALLAN SIDO ANULADOS
-			axios.get('/api/get-ventas-anuladas').then(response => {
+			axios.get('http://localhost/pisos_de_venta/public/api/get-ventas-anuladas').then(response => {
 				let ventas = response.data;
 				if (ventas.length > 0) {
 					//ACTUALIZAMOS LOS ANULADOS EN LA WEB
@@ -599,7 +599,7 @@ export default{
 		},
 		get_id(){
 
-			axios.get('/api/get-id').then(response => {
+			axios.get('http://localhost/pisos_de_venta/public/api/get-id').then(response => {
 
 				this.id = response.data;
 
@@ -616,7 +616,7 @@ export default{
 		//VENTAS
 
 				//OBTENEMOS MI ID DE PISO DE VENTA
-				axios.get('/api/get-piso-venta-id').then(response => {
+				axios.get('http://localhost/pisos_de_venta/public/api/get-piso-venta-id').then(response => {
 					let piso_venta_id = response.data;
 					//OBTENEMOS DE LA WEB LA ULTIMA VENTA QUE TIENE REGISTRADA CON NUESTRO PISO DE VENTA
 					console.log('primera peticion')
@@ -630,7 +630,7 @@ export default{
 						}
 
 						//OBTENEMOS TODAS LAS VENTAS QUE SEAN MAYOR AL ID_EXTRA QUE ACABO DE CONSEGUIR
-						axios.get('/api/ventas-sin-registrar/'+piso_venta_id+'/'+ultima_venta).then(response => {
+						axios.get('http://localhost/pisos_de_venta/public/api/ventas-sin-registrar/'+piso_venta_id+'/'+ultima_venta).then(response => {
 							console.log('tercera peticion')
 							let ventas = response.data
 							//VALIDACION SI TRAJO ALGUNA VENTA
@@ -697,7 +697,7 @@ export default{
 						ultima_caja = 0;
 					}
 					//SOLICITAMOS LAS VACIADAS QUE TENGO EN LOCAL
-					axios.get('/api/ultima-vaciada-caja-local/'+ultima_caja.id_extra).then(response => {
+					axios.get('http://localhost/pisos_de_venta/public/api/ultima-vaciada-caja-local/'+ultima_caja.id_extra).then(response => {
 						console.log('7 peticion')
 						let cajas = response.data;
 
@@ -770,7 +770,7 @@ export default{
 		},
 		get_piso_venta(){
 
-			axios.get('/api/get-piso-venta').then(response =>{
+			axios.get('http://localhost/pisos_de_venta/public/api/get-piso-venta').then(response =>{
 				console.log('get-piso-venta');
 				console.log(response)
 				this.piso_venta_selected = response.data.piso_venta;
@@ -782,7 +782,7 @@ export default{
 		},
 		get_ventas(){
 
-			axios.get('/api/get-ventas').then(response => {
+			axios.get('http://localhost/pisos_de_venta/public/api/get-ventas').then(response => {
 				console.log(response.data.data);
 				this.per_page = response.data.per_page;
 				this.total_paginas = response.data.total;
@@ -796,7 +796,7 @@ export default{
 		},
 		get_datos(){
 		//SOLICITO LOS PISOS DE VENTAS Y PRODUCTOS
-		axios.get('/api/ventas-datos-create').then(response => {
+		axios.get('http://localhost/pisos_de_venta/public/api/ventas-datos-create').then(response => {
 
 			console.log(response);
 			this.inventario = response.data
@@ -858,7 +858,7 @@ export default{
 		},
 		paginar(event){
 
-			axios.get('/api/get-ventas?page='+event).then(response => {
+			axios.get('http://localhost/pisos_de_venta/public/api/get-ventas?page='+event).then(response => {
 				console.log(response.data)
 				this.per_page = response.data.per_page;
 				this.total_paginas = response.data.total;
@@ -906,7 +906,7 @@ export default{
 			this.alert_success = false;
 			this.error = false
 			//OBTENEMOS MI ID DE PISO DE VENTA
-			axios.get('/api/get-piso-venta-id').then(response => {
+			axios.get('http://localhost/pisos_de_venta/public/api/get-piso-venta-id').then(response => {
 				let piso_venta_id = response.data;
 				//console.log(piso_venta_id)
 				//OBTENEMOS DE LA WEB LA ULTIMA VENTA QUE TIENE REGISTRADA CON NUESTRO PISO DE VENTA
@@ -915,7 +915,7 @@ export default{
 					let ultima_venta = response.data.id_extra
 						//console.log(ultima_venta)
 						//OBTENEMOS TODAS LAS VENTAS QUE SEAN MAYOR AL ID_EXTRA QUE ACABO DE CONSEGUIR
-					axios.get('/api/ventas-sin-registrar/'+piso_venta_id+'/'+ultima_venta).then(response => {
+					axios.get('http://localhost/pisos_de_venta/public/api/ventas-sin-registrar/'+piso_venta_id+'/'+ultima_venta).then(response => {
 
 						console.log(response.data)
 						let ventas = response.data
@@ -988,7 +988,7 @@ export default{
 		},
 		filtrar(){
 
-			axios.get('/api/get-ventas', {params:{fecha_i: this.fecha_inicial, fecha_f: this.fecha_final}}).then(response => {
+			axios.get('http://localhost/pisos_de_venta/public/api/get-ventas', {params:{fecha_i: this.fecha_inicial, fecha_f: this.fecha_final}}).then(response => {
 				console.log(response.data.data);
 				this.per_page = response.data.per_page;
 				this.total_paginas = response.data.total;
@@ -1018,11 +1018,11 @@ export default{
 		sync_anular(){
 
 			//OBTENEMOS MI ID DE PISO DE VENTA
-			axios.get('/api/get-piso-venta-id').then(response => {
+			axios.get('http://localhost/pisos_de_venta/public/api/get-piso-venta-id').then(response => {
 
 				let piso_venta_id = response.data;
 				//OBTENEMOS LOS PRODCUTOS QUE HALLAN SIDO ANULADOS
-				axios.get('/api/get-ventas-anuladas').then(response => {
+				axios.get('http://localhost/pisos_de_venta/public/api/get-ventas-anuladas').then(response => {
 
 					let ventas = response.data;
 					if (ventas.length > 0) {

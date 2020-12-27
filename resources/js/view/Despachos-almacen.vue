@@ -252,7 +252,7 @@
 		methods:{
 			get_despachos(){
 
-				axios.get('/api/get-despachos-almacen').then(response => {
+				axios.get('http://localhost/pisos_de_venta/public/api/get-despachos-almacen').then(response => {
 					//console.log(response.data);
 					this.per_page = response.data.per_page;
 					this.total_paginas = response.data.total;
@@ -265,7 +265,7 @@
 			},
 			get_datos(){
 				//SOLICITO LOS PISOS DE VENTAS Y PRODUCTOS
-				axios.get('/api/despachos-datos-create').then(response => {
+				axios.get('http://localhost/pisos_de_venta/public/api/despachos-datos-create').then(response => {
 
 					console.log(response);
 					this.piso_ventas = response.data.piso_ventas
@@ -342,7 +342,7 @@
 			},
 			paginar(event){
 
-				axios.get('/api/get-despachos-almacen?page='+event).then(response => {
+				axios.get('http://localhost/pisos_de_venta/public/api/get-despachos-almacen?page='+event).then(response => {
 					console.log(response.data)
 					this.per_page = response.data.per_page;
 					this.total_paginas = response.data.total;
@@ -378,7 +378,7 @@
 			buscar_inventario(){
 				//console.log(this.piso_venta_retiro)
 				
-				axios.get('/api/inventario-piso-venta/'+this.piso_venta_retiro).then(response => {
+				axios.get('http://localhost/pisos_de_venta/public/api/inventario-piso-venta/'+this.piso_venta_retiro).then(response => {
 					console.log(response)
 					this.inventario_piso_venta = response.data
 					this.disab = false;

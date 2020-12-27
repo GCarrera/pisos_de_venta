@@ -185,7 +185,7 @@
 				let despachosSinConfirmar = [];
 				let despachosConfirmados = [];
 				//ULTIMO DESPACHO RECIBIDO
-				axios.get('/api/ultimo-despacho').then(response => {
+				axios.get('http://localhost/pisos_de_venta/public/api/ultimo-despacho').then(response => {
 
 					//console.log(response)
 					//SI SE TRAJO ALGUN DESPACHO, ESTO QUITA EL ERROR DE LA PRIMERA VEZ YA QUE NO ABRA NINGUN REGISTRO previo
@@ -287,7 +287,7 @@
 			},
 			get_piso_venta(){
 
-				axios.get('/api/get-piso-venta').then(response =>{
+				axios.get('http://localhost/pisos_de_venta/public/api/get-piso-venta').then(response =>{
 					console.log(response)
 					this.piso_venta_selected = response.data.piso_venta;
 					this.sincronizacion = response.data.sincronizacion.created_at;
@@ -298,7 +298,7 @@
 			},
 			get_despachos(){
 
-				axios.get('/api/get-despachos').then(response => {
+				axios.get('http://localhost/pisos_de_venta/public/api/get-despachos').then(response => {
 					//console.log(response.data);
 					this.per_page = response.data.per_page;
 					this.total_paginas = response.data.total;
@@ -311,7 +311,7 @@
 			},
 			paginar(event){
 
-				axios.get('/api/get-despachos?page='+event).then(response => {
+				axios.get('http://localhost/pisos_de_venta/public/api/get-despachos?page='+event).then(response => {
 					console.log(response.data)
 					this.per_page = response.data.per_page;
 					this.total_paginas = response.data.total;
@@ -343,7 +343,7 @@
 			},
 			get_id(){
 
-				axios.get('/api/get-id').then(response => {
+				axios.get('http://localhost/pisos_de_venta/public/api/get-id').then(response => {
 
 					this.id = response.data;
 
@@ -359,7 +359,7 @@
 				let despachosSinConfirmar = [];
 				let despachosConfirmados = [];
 				//ULTIMO DESPACHO RECIBIDO
-				axios.get('/api/ultimo-despacho').then(response => {
+				axios.get('http://localhost/pisos_de_venta/public/api/ultimo-despacho').then(response => {
 
 					//console.log(response)
 					//SI SE TRAJO ALGUN DESPACHO, ESTO QUITA EL ERROR DE LA PRIMERA VEZ YA QUE NO ABRA NINGUN REGISTRO previo
@@ -455,7 +455,7 @@
 			},
 			sinconfirmacion(){
 				//PEDIR DE LA WEB LOS DESPACHOS QUE NO ESTAN CONFIRMADOS
-							axios.get('/api/get-despachos-sin-confirmacion/'+this.id).then(response => {
+							axios.get('http://localhost/pisos_de_venta/public/api/get-despachos-sin-confirmacion/'+this.id).then(response => {
 
 								console.log(response);
 
