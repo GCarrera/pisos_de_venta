@@ -284,7 +284,7 @@
 						console.log('el mensaje',this.error_message)
 						this.error = true;
 						this.showAlert();
-						window.location="/ventas/create";
+						window.location="http://localhost/pisos_de_venta/public/ventas/create";
 
 					}else{
 						this.cantidad_disponible = null

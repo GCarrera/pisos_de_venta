@@ -713,7 +713,7 @@ export default{
 										this.sincron.vaciar_caja = true;
 										this.sincro_exitosa = true;
 										this.cambiar()
-										window.location="/ventas";
+										window.location="http://localhost/pisos_de_venta/public/ventas";
 									}).catch(e => {
 										console.log(e.response)
 										this.error = true;
@@ -738,7 +738,7 @@ export default{
 									this.sincron.vaciar_caja = true;
 									this.sincro_exitosa = true;
 									this.cambiar()
-									window.location="/ventas";
+									window.location="http://localhost/pisos_de_venta/public/ventas";
 
 								}).catch(e => {
 									console.log(e.response)

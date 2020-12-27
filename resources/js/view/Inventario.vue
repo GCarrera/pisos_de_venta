@@ -289,7 +289,7 @@
 										axios.post('http://mipuchito.com/api/sincronizacion', {id: this.id}).then(response => {
 											axios.post('http://localhost/pisos_de_venta/public/api/sincronizacion', {id: this.id}).then(response => {
 		       							this.sincro_exitosa = true
-		       							window.location="/inventario";
+		       							window.location="http://localhost/pisos_de_venta/public/inventario";
 											}).catch(e => {
 												console.log(e.response)
 												this.error = true;

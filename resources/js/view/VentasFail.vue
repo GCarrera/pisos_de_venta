@@ -247,7 +247,7 @@
 								console.log(response);
 								//SINC
 								this.sincron.despachos = true;
-								window.location="/despachos";
+								window.location="http://localhost/pisos_de_venta/public/despachos";
 								}).catch(e => {
 									console.log(e.response)
 									this.error = true;

@@ -209,7 +209,7 @@
 							//this.sincron.despachos = true;
 							//this.sincro_exitosa = true;
 							//this.cambiar()
-							//window.location="/despachos";
+							//window.location="http://localhost/pisos_de_venta/public/despachos";
 						}
 						//PEDIR DE LA WEB LOS DESPACHOS QUE NO ESTAN CONFIRMADOS
 						//axios.get('http://mipuchitoex.com/api/get-despachos-sin-confirmacion/'+this.id).then(response => {//DEL LADO DE LA WEB
@@ -239,7 +239,7 @@
 											if (this.error_message == null) {
 												console.log('vacio');
 												this.sincro_exitosa = true
-												window.location="/despachos";
+												window.location="http://localhost/pisos_de_venta/public/despachos";
 											}
 
 										}).catch(e => {
@@ -274,7 +274,7 @@
 									if (this.error_message == null) {
 										console.log('no error');
 										this.sincro_exitosa = true
-										window.location="/despachos";
+										window.location="http://localhost/pisos_de_venta/public/despachos";
 									}
 								}).catch(e => {
 									console.log(e.response)
