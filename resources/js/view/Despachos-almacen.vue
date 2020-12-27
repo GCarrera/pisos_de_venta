@@ -314,7 +314,7 @@
 			},
 			despachar(){
 
-				axios.post('/api/despachos', {productos: this.productos, piso_venta: this.piso_venta}).then(response => {
+				axios.post('http://localhost/pisos_de_venta/api/despachos', {productos: this.productos, piso_venta: this.piso_venta}).then(response => {
 					console.log(response)
 					this.articulo = {id: 0, nombre: "", cantidad: ""};
 					this.despachos.splice(0,0, response.data);
@@ -328,7 +328,7 @@
 			},
 			retirar(){
 
-				axios.post('/api/despachos', {productos: this.productos, piso_venta: this.piso_venta}).then(response => {
+				axios.post('http://localhost/pisos_de_venta/api/despachos', {productos: this.productos, piso_venta: this.piso_venta}).then(response => {
 					console.log(response)
 					this.articulo = {id: 0, nombre: "", cantidad: ""};
 					this.despachos.splice(0,0, response.data);
@@ -363,7 +363,7 @@
 			},
 			retirar(){
 
-				axios.post('/api/despachos-retiro', {productos: this.productos_retirar, piso_venta: this.piso_venta_retiro}).then(response => {
+				axios.post('http://localhost/pisos_de_venta/api/despachos-retiro', {productos: this.productos_retirar, piso_venta: this.piso_venta_retiro}).then(response => {
 					console.log(response)
 					this.articulo_retiro = {id: "", nombre: "", cantidad: ""};
 					this.despachos.splice(0,0, response.data);

@@ -201,7 +201,7 @@
 						if (productos.length > 0) {
 							//console.log(productos);
 							console.log("hay que registrar")
-							axios.post('/api/registrar-inventory', {productos: productos}).then(response => {
+							axios.post('http://localhost/pisos_de_venta/api/registrar-inventory', {productos: productos}).then(response => {
 
 								console.log(response.data);
 								if (response.data == true) {
@@ -234,7 +234,7 @@
 									console.log(response);
 									let nuevoInventario = response.data;
 									//ACTUALIZAMOS EN LOCAL LOS INVENTORY_ID
-									axios.post('/api/actualizar-inventory-id', {inventario: nuevoInventario}).then(response => {
+									axios.post('http://localhost/pisos_de_venta/api/actualizar-inventory-id', {inventario: nuevoInventario}).then(response => {
 
 										console.log(response);
 										//ACTUALIZAMOS LOS PRECIOS
@@ -245,7 +245,7 @@
 											let inventory = response.data.inventory
 											let inventario = response.data.inventario
 
-											axios.post('/api/actualizar-precios-inventory', {productos: inventory, precios: inventario}).then(response => {
+											axios.post('http://localhost/pisos_de_venta/api/actualizar-precios-inventory', {productos: inventory, precios: inventario}).then(response => {
 
 												console.log(response.data)
 												//SINC
@@ -278,7 +278,7 @@
 									let inventory = response.data.inventory
 									let inventario = response.data.inventario
 
-									axios.post('/api/actualizar-precios-inventory', {productos: inventory, precios: inventario}).then(response => {
+									axios.post('http://localhost/pisos_de_venta/api/actualizar-precios-inventory', {productos: inventory, precios: inventario}).then(response => {
 
 										console.log(response.data)
 										//SINC
@@ -287,7 +287,7 @@
 			   							this.get_id();
 									 	this.cambiar()
 										axios.post('http://mipuchito.com/api/sincronizacion', {id: this.id}).then(response => {
-											axios.post('/api/sincronizacion', {id: this.id}).then(response => {
+											axios.post('http://localhost/pisos_de_venta/api/sincronizacion', {id: this.id}).then(response => {
 		       							this.sincro_exitosa = true
 		       							window.location="/inventario";
 											}).catch(e => {
@@ -392,7 +392,7 @@
 						if (productos.length > 0) {
 
 							console.log("hay que registrar")
-							axios.post('/api/registrar-inventory', {productos: productos}).then(response => {
+							axios.post('http://localhost/pisos_de_venta/api/registrar-inventory', {productos: productos}).then(response => {
 								console.log(response);
 								if (response.data == true) {
 									console.log("productos registrados exitosamente")
@@ -414,7 +414,7 @@
 							console.log(response)
 							let articulos = response.data
 
-							axios.post('/api/actualizar-precios-inventory', {productos: articulos}).then(response => {
+							axios.post('http://localhost/pisos_de_venta/api/actualizar-precios-inventory', {productos: articulos}).then(response => {
 
 								console.log(response.data)
 							}).catch(e => {
@@ -432,10 +432,10 @@
 				});
 
 				//SICRONIZACION
-				axios.post('/api/sincronizacion', {id: this.id}).then(response => {
+				axios.post('http://localhost/pisos_de_venta/api/sincronizacion', {id: this.id}).then(response => {
 					console.log(response);
 
-					axios.post('/api/sincronizacion', {id: this.id}).then(response => {//WEB
+					axios.post('http://localhost/pisos_de_venta/api/sincronizacion', {id: this.id}).then(response => {//WEB
 						console.log(response);
 
 					}).catch(e => {

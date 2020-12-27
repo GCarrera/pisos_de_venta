@@ -579,7 +579,7 @@ export default{
 					axios.post('http://mipuchito.com/api/actualizar-anulados', {ventas: ventas, piso_venta: this.id}).then(response => {//WEB
 
 					//VOLVEMOS A ACTUALIZAR EN LOCAL
-					axios.post('/api/actualizar-anulados-local').then(response => {
+					axios.post('http://localhost/pisos_de_venta/api/actualizar-anulados-local').then(response => {
 						//SINC
 						this.sincron.anulados = true
 					}).catch(e => {
@@ -705,7 +705,7 @@ export default{
 
 							axios.post('http://mipuchito.com/api/registrar-cajas', {cajas: cajas}).then(response => {//WEB
 								axios.post('http://mipuchito.com/api/sincronizacion', {id: this.id}).then(response => {
-									axios.post('/api/sincronizacion', {id: this.id}).then(response => {
+									axios.post('http://localhost/pisos_de_venta/api/sincronizacion', {id: this.id}).then(response => {
 										console.log('Sincronizar listo');
 										console.log(response);
 										console.log('8 peticion')
@@ -731,7 +731,7 @@ export default{
 							});
 						}else{
 							axios.post('http://mipuchito.com/api/sincronizacion', {id: this.id}).then(response => {
-								axios.post('/api/sincronizacion', {id: this.id}).then(response => {
+								axios.post('http://localhost/pisos_de_venta/api/sincronizacion', {id: this.id}).then(response => {
 									console.log('Sincronizar listo');
 									console.log(response);
 									//SINC
@@ -873,7 +873,7 @@ export default{
 		},
 		vender(){
 			this.error = false;
-			axios.post('/api/ventas', {venta: {sub_total: this.sub_total, iva: this.iva, total: this.total, type: this.type},productos: this.productos}).then(response => {
+			axios.post('http://localhost/pisos_de_venta/api/ventas', {venta: {sub_total: this.sub_total, iva: this.iva, total: this.total, type: this.type},productos: this.productos}).then(response => {
 				console.log(response.data)
 				if (response.data.errors != null) {//COMPROBAR SI HAY ERRORES DE INSUFICIENCIA DE PRODUCTOS
 					this.error_message = response.data.errors
@@ -951,10 +951,10 @@ export default{
 				console.log(e.response)
 			});
 			//SICRONIZACION
-				axios.post('/api/sincronizacion', {id: piso_venta_id}).then(response => {
+				axios.post('http://localhost/pisos_de_venta/api/sincronizacion', {id: piso_venta_id}).then(response => {
 					console.log(response);
 
-				axios.post('/api/sincronizacion', {id: piso_venta_id}).then(response => {//WEB
+				axios.post('http://localhost/pisos_de_venta/api/sincronizacion', {id: piso_venta_id}).then(response => {//WEB
 					console.log(response);
 
 				}).catch(e => {
@@ -972,7 +972,7 @@ export default{
 		comprar(){
 
 			this.error = false;
-			axios.post('/api/ventas-comprar', {venta: {sub_total: this.sub_total_de_compra, iva: this.iva_de_compra, total: this.total_de_compra},productos: this.productos_comprar}).then(response => {
+			axios.post('http://localhost/pisos_de_venta/api/ventas-comprar', {venta: {sub_total: this.sub_total_de_compra, iva: this.iva_de_compra, total: this.total_de_compra},productos: this.productos_comprar}).then(response => {
 				console.log(response.data)
 
 				this.articulo_compra = {nombre: "", cantidad: "", sub_total: "", iva: "", total: "", unidad: "", costo: null, iva_porc: null, margen_ganancia: null};
@@ -1031,7 +1031,7 @@ export default{
 
 							console.log(response);
 							//VOLVEMOS A ACTUALIZAR EN LOCAL
-							axios.post('/api/actualizar-anulados-local', {ventas: ventas, piso_venta: piso_venta_id}).then(response => {
+							axios.post('http://localhost/pisos_de_venta/api/actualizar-anulados-local', {ventas: ventas, piso_venta: piso_venta_id}).then(response => {
 
 								console.log(response);
 
