@@ -224,7 +224,7 @@
 
 								despachosConfirmados = response.data
 								console.log("despachos confirmados");
-								//console.log(response.data);
+								console.log(despachosConfirmados);
 								//GUARDAR LOS DATOS ANTERIORES EN LA WEB
 								axios.post('http://mipuchito.com/api/actualizar-confirmados', {despachos: despachosConfirmados, piso_venta_id: this.id}).then(response => {//DEL LADO DE LA WEB PARA ACTUALIZAR LAS CONFIRMACIONES
 									axios.post('http://mipuchito.com/api/sincronizacion', {id: this.id}).then(response => {

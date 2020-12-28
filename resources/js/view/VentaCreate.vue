@@ -296,7 +296,7 @@
 					  	timer: 1500
 					})
 					setTimeout(function () {
-						window.location = "/ventas/create";
+						window.location = "/pisos_de_venta/public/ventas/create";
 					}, 1500);
 					//window.location = "/ventas/create";
 					// setTimeout((1500) => {
