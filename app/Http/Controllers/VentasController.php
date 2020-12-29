@@ -100,7 +100,7 @@ class VentasController extends Controller
 
 	            // $data= ['resta' =>$resta, 'cantidad inventario' => $inventario->cantidad, 'cantidad de producto'=> $producto['cantidad']];
 	            //VALICACION POR SI NO HAY SUFICIENTES PRODUCTOS
-	            if ($resta <= 0.000) {
+	            if ($resta < 0.000) {
 
 	            	return response()->json(['errors' => 'no hay suficientes productos en el inventario']);
 	            	DB::rollback();
