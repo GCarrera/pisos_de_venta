@@ -48,13 +48,13 @@
 							</div>
 
 							<div class="form-group col-md-3">
-								<label for="cantidad">Cantidad:</label>
-								<input type="number" name="cantidad" id="cantidad" placeholder="Cantidad" class="form-control" v-model="articulo.cantidad" ref="cantidad" v-on:keyup.enter="agregar_producto_enter">
+								<!--<label for="cantidad">Cantidad:</label>-->
+								<!--<input type="number" name="cantidad" id="cantidad" placeholder="Cantidad" class="form-control" v-model="articulo.cantidad" ref="cantidad" v-on:keyup.enter="agregar_producto_enter">-->
 							</div>
 
 							<div class="form-group col-md-3">
-								<label class="text-center" for="">Acción:</label><br>
-								<button class="btn btn-primary btn-block" type="button" @click="agregar_producto()" :disabled="disabled_venta">Agregar</button>
+								<!--<label class="text-center" for="">Acción:</label><br>
+								<button class="btn btn-primary btn-block" type="button" @click="agregar_producto()" :disabled="disabled_venta">Agregar</button>-->
 							</div>
 						</div>
 					</div>
@@ -73,10 +73,11 @@
 						<tbody>
 							<tr v-for="(produc_enviar, index) in productos" :key="index">
 								<td>{{produc_enviar.nombre}}</td>
-								<td>{{produc_enviar.cantidad}}</td>
-								<td>{{new Intl.NumberFormat("de-DE", {minimumFractionDigits: 2}).format(produc_enviar.total/produc_enviar.cantidad)}}</td>
+								<td><input type="number" name="cantidad" min="0" :id="index" value="1" placeholder="Cantidad" class="form-control" v-on:keyup="update_cantidad($event.target.value, produc_enviar.id, index)" v-on:change="update_cantidad($event.target.value, produc_enviar.id, index)"></td>
+								<!--<td>{{produc_enviar.cantidad}}</td>-->
+								<td>{{new Intl.NumberFormat("de-DE", {minimumFractionDigits: 2, maximumFractionDigits: 2}).format(produc_enviar.total/produc_enviar.cantidad)}}</td>
 								<!-- <td>{{produc_enviar.iva}}</td> -->
-								<td>{{new Intl.NumberFormat("de-DE", {minimumFractionDigits: 2}).format(produc_enviar.total)}}</td>
+								<td>{{new Intl.NumberFormat("de-DE", {minimumFractionDigits: 2, maximumFractionDigits: 2}).format(produc_enviar.total)}}</td>
 								<td>
 									<button class="btn btn-danger" type="button" @click="eliminar(index)">Eliminar</button>
 								</td>
@@ -127,6 +128,7 @@
 				productos: [],//LISTA DE PRODUCTOS QUE VOY A AGREGAR
 				iva:"",
 				dolar:0,
+				focusId:0,
 				articulo: {
 					id: 0,
 					nombre: "",
@@ -156,7 +158,7 @@
 				}
 			},
 			setFocus(){
-				this.$refs.cantidad.focus();
+				//this.$refs.cantidad.focus();
 			},
 			get_datos(){
 				//SOLICITO LOS PISOS DE VENTAS Y PRODUCTOS
@@ -200,15 +202,101 @@
 					this.articulo.id = id;
 					this.articulo.nombre = resultado.inventario.name;
 
+
 					this.articulo.sub_total = resultado.inventario.precio.sub_total_menor
 					this.articulo.iva = resultado.inventario.precio.iva_menor
 					this.articulo.total = resultado.inventario.precio.total_menor
 
 					this.cantidad_disponible = resultado.cantidad;
 
-					console.log(this.articulo);
+					console.log("establecer_nombre 204 "+this.cantidad_disponible);
+
+					this.agregar_producto_new();
 				}
 
+			},
+			update_cantidad(cant, id, index){
+				if (cant != "" && cant != 0) {
+
+					let resultado = this.inventario_completo.find(element => element.inventario.id == id)
+					this.articulo.id = id;
+					this.articulo.nombre = resultado.inventario.name;
+
+
+					this.articulo.sub_total = resultado.inventario.precio.sub_total_menor
+					this.articulo.iva = resultado.inventario.precio.iva_menor
+					this.articulo.total = resultado.inventario.precio.total_menor
+
+					this.cantidad_disponible = resultado.cantidad;
+
+					//------------------------------------------------
+
+					//this.selectedValue = null
+					this.articulo.cantidad = cant
+					this.articulo.sub_total *= this.articulo.cantidad
+					this.articulo.iva *= this.articulo.cantidad
+					this.articulo.total *= this.articulo.cantidad
+
+					//AGREGAR PRECIO DOLAR AQUI
+					this.articulo.sub_total *= this.dolar
+					this.articulo.iva *= this.dolar
+					this.articulo.total *= this.dolar
+
+					this.productos[index]['sub_total'] = this.articulo.sub_total;
+					this.productos[index]['iva'] = this.articulo.iva;
+					this.productos[index]['total'] = this.articulo.total;
+					this.productos[index]['cantidad'] = cant;
+
+					/*this.productos.splice(index, 1);
+					this.productos.push(this.articulo);*/
+
+					//console.log(this.productos)
+					this.articulo = {id: 0, nombre: "", cantidad: "", sub_total: "", iva: "", total: ""};
+
+				}
+
+			},
+			agregar_producto_new(compra){
+
+				if (compra == "compra") {
+
+					this.articulo_compra.sub_total_unitario = this.articulo_compra.sub_total
+					this.articulo_compra.iva_unitario = this.articulo_compra.iva
+					this.articulo_compra.total_unitario = this.articulo_compra.total
+
+					this.articulo_compra.sub_total *= this.articulo_compra.cantidad
+					this.articulo_compra.iva *= this.articulo_compra.cantidad
+					this.articulo_compra.total *= this.articulo_compra.cantidad
+
+					this.productos_comprar.push(this.articulo_compra);
+
+
+					this.articulo_compra = {nombre: "", cantidad: "", sub_total: "", iva: "", total: "", unidad: "", costo: null, iva_porc: null, margen_ganancia: null};
+				}else{
+					this.selectedValue = null
+					this.articulo.cantidad = 1
+					this.articulo.sub_total *= this.articulo.cantidad
+					this.articulo.iva *= this.articulo.cantidad
+					this.articulo.total *= this.articulo.cantidad
+
+					//AGREGAR PRECIO DOLAR AQUI
+					this.articulo.sub_total *= this.dolar
+					this.articulo.iva *= this.dolar
+					this.articulo.total *= this.dolar
+
+					this.productos.push(this.articulo);
+					/*this.focusId = this.productos.length-1;
+					$("#"+this.focusId).focusin();
+					/*this.$refs.focusId.focus();*/
+					/*console.log("pasiro");
+					console.log(this.focusId)
+					console.log($("#"+this.focusId));*/
+
+					//console.log(this.productos)
+					this.articulo = {id: 0, nombre: "", cantidad: "", sub_total: "", iva: "", total: ""};
+
+					//this.cantidad_disponible = "";
+				}
 			},
 			agregar_producto(compra){
 
@@ -369,7 +457,7 @@
 				console.log("funcion mostrar_total_total");
 				console.log(this.total_total);
 				//AGREGAR PRECIO DOLAR AQUI
-				let n = new Intl.NumberFormat("de-DE", {minimumFractionDigits: 2}).format(this.total_total)
+				let n = new Intl.NumberFormat("de-DE", {minimumFractionDigits: 2, maximumFractionDigits: 2}).format(this.total_total)
 				//let a = n +",00"
 				return n
 			},
@@ -406,7 +494,7 @@
 			selectedValue: function (val) {
 				if (val != null) {
 					this.establecer_nombre(val.value)
-		      		console.log(val.value)
+		      		console.log("selectedValue watch "+val.value)
 	      		}
 	    	}
 		}
