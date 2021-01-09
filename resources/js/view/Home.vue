@@ -43,7 +43,7 @@
 				<div class="row text-white text-center">
 					<div class="col-md-3" style="line-height: 5em; font-size: 1.5em;">
 						<!--<div class="bg-dark rounded shadow">Ventas: {{count.ventas}}</div>-->
-						<a href="/ventas" class="btn bg-dark text-white" tabindex="-1" role="button" aria-disabled="true">Ventas: {{count.ventas}}</a>
+						<a href="http://localhost/pisos_de_venta/public/ventas" class="btn bg-dark text-white" tabindex="-1" role="button" aria-disabled="true">Ventas: {{count.ventas}}</a>
 
 					</div>
 					<div class="col-md-3" style="line-height: 5em; font-size: 1.5em;">
@@ -52,7 +52,7 @@
 					</div>
 					<div class="col-md-3" style="line-height: 5em; font-size: 1.5em;">
 						<!--<div class="bg-dark rounded shadow">Despachos: {{count.despachos}}</div>-->
-						<a href="/despachos" class="btn bg-dark text-white" tabindex="-1" role="button" aria-disabled="true">Despachos: {{count.despachos}}</a>
+						<a href="http://localhost/pisos_de_venta/public/despachos" class="btn bg-dark text-white" tabindex="-1" role="button" aria-disabled="true">Despachos: {{count.despachos}}</a>
 					</div>
 					<div class="col-md-3" style="line-height: 5em; font-size: 1.5em;">
 						<!--<div class="bg-dark rounded shadow">Retiros: {{count.retiros}}</div>-->
@@ -95,7 +95,7 @@
 				<div class="modal-dialog">
 				    <div class="modal-content">
 						<div class="modal-header">
-				        	<h5 class="modal-title" id="exampleModalLabel">Vciar caja</h5>
+				        	<h5 class="modal-title" id="exampleModalLabel">Vaciar caja</h5>
 				        	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 				          	<span aria-hidden="true">&times;</span>
 				        	</button>

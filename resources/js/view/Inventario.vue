@@ -16,7 +16,8 @@
 							<div v-if="piso_venta_selected.length != 0" style="font-size: 1em;" class="mt-3">
 								<span><span class="font-weight-bold">PV:</span> {{piso_venta_selected.nombre}}</span> <br>
 								<!-- <span><span class="font-weight-bold">Lugar:</span> {{piso_venta_selected.ubicacion}}</span> <br> -->
-								<span><span class="font-weight-bold">Caja:</span> {{formattedCurrencyValue}}</span> <br>
+								<span><span class="font-weight-bold">Productos:</span> {{productos.length}}</span> <br>
+								<!--<span><span class="font-weight-bold">Caja:</span> {{formattedCurrencyValue}}</span> <br>-->
 
 							</div>
 								<hr>
