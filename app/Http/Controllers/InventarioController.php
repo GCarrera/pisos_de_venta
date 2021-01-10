@@ -45,6 +45,24 @@ class InventarioController extends Controller
         return response()->json($inventario);
     }
 
+    public function auditoria(Request $request)
+    {
+      foreach ($request->productos as $value) {
+
+        $inventory_id = $value['inventario']['inventory_id'];
+
+        $producto = Inventario::select('id')->where('inventory_id', $inventory_id)->orderBy('id', 'desc')->first();
+
+        $inventario = Inventario_piso_venta::with('inventario')->where('piso_venta_id', $request->id)->where('inventario_id', $producto->id)->orderBy('id', 'desc')->first();
+
+        $inventario->cantidad = $value['cantidad'];
+
+        $inventario->save();
+      }
+
+      return response()->json(true);
+    }
+
     public function ultimo_inventory()
     {
 

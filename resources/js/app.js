@@ -37,7 +37,7 @@ Vue.component('compra-create', require('./view/CompraCreate.vue').default);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 import Vue from 'vue'
-import {ModalPlugin, PaginationPlugin, AlertPlugin } from 'bootstrap-vue'
+import {ModalPlugin, PaginationPlugin, AlertPlugin, BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 
 //Vue.component('b-modal', BModal)
 // Note that Vue automatically prefixes directive names with `v-`
@@ -49,6 +49,14 @@ import {ModalPlugin, PaginationPlugin, AlertPlugin } from 'bootstrap-vue'
 Vue.use(ModalPlugin)
 Vue.use(PaginationPlugin)
 Vue.use(AlertPlugin)
+
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+
+// Install BootstrapVue
+Vue.use(BootstrapVue)
+// Optionally install the BootstrapVue icon components plugin
+Vue.use(IconsPlugin)
 // Optionally install the BootstrapVue icon components plugin
 //Vue.use(IconsPlugin)
 

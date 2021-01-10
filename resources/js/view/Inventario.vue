@@ -32,6 +32,31 @@
 							</div>
 							</button>
 
+							<button class="btn btn-primary btn-block" v-b-modal.modal-auditoria>
+
+							<span v-if="loading_aud == false">Auditoria</span>
+							<div class="spinner-border text-light text-center" role="status" v-if="loading_aud == true">
+							  	<span class="sr-only">Cargando...</span>
+							</div>
+							</button>
+
+							<!-- MODAL AUDITORIA -->
+							<b-modal id="modal-auditoria" size="sm" title="Modificar cantidad" @ok="handleOk">
+					      <div class="d-block text-center">
+									<p>¿Esta segura que desea proceder con la auditoria?</p>
+					      </div>
+								<template #modal-footer="{ ok, cancel }">
+						      <!-- Emulate built in modal footer ok and cancel button actions -->
+						      <b-button size="sm" variant="success" @click="ok()">
+						        Continuar
+						      </b-button>
+						      <b-button size="sm" variant="danger" @click="cancel()">
+						        Cancelar
+						      </b-button>
+						    </template>
+					    </b-modal>
+							<!-- FIN MODAL AUDITORIA -->
+
 							<!--<button class="btn btn-warning btn-block" @click="precios">Precios</button>-->
 					</div>
 				</div>
@@ -142,6 +167,7 @@
 				productos: [],
 				sincronizacion:'',
 				loading:false,
+				loading_aud:false,
 				id:'',
 				error: false,
 				piso_venta_selected:[],
@@ -169,6 +195,30 @@
 		methods:{
 			showModalDetalles(id){
 				this.$bvModal.show("modal-detalles-"+id)
+			},
+			handleOk(){
+				this.cambiar_aud();
+				console.log("empieza audotioria");
+				axios.post('http://mipuchito.com/api/auditoria', {id: this.id}).then(response => {
+					console.log(response);
+					let productos = response.data;
+					axios.post('http://localhost/pisos_de_venta/public/api/auditoria', {id: this.id, productos: productos}).then(response => {
+						console.log(response.data);
+						if (response.data) {
+							this.cambiar_aud();
+							window.location="http://localhost/pisos_de_venta/public/inventario";
+						}
+						//this.sincro_exitosa = true
+					}).catch(e => {
+						console.log(e.response)
+						this.error = true;
+						this.cambiar_aud();
+					});
+				}).catch(e => {
+					console.log(e.response)
+					this.error = true;
+					this.cambiar_aud();
+				});
 			},
 			sincronizar(){
 				this.sincron = {
@@ -332,6 +382,9 @@
 		    cambiar(){
 				console.log("btn cambio")
 				this.loading = !this.loading;
+			},
+			cambiar_aud(){
+				this.loading_aud = !this.loading_aud;
 			},
 			get_dolar() {
 				axios.get('http://localhost/pisos_de_venta/public/api/get-dolar').then(response =>{
