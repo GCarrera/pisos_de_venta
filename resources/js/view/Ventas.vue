@@ -45,7 +45,7 @@
 						<span class="font-weight-bold" > Ultima Actualización: </span> <span v-if="sincronizacion !== null">{{sincronizacion}}</span> <br>
 						<!-- <span class="font-weight-bold" >Ultima vez que vacio la caja: </span><span  v-if="caja !== null">{{caja}}</span> <br> -->
 						<hr>
-						<button class="btn btn-primary btn-block" @click="sincronizar">
+						<button class="btn btn-primary btn-block" @click="sincronizar" :disabled="loading">
 
 							<span v-if="loading == false">Sincronizar</span>
 							<div class="spinner-border text-light text-center" role="status" v-if="loading == true">
@@ -619,7 +619,7 @@ export default{
 				axios.get('http://localhost/pisos_de_venta/public/api/get-piso-venta-id').then(response => {
 					let piso_venta_id = response.data;
 					//OBTENEMOS DE LA WEB LA ULTIMA VENTA QUE TIENE REGISTRADA CON NUESTRO PISO DE VENTA
-					console.log('primera peticion')
+					console.log('primera peticion '+piso_venta_id)
 					axios.get('http://mipuchito.com/api/ultima-venta/'+piso_venta_id).then(response => {//WEB
 						console.log('segunda peticion')
 						//EVALUAMOS QUE EXISTA LA PROPIEDAD EN CASO DE SER LA PRIMERA VENTA
@@ -628,11 +628,13 @@ export default{
 						} else {
 							var ultima_venta = '0'
 						}
+						console.log(ultima_venta);
 
 						//OBTENEMOS TODAS LAS VENTAS QUE SEAN MAYOR AL ID_EXTRA QUE ACABO DE CONSEGUIR
 						axios.get('http://localhost/pisos_de_venta/public/api/ventas-sin-registrar/'+piso_venta_id+'/'+ultima_venta).then(response => {
 							console.log('tercera peticion')
 							let ventas = response.data
+							console.log(ventas);
 							//VALIDACION SI TRAJO ALGUNA VENTA
 							if (ventas.length > 0) {
 
@@ -713,7 +715,7 @@ export default{
 										this.sincron.vaciar_caja = true;
 										this.sincro_exitosa = true;
 										this.cambiar()
-										window.location="http://localhost/pisos_de_venta/public/ventas";
+										//window.location="http://localhost/pisos_de_venta/public/ventas";
 									}).catch(e => {
 										console.log(e.response)
 										this.error = true;
@@ -738,7 +740,7 @@ export default{
 									this.sincron.vaciar_caja = true;
 									this.sincro_exitosa = true;
 									this.cambiar()
-									window.location="http://localhost/pisos_de_venta/public/ventas";
+									//window.location="http://localhost/pisos_de_venta/public/ventas";
 
 								}).catch(e => {
 									console.log(e.response)

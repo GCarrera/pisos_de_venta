@@ -26,11 +26,11 @@
 									<span class="font-weight-bold" > Ultima Actualización: </span> <span v-if="sincronizacion !== null">{{sincronizacion}}</span> <br>
 									<!-- <span class="font-weight-bold" >Ultima vez que vacio la caja: </span><span  v-if="caja !== null">{{caja}}</span> <br> -->
 								<hr>
-							<button class="btn btn-primary btn-block" @click="sincronizar">
+							<button class="btn btn-primary btn-block" @click="sincronizar" :disabled="loading">
 
 							<span v-if="loading == false">Sincronizar</span>
 							<div class="spinner-border text-light text-center" role="status" v-if="loading == true">
-							  	<span class="sr-only">Loading...</span>
+							  	<span class="sr-only">Cargando...</span>
 							</div>
 							</button>
 
@@ -71,8 +71,12 @@
 								<td>
 									<button type="button" class="btn btn-primary" @click="showModalDetalles(despacho.id)">Ver</button>
 									<!--<button class="btn btn-primary" data-toggle="modal" data-target="#modalVer">Ver</button>-->
-									<button class="btn btn-success" v-if="despacho.confirmado == null" @click="confirmar(despacho.id, index)">Confirmar</button>
-									<button class="btn btn-danger" v-if="despacho.confirmado == null" @click="negar(despacho.id, index)">Negar</button>
+									<button class="btn btn-success" v-if="despacho.confirmado == null" @click="confirmar(despacho.id, index)" :disabled="loadingDes">
+										Confirmar
+									</button>
+									<button class="btn btn-danger" v-if="despacho.confirmado == null" @click="negar(despacho.id, index)" :disabled="loadingDes">
+										Negar
+									</button>
 								</td>
 
 								<!-- Modal PARA VER LOS DETALLES -->
@@ -123,6 +127,7 @@
 				despachos: [],
 				currentPage: 0,
 				loading:false,
+				loadingDes:false,
 				per_page: 0,
 				sincronizacion:'',
 				total_paginas: 0,
@@ -183,7 +188,7 @@
 
 							console.log("hey if");
 							//REGISTRAR LOS DESPACHOS RECIBIDOS
-							axios.post('http://localhost/pisos_de_venta/public//api/registrar-despachos-piso-venta', {despachos: nuevosDespachos}).then(response => {//
+							axios.post('http://localhost/pisos_de_venta/public/api/registrar-despachos-piso-venta', {despachos: nuevosDespachos}).then(response => {//
 								console.log('registrar-despachos-piso-venta');
 								console.log(response);//SI REGISTRA DEBERIA DAR TRUE
 								if (response.data == true) {
@@ -313,6 +318,10 @@
 				console.log("btn cambio")
 				this.loading = !this.loading;
 			},
+			cambiar_des(){
+				console.log("btn cambio canfirmar")
+				this.loadingDes = !this.loadingDes;
+			},
 			get_piso_venta(){
 
 				axios.get('http://localhost/pisos_de_venta/public/api/get-piso-venta').then(response =>{
@@ -351,20 +360,28 @@
 			},
 			confirmar(id, index){
 
+				this.cambiar_des();
+
 				axios.post('http://localhost/pisos_de_venta/public/api/confirmar-despacho', {id: id}).then(response => {
 
 					console.log(response)
 					this.despachos.splice(index, 1, response.data);
+
+					this.cambiar_des();
 				}).catch(e => {
 					console.log(e.response);
 				})
 			},
 			negar(id, index){
 
+				this.cambiar_des();
+
 				axios.post('http://localhost/pisos_de_venta/public/api/negar-despacho', {id: id}).then(response => {
 
 					console.log(response.data)
 					this.despachos.splice(index, 1, response.data);
+
+					this.cambiar_des();
 				}).catch(e => {
 					console.log(e.response);
 				})

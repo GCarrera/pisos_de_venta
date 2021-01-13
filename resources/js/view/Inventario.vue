@@ -24,7 +24,7 @@
 									<span class="font-weight-bold" > Ultima Actualización: </span> <span v-if="sincronizacion !== null">{{sincronizacion}}</span> <br>
 									<!-- <span class="font-weight-bold" >Ultima vez que vacio la caja: </span><span  v-if="caja !== null">{{caja}}</span> <br> -->
 								<hr>
-							<button class="btn btn-primary btn-block" @click="sincronizar">
+							<button class="btn btn-primary btn-block" @click="sincronizar" :disabled="loading">
 
 							<span v-if="loading == false">Sincronizar</span>
 							<div class="spinner-border text-light text-center" role="status" v-if="loading == true">
