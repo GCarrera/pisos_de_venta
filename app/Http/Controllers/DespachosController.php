@@ -85,12 +85,43 @@ class DespachosController extends Controller
 
     public function negar_despacho(Request $request)
     {
+      $usuario = Auth::user()->piso_venta->id;
 
         $despacho = Despacho::with(['productos' => function($articulo){
 
         }])->findOrFail($request->id);
         $despacho->confirmado = 0;
         $despacho->save();
+
+        foreach ($despacho->productos as $valor) {
+            //BUSCAMOS EL ID EN INVENTARIO
+            $producto = Inventario::select('id')->where('inventory_id', $valor->pivot->inventory_id)->orderBy('id', 'desc')->first();
+
+            $inventario = Inventario_piso_venta::with('inventario')->where('piso_venta_id', $usuario)->where('inventario_id', $producto->id)->orderBy('id', 'desc')->first();
+
+            if ($inventario['id'] == null) {
+                $inventario = new Inventario_piso_venta();
+                $inventario['inventario_id'] = $producto->id;
+                $inventario['piso_venta_id'] = $usuario;
+                $inventario['cantidad'] = 0.00;
+                $inventario->save();
+            }else{
+                //SI ES UN DESPACHO O ES UN RETIRO
+                if($despacho->type == 1){
+
+
+                        $inventario->cantidad = 0.00;
+
+                }else{
+
+                        $inventario->cantidad = 0.00;
+
+                }
+            }
+            $inventario->save();
+
+
+        }
         /*
         foreach ($despacho->productos as $valor) {
 
