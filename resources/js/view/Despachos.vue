@@ -19,7 +19,8 @@
 							<div v-if="piso_venta_selected.length != 0" style="font-size: 1em;" class="mt-3">
 								<span><span class="font-weight-bold">PV:</span> {{piso_venta_selected.nombre}}</span> <br>
 								<!-- <span><span class="font-weight-bold">Lugar:</span> {{piso_venta_selected.ubicacion}}</span> <br> -->
-								<span><span class="font-weight-bold">Caja:</span> {{formattedCurrencyValue}}</span> <br>
+								<!--<span><span class="font-weight-bold">Caja:</span> {{formattedCurrencyValue}}</span> <br>-->
+								<span><span class="font-weight-bold">Recibidos:</span> {{this.total_paginas}}</span> <br>
 
 							</div>
 								<hr>
@@ -336,7 +337,8 @@
 			get_despachos(){
 
 				axios.get('http://localhost/pisos_de_venta/public/api/get-despachos').then(response => {
-					//console.log(response.data);
+					console.log('get_despachos');
+					console.log(response);
 					this.per_page = response.data.per_page;
 					this.total_paginas = response.data.total;
 					this.despachos = response.data.data
