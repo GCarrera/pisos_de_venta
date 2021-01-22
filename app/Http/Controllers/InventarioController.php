@@ -47,17 +47,22 @@ class InventarioController extends Controller
 
     public function auditoria(Request $request)
     {
-      foreach ($request->productos as $value) {
+      foreach ($request->productosauditoria as $value) {
 
         $inventory_id = $value['inventario']['inventory_id'];
+        $cantidadnueva = $value['cantidad'];
 
-        $producto = Inventario::select('id')->where('inventory_id', $inventory_id)->orderBy('id', 'desc')->first();
+        $producto = Inventario::select('id')->where('inventory_id', $inventory_id)->first();
+        $idunventario = $producto['id'];
 
-        $inventario = Inventario_piso_venta::with('inventario')->where('piso_venta_id', $request->id)->where('inventario_id', $producto->id)->orderBy('id', 'desc')->first();
+        $inventarioexist = Inventario_piso_venta::with('inventario')->where('piso_venta_id', $request->idpisoventa)->where('inventario_id', $idunventario)->orderBy('id', 'desc')->exists();
+        if ($inventarioexist) {
+          $inventario = Inventario_piso_venta::with('inventario')->where('piso_venta_id', $request->idpisoventa)->where('inventario_id', $idunventario)->orderBy('id', 'desc')->first();
+          $inventario->cantidad = $cantidadnueva;
 
-        $inventario->cantidad = $value['cantidad'];
+          $inventario->save();
+        }
 
-        $inventario->save();
       }
 
       return response()->json(true);

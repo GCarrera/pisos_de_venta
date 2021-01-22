@@ -202,11 +202,11 @@
 				axios.post('http://mipuchito.com/api/auditoria', {id: this.id}).then(response => {
 					console.log(response);
 					let productos = response.data;
-					axios.post('http://localhost/pisos_de_venta/public/api/auditoria', {id: this.id, productos: productos}).then(response => {
+					axios.post('http://localhost/pisos_de_venta/public/api/auditoria', {idpisoventa: this.id, productosauditoria: productos}).then(response => {
 						console.log(response.data);
 						if (response.data) {
 							this.cambiar_aud();
-							window.location="http://localhost/pisos_de_venta/public/inventario";
+							//window.location="http://localhost/pisos_de_venta/public/inventario";
 						}
 						//this.sincro_exitosa = true
 					}).catch(e => {
@@ -526,9 +526,12 @@
 			this.get_inventario();
 			this.get_id();
 			this.get_piso_venta();
-			this.get_dolar();
+			//this.get_dolar();
 
 		},
+		created(){
+			this.get_dolar();
+		}
 
 	}
 </script>
