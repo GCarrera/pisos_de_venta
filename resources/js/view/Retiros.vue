@@ -233,7 +233,7 @@
 
        axios.post('/api/despachos-retiro', {productos: this.productos, piso_venta: this.id}).then(response => {
          console.log(response)
-         axios.post('http://localhost/api/store-retiro', {productos: this.productos, piso_venta: this.id}).then(response => {
+         axios.post('http://mipuchito.com/api/store-retiro', {productos: this.productos, piso_venta: this.id}).then(response => {
            console.log(response);
            this.articulo = {id: 0, nombre: "", cantidad: ""};
            this.despachos.splice(0,0, response.data);
