@@ -56,7 +56,7 @@
 					</div>
 					<div class="col-md-3" style="line-height: 5em; font-size: 1.5em;">
 						<!--<div class="bg-dark rounded shadow">Retiros: {{count.retiros}}</div>-->
-						<a href="#" class="btn bg-dark text-white" tabindex="-1" role="button" aria-disabled="true">Retiros: {{count.retiros}}</a>
+						<a href="http://localhost/pisos_de_venta/public/retiros" class="btn bg-dark text-white" tabindex="-1" role="button" aria-disabled="true">Retiros: {{count.retiros}}</a>
 					</div>
 				</div>
 				<!--TABLAS DE VENTAS Y COMPRAS-->
