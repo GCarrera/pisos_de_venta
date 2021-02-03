@@ -22,6 +22,8 @@ Route::get('/ventas/create', 'VentasController@create')->name('ventas.create');
 Route::get('/ventas/create-compra', 'VentasController@create_compra')->name('ventas.create.compra');
 //DESPACHOS
 Route::get('/despachos', 'DespachosController@index')->name('despachos.index');
+//RETIROS
+Route::get('/retiros', 'DespachosController@index_retiros')->name('retiros.index');
 //COMPRAS
 Route::get('/compras', 'ComprasController@index')->name('compras.index');
 //DESPACHOS ALMACEN
