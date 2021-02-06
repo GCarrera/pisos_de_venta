@@ -239,7 +239,7 @@
            this.despachos.splice(0,0, response.data);
            this.productos = [];
            this.loading = false;
-           window.location="/despachos-almacen";
+           window.location="http://localhost/pisos_de_venta/public/despachos";
          }).catch(e => {
            console.log(e.response)
            this.error = true;
