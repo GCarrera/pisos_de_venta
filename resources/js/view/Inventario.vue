@@ -16,7 +16,7 @@
 							<div v-if="piso_venta_selected.length != 0" style="font-size: 1em;" class="mt-3">
 								<span><span class="font-weight-bold">PV:</span> {{piso_venta_selected.nombre}}</span> <br>
 								<!-- <span><span class="font-weight-bold">Lugar:</span> {{piso_venta_selected.ubicacion}}</span> <br> -->
-								<span><span class="font-weight-bold">Productos:</span> {{productos.length}}</span> <br>
+								<span><span class="font-weight-bold">Productos:</span> {{this.total_productos}}</span> <br>
 								<!--<span><span class="font-weight-bold">Caja:</span> {{formattedCurrencyValue}}</span> <br>-->
 
 							</div>
@@ -176,6 +176,7 @@
 				currentPage: 0,
 				per_page: 0,
 				total_paginas: 0,
+				total_productos: 0,
 				alert_success: false,
 				alert_message: "",
 				id: 0,
@@ -411,9 +412,10 @@
 					//console.log(response.data);
 					this.per_page = response.data.per_page;
 					this.total_paginas = response.data.total;
+					this.total_productos = response.data.total;
 					this.productos = response.data.data
-
-					console.log(this.productos)
+					console.log("total productos");
+					console.log(this.total_productos)
 				}).catch(e => {
 					console.log(e.response)
 				});
