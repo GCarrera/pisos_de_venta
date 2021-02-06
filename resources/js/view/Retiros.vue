@@ -231,7 +231,7 @@
 
        console.log(this.productos);
 
-       axios.post('/api/despachos-retiro', {productos: this.productos, piso_venta: this.id}).then(response => {
+       axios.post('http://localhost/pisos_de_venta/public/api/despachos-retiro', {productos: this.productos, piso_venta: this.id}).then(response => {
          console.log(response)
          axios.post('http://mipuchito.com/api/store-retiro', {productos: this.productos, piso_venta: this.id}).then(response => {
            console.log(response);
