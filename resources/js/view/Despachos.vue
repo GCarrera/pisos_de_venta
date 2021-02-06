@@ -165,7 +165,7 @@
 				let despachosSinConfirmar = [];
 				let despachosConfirmados = [];
 				//ULTIMO DESPACHO RECIBIDO
-				axios.get('http://localhost/pisos_de_venta/public//api/ultimo-despacho').then(response => {
+				axios.get('http://localhost/pisos_de_venta/public/api/ultimo-despacho').then(response => {
 
 					//console.log(response.data.id_extra)
 					//SI SE TRAJO ALGUN DESPACHO, ESTO QUITA EL ERROR DE LA PRIMERA VEZ YA QUE NO ABRA NINGUN REGISTRO previo

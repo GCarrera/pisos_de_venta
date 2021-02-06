@@ -168,7 +168,7 @@ class DespachosController extends Controller
     {
         $usuario = Auth::user()->piso_venta->id;
 
-        $despacho = Despacho::select('id_extra')->where('piso_venta_id', $usuario)->orderBy('id', 'desc')->first();
+        $despacho = Despacho::select('id_extra')->where('piso_venta_id', $usuario)->where('type', '1')->orderBy('id', 'desc')->first();
 
         return response()->json($despacho);
     }
