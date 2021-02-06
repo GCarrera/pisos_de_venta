@@ -162,7 +162,7 @@
      get_datos(){
        console.log("get_datos");
 			 //SOLICITO LOS PISOS DE VENTAS Y PRODUCTOS
-			 axios.get('/api/ventas-datos-create').then(response => {
+			 axios.get('http://localhost/pisos_de_venta/public/api/ventas-datos-create').then(response => {
 
 				 this.inventario = response.data
 				 //this.inventario_compra = response.data
@@ -178,7 +178,7 @@
 			 });
      },
      get_id(){
-       axios.get('/api/get-id').then(response => {
+       axios.get('http://localhost/pisos_de_venta/public/api/get-id').then(response => {
          this.id = response.data;
          console.log(this.id);
        }).catch(e => {
