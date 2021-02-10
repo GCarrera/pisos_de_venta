@@ -53,5 +53,18 @@ class UsersTableSeeder extends Seeder
         					'dinero' => 0,
         					'user_id' => $usuario->id
         					]);
+
+        $usuario = User::create([
+        		'name' => 'abastoii',
+        		'email' => 'abastoii@gmail.com',
+        		'password' => bcrypt("abastoii")
+        		]);
+
+        $piso_Venta = Piso_venta::create([
+        					'nombre' => 'Abasto II',
+        					'ubicacion' => 'Segundera Sector 1 Cagua Edo Aragua',
+        					'dinero' => 0,
+        					'user_id' => $usuario->id
+        					]);
     }
 }
