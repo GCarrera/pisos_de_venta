@@ -403,12 +403,21 @@
 			},
 			disabled_venta(){
 
-				if (this.articulo.id != 0 && this.articulo.cantidad != ""){
+				var validation = parseFloat(this.cantidad_disponible)-parseFloat(this.articulo.cantidad);
+
+				if (this.articulo.id != 0 && this.articulo.cantidad != "" && validation >= 0 && this.articulo.cantidad > 0){
 
 					return false;
 				}else{
 					return true;
 				}
+
+				/*if (this.articulo.id != 0 && this.articulo.cantidad != ""){
+
+					return false;
+				}else{
+					return true;
+				}*/
 			}
 		},
 		watch:{
