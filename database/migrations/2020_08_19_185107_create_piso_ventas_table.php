@@ -18,6 +18,7 @@ class CreatePisoVentasTable extends Migration
             $table->string('nombre');
             $table->text("ubicacion");
             $table->decimal('dinero', 20, 2);
+            $table->decimal('gain', 20, 2)->default('0.00');
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
 

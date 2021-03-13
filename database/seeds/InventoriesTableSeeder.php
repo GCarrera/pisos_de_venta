@@ -13,7 +13,7 @@ class InventoriesTableSeeder extends Seeder
     {
         //
         DB::table('inventories')->delete();
-        DB::table('inventories')->insert([
+        /*DB::table('inventories')->insert([
             [
                 'product_name' => 'Harina P.A.N 1 kg',
                 'description' => 'Harina de maiz blanco',
@@ -140,6 +140,6 @@ class InventoriesTableSeeder extends Seeder
                 //'enterprise_id' => '3',
                 'created_at' => now()
             ],
-        ]);
+        ]);*/
     }
 }

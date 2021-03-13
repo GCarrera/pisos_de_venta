@@ -54,11 +54,13 @@ class UsersController extends Controller
             $vaciar_caja = new Vaciar_caja();
             $vaciar_caja->piso_venta_id = $usuario;
             $vaciar_caja->monto = $piso_venta->dinero;
+            $vaciar_caja->ganancia = $piso_venta->gain;
             $vaciar_caja->save();
             $vaciar_caja->id_extra = $vaciar_caja->id;
             $vaciar_caja->save();
 
             $piso_venta->dinero = 0;
+            $piso_venta->gain = 0;
             $piso_venta->save();
 
             DB::commit();

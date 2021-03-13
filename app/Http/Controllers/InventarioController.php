@@ -73,7 +73,13 @@ class InventarioController extends Controller
 
         $inventory = Inventory::select('id')->orderBy('id', 'desc')->first();
 
-        return response()->json($inventory->id);
+        if (isset($inventory->id)) {
+          return response()->json($inventory->id);
+        } else {
+          return '0';
+        }
+
+
     }
 
     public function get_inventory($id)//WEB
@@ -206,6 +212,46 @@ class InventarioController extends Controller
             DB::beginTransaction();
 
             foreach ($request->productos as $producto) {
+
+              $inventoryupdate = Inventory::select('id')->where('id', $producto['id'])->first();
+
+              if (isset($inventoryupdate['id'])) {
+                $inventoryupdate->product_name   = $producto['product_name'];
+                $inventoryupdate->description    = $producto['description'];
+                $inventoryupdate->quantity       = $producto['quantity'];
+                $inventoryupdate->unit_type      = $producto['unit_type'];
+                $inventoryupdate->qty_per_unit   = $producto['qty_per_unit'];
+                $inventoryupdate->total_qty_prod = $producto['total_qty_prod'];
+                //$inventoryupdate->stock_min      = $producto['stock_min'];
+
+                $inventoryupdate->save();
+              }
+
+              $productupdate = Product::select('id')->where('inventory_id', $producto['id'])->first();
+
+              if (isset($productupdate['id'])) {
+          			$productupdate->retail_margin_gain     = $producto['product']['retail_margin_gain'];
+          			$productupdate->wholesale_margin_gain  = $producto['product']['wholesale_margin_gain'];
+
+                $productupdate->save();
+              } else {
+                $productupdate = new Product();
+                $productupdate->cost                             = $producto['product']['cost'];
+            		$productupdate->iva_percent                      = $producto['product']['iva_percent'];
+            		$productupdate->retail_margin_gain               = $producto['product']['retail_margin_gain'];
+            		$productupdate->retail_total_price               = $producto['product']['retail_total_price'];
+            		$productupdate->retail_iva_amount                = $producto['product']['retail_iva_amount'];
+            		$productupdate->wholesale_margin_gain            = $producto['product']['wholesale_margin_gain'];
+            		$productupdate->wholesale_packet_price           = $producto['product']['wholesale_packet_price'];
+            		$productupdate->wholesale_total_packet_price     = $producto['product']['wholesale_total_packet_price'];
+            		$productupdate->wholesale_total_individual_price = $producto['product']['wholesale_total_individual_price'];
+            		$productupdate->wholesale_iva_amount             = $producto['product']['wholesale_iva_amount'];
+            		$productupdate->inventory_id                     = $producto['id'];
+                $productupdate->image                            = "default.jpeg";
+            		$productupdate->oferta                           = $producto['product']['oferta'];
+
+            		$productupdate->save();
+              }
 
                 $inventario = Inventario::select('id')->where('inventory_id', $producto['id'])->orderBy('id', 'desc')->first();
 

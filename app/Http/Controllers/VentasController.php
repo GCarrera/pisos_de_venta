@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Inventario_piso_venta;
 use App\Detalle_venta;
 use DB;
+use App\Inventory;
 use App\Inventario;
 use App\Precio;
 use App\Piso_venta;
@@ -64,7 +65,6 @@ class VentasController extends Controller
 
     public function store(Request $request)
     {
-    	// return $request;
     	$usuario = Auth::user()->piso_venta->id;
 
     	try{
@@ -81,7 +81,16 @@ class VentasController extends Controller
 
 	        $venta->id_extra = $venta->id;
 	        $venta->save();
+
+          $ganancia = 0;
+
 	        foreach ($request->productos as $producto) {
+            //CALCULO DE GANANCIA
+            $idinventario = $producto['id'];
+            $idinventory = Inventario::where('id', $idinventario)->select('inventory_id')->first();
+            $prueba = Inventory::where('id', $idinventory->inventory_id)->first()->product()->select('retail_margin_gain')->first();
+            $porcentajeganancia = $prueba->retail_margin_gain;
+            $ganancia += ($producto['total']*$porcentajeganancia)/100;
 	        	//REGISTRAMOS EL PRODUCTO EN LOS DETALLES DE LA VENTA
 	            $detalles = new Detalle_venta();
 	            $detalles->venta_id = $venta->id;
@@ -113,11 +122,14 @@ class VentasController extends Controller
 	        //SUMAMOS EN EL DINERO GENERADO EN EL PISO DE VENTA
 	        $piso_venta = Piso_venta::where('user_id', $usuario)->first();
 	        $piso_venta->dinero += $venta->total;
+	        $piso_venta->gain += $ganancia;
 	        $piso_venta->save();
 
 	        DB::commit();
 
 	        $venta = Venta::with('detalle')->findOrFail($venta->id);
+
+          //$dataganancia['ganancia'] = $ganancia;
 
 	        return response()->json($venta);
 
