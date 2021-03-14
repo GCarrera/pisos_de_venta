@@ -100,7 +100,14 @@
 		<tr v-for="(venta, index) in ventas" :key="index" :class="{'bg-danger': venta.anulado == 0 || venta.anulado == 1, 'text-white': venta.anulado == 1 || venta.anulado == 0}">
 			<td v-if="venta.type == 1">FC-00{{venta.id}}</td>
 			<td v-if="venta.type == 1">{{venta.created_at}}</td>
-			<td v-if="venta.type == 1">{{new Intl.NumberFormat("de-DE", {minimumFractionDigits: 2}).format(venta.total)}}</td>
+			<td v-if="venta.pago == 1">
+				<span class="text-success">
+					{{new Intl.NumberFormat("de-DE", {minimumFractionDigits: 2}).format(venta.total-(venta.total*0.03))}}
+				</span>
+			</td>
+			<td v-else>
+				{{new Intl.NumberFormat("de-DE", {minimumFractionDigits: 2}).format(venta.total)}}
+			</td>
 			<td>
 				<button type="button" class="btn btn-primary" @click="showModalDetalles(venta.id)">Ver</button>
 				<!--<button class="btn btn-danger" type="button" @click="showModalAnular(venta.id)" v-if="venta.anulado == null">Anular</button>-->
@@ -134,18 +141,23 @@
 				</table>
 
 				<div class="row">
-					<div class="col-md-7">
+					<div class="col-md-6">
 
 					</div>
 
-					<div class="col-md-2 text-right">
+					<div class="col-md-3 text-right">
 
-						<span class="font-weight-bold">Total:</span>
+						<span class="font-weight-bold">Total:</span><br>
+						<span v-if="venta.pago == 1" class="font-weight-bold small">Descuento:</span><br>
+						<span v-if="venta.pago == 1" class="font-weight-bold small">Total con Descuento:</span>
+
 
 					</div>
 
 					<div class="col-md-3">
-						<span>{{new Intl.NumberFormat("de-DE", {minimumFractionDigits: 2}).format(venta.total)}}</span>
+						<span class="small"> BsS {{new Intl.NumberFormat("de-DE", {minimumFractionDigits: 2}).format(venta.total)}}</span><br>
+						<span v-if="venta.pago == 1" class="small"> BsS {{new Intl.NumberFormat("de-DE", {minimumFractionDigits: 2}).format(venta.total*0.03)}}</span><br>
+						<span v-if="venta.pago == 1"> BsS {{new Intl.NumberFormat("de-DE", {minimumFractionDigits: 2}).format(venta.total-(venta.total*0.03))}}</span>
 					</div>
 
 				</div>

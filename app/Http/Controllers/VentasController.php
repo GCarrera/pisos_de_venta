@@ -73,6 +73,12 @@ class VentasController extends Controller
 	    	$venta = new Venta();
 	        $venta->piso_venta_id = $usuario;
 	        $venta->type = 1; // 1 ES VENTA
+          if ($request->venta['divisa'] === true) {
+            $venta->pago = 1; // 1 ES DIVISA
+          } else {
+            $venta->pago = 2; // 2 ES BSS
+          }
+
 	        $venta->sub_total = $request->venta['sub_total'];
 	        $venta->iva = $request->venta['iva'];
 	        $venta->total = $request->venta['total'];
@@ -121,8 +127,15 @@ class VentasController extends Controller
 
 	        //SUMAMOS EN EL DINERO GENERADO EN EL PISO DE VENTA
 	        $piso_venta = Piso_venta::where('user_id', $usuario)->first();
-	        $piso_venta->dinero += $venta->total;
-	        $piso_venta->gain += $ganancia;
+          if ($request->venta['divisa'] === true) {
+            $venta_total = $request->venta['total']-($request->venta['total']*0.03);
+            $ganancia_total = $ganancia-($ganancia*0.03);
+            $piso_venta->dinero += $venta_total;
+            $piso_venta->gain += $ganancia_total;
+          } else {
+            $piso_venta->dinero += $venta->total;
+            $piso_venta->gain += $ganancia;
+          }
 	        $piso_venta->save();
 
 	        DB::commit();

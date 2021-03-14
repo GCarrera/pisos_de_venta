@@ -29,7 +29,7 @@
 				<form method="post" @submit.prevent="" onkeydown="return event.key != 'Enter';"><!--Formulario-->
 
 					<div>
-						<div class="form-row">
+						<div class="form-row align-items-center">
 							<div class="form-group col-md-3">
 								<label>Producto:</label>
 								<v-select id="producto" @input="setFocus" :labelSearchPlaceholder="labelSearch" :labelNotFound="labelNot" :labelTitle="labelTit" :options="inventario" v-model="selectedValue" searchable showDefaultOption/>
@@ -42,8 +42,8 @@
 								-->
 							</div>
 
-							<div class="form-group col-md-3">
-								<label for="cantidad">Cantidad disponible:</label>
+							<div class="form-group col-md-2">
+								<label for="cantidad">Disponible:</label>
 								<input type="number" name="cantidad_disponible" id="cantidad_disponible" placeholder="" class="form-control" v-model="cantidad_disponible" disabled="">
 							</div>
 
@@ -60,6 +60,11 @@
 							<div class="form-group col-md-2">
 								<label class="text-center" for="">Acción:</label><br>
 								<button class="btn btn-primary btn-block" type="button" @click="agregar_producto()" :disabled="disabled_venta">Agregar</button>
+							</div>
+							<div class="form-group col-md-1">
+								<label class="text-center" for="">Divisas:</label><br>
+								<b-form-checkbox v-model="checked_divisa" class="align-middle" name="check-button" switch>
+						    </b-form-checkbox>
 							</div>
 						</div>
 					</div>
@@ -90,18 +95,22 @@
 					</table>
 
 					<div class="row">
-		      			<div class="col-md-7">
+		      			<div class="col-md-6">
 
 		      			</div>
 
-		      			<div class="col-md-2 text-right">
+		      			<div class="col-md-3 text-right">
 
-		      				<span class="font-weight-bold small">Total:</span>
+		      				<span class="font-weight-bold small">Total:</span><br>
+		      				<span v-if="checked_divisa" class="font-weight-bold small">Descuento:</span><br>
+		      				<span v-if="checked_divisa" class="font-weight-bold small">Total con Descuento:</span>
 
 		      			</div>
 
 		      			<div class="col-md-3">
-									<span class="small"> Bs {{mostar_total_total}}</span>
+									<span class="small"> BsS {{mostar_total_total}}</span><br>
+									<span v-if="checked_divisa" class="small"> BsS {{mostar_descuento}}</span><br>
+									<span v-if="checked_divisa" class="small"> BsS {{mostar_total_descuento}}</span>
 		      				<span class="d-none"> Bs {{mostar_sub_total}}</span><br>
 			      			<!-- <span class="small">{{iva_total}}</span><br> -->
 		      			</div>
@@ -127,6 +136,7 @@
 		},
 		data(){
 			return{
+				checked_divisa: false,
 				inventario_completo: [],
 				inventario: [],
 				productos: [],//LISTA DE PRODUCTOS QUE VOY A AGREGAR
@@ -279,8 +289,9 @@
 						{
 							sub_total: this.sub_total,
 						 	iva: this.iva_total,
-						  	total: this.total,
-						    type: this.type
+						  total: this.total,
+							divisa: this.checked_divisa,
+						  type: this.type
 						},
 						productos:this.productos
 					}).then(response => {
@@ -292,7 +303,7 @@
 						console.log('el mensaje',this.error_message)
 						this.error = true;
 						this.showAlert();
-						window.location="http://localhost/pisos_de_venta/public/ventas/create";
+						//window.location="http://localhost/pisos_de_venta/public/ventas/create";
 
 					}else{
 						this.cantidad_disponible = null
@@ -305,7 +316,7 @@
 					  	timer: 1500
 					})
 					setTimeout(function () {
-						window.location = "/pisos_de_venta/public/ventas/create";
+						//window.location = "/pisos_de_venta/public/ventas/create";
 					}, 1500);
 					//window.location = "/ventas/create";
 					// setTimeout((1500) => {
@@ -379,6 +390,23 @@
 				console.log(this.total_total);
 				//AGREGAR PRECIO DOLAR AQUI
 				let n = new Intl.NumberFormat("de-DE", {minimumFractionDigits: 2}).format(this.total_total)
+				//let a = n +",00"
+				return n
+			},
+			mostar_descuento(){
+				console.log("funcion mostrar_total_total");
+				console.log(this.total_total);
+				//AGREGAR PRECIO DOLAR AQUI
+				let n = new Intl.NumberFormat("de-DE", {minimumFractionDigits: 2}).format(this.total_total*0.03)
+				//let a = n +",00"
+				return n
+			},
+			mostar_total_descuento(){
+				console.log("funcion mostrar_total_total");
+				console.log(this.total_total);
+				let total = this.total_total-(this.total_total*0.03);
+				//AGREGAR PRECIO DOLAR AQUI
+				let n = new Intl.NumberFormat("de-DE", {minimumFractionDigits: 2}).format(total)
 				//let a = n +",00"
 				return n
 			},
