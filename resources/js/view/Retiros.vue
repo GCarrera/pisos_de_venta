@@ -233,13 +233,25 @@
 
        axios.post('http://localhost/pisos_de_venta/public/api/despachos-retiro', {productos: this.productos, piso_venta: this.id}).then(response => {
          console.log(response)
+         var idlocal = response.data;
          axios.post('http://mipuchito.com/api/store-retiro', {productos: this.productos, piso_venta: this.id}).then(response => {
            console.log(response);
-           this.articulo = {id: 0, nombre: "", cantidad: ""};
-           this.despachos.splice(0,0, response.data);
-           this.productos = [];
-           this.loading = false;
-           window.location="http://localhost/pisos_de_venta/public/despachos";
+           var idextra = response.data;
+           //this.despachos.splice(0,0, response.data);
+
+             axios.post('http://localhost/pisos_de_venta/public/api/id-extra-retiro', {despacho: idextra, local: idlocal}).then(response => {
+
+               this.articulo = {id: 0, nombre: "", cantidad: ""};
+               this.productos = [];
+               this.loading = false;
+               window.location="http://localhost/pisos_de_venta/public/despachos";
+
+             }).catch(e => {
+               console.log(e.response)
+               this.error = true;
+               this.cambiar()
+             });
+
          }).catch(e => {
            console.log(e.response)
            this.error = true;

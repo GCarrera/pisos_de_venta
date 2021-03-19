@@ -80,6 +80,7 @@ Route::prefix('api')->group(function(){
 	Route::post('/despachos', 'DespachosController@store');
 	Route::get('/get-despachos-almacen', 'DespachosController@get_despachos_almacen');
 	Route::post('/despachos-retiro', 'DespachosController@store_retiro');
+	Route::post('/id-extra-retiro', 'DespachosController@id_extra_retiro');
 	Route::get('/inventario-piso-venta/{id}', 'DespachosController@get_datos_inventario_piso_venta');
 
 	//VENTAS

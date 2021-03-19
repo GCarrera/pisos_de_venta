@@ -168,7 +168,7 @@ class DespachosController extends Controller
     {
         $usuario = Auth::user()->piso_venta->id;
 
-        $despacho = Despacho::select('id_extra')->where('piso_venta_id', $usuario)->where('type', '1')->orderBy('id', 'desc')->first();
+        $despacho = Despacho::select('id_extra')->where('piso_venta_id', $usuario)->where('id_extra', '!=', 'NULL')->orderBy('id', 'desc')->first();
 
         return response()->json($despacho);
     }
@@ -440,7 +440,8 @@ class DespachosController extends Controller
             $despacho->confirmado = 1;
             $despacho->save();
 
-            $despacho->id_extra = $despacho->id;
+            //$despacho->id_extra = 'NULL';
+            //$despacho->id_extra = $despacho->id;
             $despacho->save();
 
             foreach ($request->productos as $producto) {
@@ -496,19 +497,30 @@ class DespachosController extends Controller
                 }
             }
 
-            $despacho = Despacho::with(['productos' => function($producto){
+            /*$despacho = Despacho::with(['productos' => function($producto){
                 $producto->select('product_name');
-            }, 'piso_venta'])->findOrFail($despacho->id);
+            }, 'piso_venta'])->findOrFail($despacho->id);*/
 
             DB::commit();
 
-            return response()->json($despacho);
+            return response()->json($despacho->id);
 
         }catch(Exception $e){
 
             DB::rollback();
             return response()->json($e);
         }
+    }
+
+    public function id_extra_retiro(Request $request)
+    {
+      $idextra = $request->despacho;
+      $idlocal = $request->local;
+      $despacho = Despacho::find($idlocal);
+      $despacho->id_extra = $idextra;
+      $despacho->save();
+
+      return 'true';
     }
 
     public function get_datos_inventario_piso_venta($id)
