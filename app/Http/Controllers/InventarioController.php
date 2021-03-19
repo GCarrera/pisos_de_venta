@@ -225,6 +225,19 @@ class InventarioController extends Controller
                 //$inventoryupdate->stock_min      = $producto['stock_min'];
 
                 $inventoryupdate->save();
+              } else {
+                $inventory = new Inventory();
+                $inventory->id = $producto['id'];
+                $inventory->product_name = $producto['product_name'];
+                $inventory->description = $producto['description'];
+                $inventory->quantity = $producto['quantity'];
+                $inventory->unit_type = $producto['unit_type'];
+                $inventory->unit_type_menor = $producto['unit_type_menor'];
+                $inventory->qty_per_unit = $producto['qty_per_unit'];
+                $inventory->status = $producto['status'];
+                $inventory->total_qty_prod = $producto['total_qty_prod'];
+                $inventoryupdate->stock_min      = $producto['stock_min'];
+                $inventory->save();
               }
 
               $productupdate = Product::select('id')->where('inventory_id', $producto['id'])->first();
