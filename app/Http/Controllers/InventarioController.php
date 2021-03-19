@@ -236,7 +236,7 @@ class InventarioController extends Controller
                 $inventory->qty_per_unit = $producto['qty_per_unit'];
                 $inventory->status = $producto['status'];
                 $inventory->total_qty_prod = $producto['total_qty_prod'];
-                $inventoryupdate->stock_min      = $producto['stock_min'];
+                //$inventoryupdate->stock_min      = $producto['stock_min'];
                 $inventory->save();
               }
 
