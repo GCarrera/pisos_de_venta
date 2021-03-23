@@ -30,7 +30,7 @@
         <nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    Pisos de venta
+                    Pisos de ventas
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -44,7 +44,11 @@
 
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('home') }}">Inicio <font-awesome-icon icon="home"/></a>
+                            <a class="nav-link" href="{{ route('home') }}">Inicio</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('solicitudes.index') }}">Solicitudes <font-awesome-icon icon="user"/></a>
                         </li>
 
                         <li class="nav-item">

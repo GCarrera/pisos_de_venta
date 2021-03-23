@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use App\Inventario_piso_venta;
 use App\Vaciar_caja;
 use App\Dolar;
+use App\Solicitud;
 
 class PisoVentasController extends Controller
 {
@@ -24,6 +25,63 @@ class PisoVentasController extends Controller
     	$piso_ventas = Piso_venta::all();
 
     	return response()->json($piso_ventas);
+    }
+
+    public function solicitudes()
+    {
+      return view('solicitudes.index');
+    }
+
+    public function get_solicitudes(Request $request)
+    {
+      $usuario = Auth::user()->piso_venta->id;
+
+      if ($request->search != null) {
+
+          $inventario  = Solicitud::with('pisos')->where('piso_venta_id', $usuario)->where('nombre', 'like', '%'.$request->search.'%')->orderBy('nombre', 'desc')->paginate(20);
+          return response()->json($inventario);
+
+      } else {
+
+        $inventario  = Solicitud::with('pisos')->where('piso_venta_id', $usuario)->orderBy('nombre', 'desc')->paginate(20);
+        return response()->json($inventario);
+
+      }
+
+    }
+
+    public function store_solicitud(Request $request)
+    {
+      $usuario = Auth::user()->piso_venta->id;
+
+      $solicitud = new Solicitud();
+
+  		$solicitud->nombre = $request->nombre;
+  		$solicitud->telefono = $request->telefono;
+  		$solicitud->producto = $request->producto;
+  		$solicitud->piso_venta_id = $usuario;
+  		$solicitud->save();
+
+      return $solicitud;
+
+    }
+
+    public function last_solicitud(Request $request)
+    {
+      $usuario = Auth::user()->piso_venta->id;
+
+      $id_extra = $request->idExtra;
+
+      $solicitud = Solicitud::where('piso_venta_id', $usuario)->where('id', '>', $id_extra)->get();
+      $count = $solicitud->count();
+      if ($count != 0) {
+        return $solicitud;
+      } else {
+        return 0;
+      }
+
+      //$ventas = Venta::with('detalle', 'detalle.precio')->where('piso_venta_id', $piso_venta)->where('id_extra', '>', $id)->get();
+
     }
 
     public function resumen()// funcion carga el resumen de ventas compras despachos de la vista home

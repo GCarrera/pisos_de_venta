@@ -22,6 +22,7 @@ window.Vue = require('vue');
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('inventario', require('./view/Inventario.vue').default);
+Vue.component('solicitudes', require('./view/Solicitudes.vue').default);
 Vue.component('ventas', require('./view/Ventas.vue').default);
 Vue.component('despachos', require('./view/Despachos.vue').default);
 Vue.component('retiros', require('./view/Retiros.vue').default);

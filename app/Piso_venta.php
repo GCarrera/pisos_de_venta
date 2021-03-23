@@ -11,6 +11,10 @@ class Piso_venta extends Model
         'nombre', 'ubicacion', 'dinero', 'user_id',
     ];
 
+    public function solicitudes()
+    {
+        return $this->hasMany('App\Solicitud');
+    }
 
     public function user()
     {

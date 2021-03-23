@@ -30,6 +30,8 @@ Route::get('/compras', 'ComprasController@index')->name('compras.index');
 Route::get('/despachos-almacen', 'DespachosController@index_almacen')->name('despachos.almacen.index');
 Route::get('/despachos/create', 'DespachosController@create')->name('despachos.create');
 Route::post('/despachos-almacen', 'DespachosController@store')->name('despachos.store');
+//SOLICITUDES
+Route::get('/solicitudes', 'PisoVentasController@solicitudes')->name('solicitudes.index');
 
 Auth::routes();
 
@@ -58,6 +60,12 @@ Route::prefix('api')->group(function(){
 	Route::get('/get-precios-inventory', 'InventarioController@get_precios_inventory');//WEB
 	Route::post('/actualizar-precios-inventory', 'InventarioController@actualizar_precios_inventory');
   Route::post('/auditoria', 'InventarioController@auditoria');//AUDITORIA
+
+  //SOLICITUDES
+  Route::get('/get-solicitudes', 'PisoVentasController@get_solicitudes');
+  Route::post('/store-solicitud', 'PisoVentasController@store_solicitud');
+  Route::post('/last-solicitud', 'PisoVentasController@last_solicitud');
+
 
 	//actualizar inventory_id
 	Route::get('/get-inventories-id', 'InventarioController@get_inventory_id');
