@@ -58,7 +58,7 @@ class VentasController extends Controller
     {
     	$usuario = Auth::user()->piso_venta->id;
 
-    	$inventario = Inventario_piso_venta::with('inventario.precio')->where('piso_venta_id', $usuario)->where('cantidad', '>', '0.000')->get();
+    	$inventario = Inventario_piso_venta::with('inventario.precio')->where('piso_venta_id', $usuario)->get();
 
     	return response()->json($inventario);
     }

@@ -168,7 +168,14 @@
 				if (this.articulo.id != 0 && this.articulo.cantidad != ""){
 					//console.log("holis");
 
-					this.agregar_producto();
+					var validation = parseFloat(this.cantidad_disponible)-parseFloat(this.articulo.cantidad);
+
+					if (this.articulo.id != 0 && this.articulo.cantidad != "" && validation >= 0 && this.articulo.cantidad > 0){
+
+						this.agregar_producto();
+
+					}
+
 				}
 			},
 			setFocus(){
