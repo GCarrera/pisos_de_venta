@@ -12,6 +12,7 @@ use App\Inventario_piso_venta;
 use App\Vaciar_caja;
 use App\Dolar;
 use App\Solicitud;
+use Illuminate\Support\Facades\DB;
 
 class PisoVentasController extends Controller
 {
@@ -81,6 +82,25 @@ class PisoVentasController extends Controller
       }
 
       //$ventas = Venta::with('detalle', 'detalle.precio')->where('piso_venta_id', $piso_venta)->where('id_extra', '>', $id)->get();
+
+    }
+
+    public function finish_solicitud(Request $request)
+    {
+      $usuario = Auth::user()->piso_venta->id;
+
+
+      foreach ($request->data as $key => $value) {
+        $id_extra = $value;
+        //return $id_extra;
+
+        //$Solicitud = Solicitud::find($id_extra);
+        $Solicitud = DB::table('solicitudes')->where('id', $id_extra)->delete();
+        //$Solicitud->delete();
+
+      }
+
+      return $Solicitud;
 
     }
 

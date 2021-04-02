@@ -65,6 +65,7 @@ Route::prefix('api')->group(function(){
   Route::get('/get-solicitudes', 'PisoVentasController@get_solicitudes');
   Route::post('/store-solicitud', 'PisoVentasController@store_solicitud');
   Route::post('/last-solicitud', 'PisoVentasController@last_solicitud');
+  Route::post('/finish-solicitud', 'PisoVentasController@finish_solicitud');
 
 
 	//actualizar inventory_id

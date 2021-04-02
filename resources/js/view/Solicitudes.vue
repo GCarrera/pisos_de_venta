@@ -247,6 +247,8 @@
 			},
 			sincronizar(){
 
+				console.log(this.id);
+
 				//ULTIMA SOLICITUD GUARDADA EN WEB
 				axios.post('http://mipuchito.com/api/last-solicitud', {id: this.id}).then(response => {
 					console.log(response);
@@ -259,13 +261,59 @@
 					//TODAS LAS SOLICITUDES MAYORES AL ID-EXTRA WEB
 					axios.post('http://localhost/pisos_de_venta/public/api/last-solicitud', {id: this.id, idExtra: idExtra}).then(response => {
 						console.log(response);
-						if (response != 0) {
+						if (response.data != 0) {
 							//SE REGISTRAN LAS SOLICITUDES NUEVAS
 							axios.post('http://mipuchito.com/api/nuevas-solicitud', {data: response.data}).then(response => {
 								console.log(response);
-								this.sincro_exitosa = true;
+								//TODAS LAS SOLICITUDES FINALIZADAS EN LA WEB
+								axios.post('http://mipuchito.com/api/finished-solicitud', {id: this.id}).then(response => {
+									console.log(response);
+									if (response.data != "") {
+										var data = response.data;
+									} else {
+										var data = 0;
+									}
+									//BORRAR LAS SOLICITUDES EN LOCAL
+									axios.post('http://localhost/pisos_de_venta/public/api/finish-solicitud', {data: data}).then(response => {
+										console.log(response);
+										this.sincro_exitosa = true;
+										this.cambiar()
+										window.location="http://localhost/pisos_de_venta/public/solicitudes";
+									}).catch(e => {
+										console.log(e.response)
+										this.error = true;
+										this.cambiar()
+									});
+								}).catch(e => {
+									console.log(e.response)
+									this.error = true;
+									this.cambiar()
+								});
+							}).catch(e => {
+								console.log(e.response)
+								this.error = true;
 								this.cambiar()
-								window.location="http://localhost/pisos_de_venta/public/solicitudes";
+							});
+						} else {
+							//TODAS LAS SOLICITUDES FINALIZADAS EN LA WEB
+							axios.post('http://mipuchito.com/api/finished-solicitud', {id: this.id}).then(response => {
+								console.log(response);
+								if (response.data != "") {
+									var data = response.data;
+								} else {
+									var data = 0;
+								}
+								//BORRAR LAS SOLICITUDES EN LOCAL
+								axios.post('http://localhost/pisos_de_venta/public/api/finish-solicitud', {data: data}).then(response => {
+									console.log(response);
+									this.sincro_exitosa = true;
+									this.cambiar()
+									window.location="http://localhost/pisos_de_venta/public/solicitudes";
+								}).catch(e => {
+									console.log(e.response)
+									this.error = true;
+									this.cambiar()
+								});
 							}).catch(e => {
 								console.log(e.response)
 								this.error = true;
@@ -296,9 +344,10 @@
 			get_piso_venta(){
 
 				axios.get('http://localhost/pisos_de_venta/public/api/get-piso-venta').then(response =>{
-					console.log(response)
 					this.piso_venta_selected = response.data.piso_venta;
+					this.id = response.data.piso_venta.id;
 					this.sincronizacion = response.data.sincronizacion.created_at;
+					console.log(this.id);
 
 				}).catch(e => {
 					console.log(e.response);
@@ -336,11 +385,12 @@
 		},
 		mounted(){
 			//console.log(this.productos)
-			this.get_solicitud();
-			this.get_piso_venta();
 
 		},
 		created(){
+
+			this.get_solicitud();
+			this.get_piso_venta();
 
 		}
 
