@@ -95,16 +95,18 @@ class VentasController extends Controller
             $idinventario = $producto['id'];
             $idinventory = Inventario::where('id', $idinventario)->select('inventory_id')->first();
             $prueba = Inventory::where('id', $idinventory->inventory_id)->first()->product()->select('retail_margin_gain')->first();
-            $porcentajeganancia = $prueba->retail_margin_gain;
-            $ganancia += ($producto['total']*$porcentajeganancia)/100;
+            if (isset($prueba->retail_margin_gain)) {
+              $porcentajeganancia = $prueba->retail_margin_gain;
+              $ganancia += ($producto['total']*$porcentajeganancia)/100;
+            }
 	        	//REGISTRAMOS EL PRODUCTO EN LOS DETALLES DE LA VENTA
 	            $detalles = new Detalle_venta();
 	            $detalles->venta_id = $venta->id;
 	            $detalles->cantidad = $producto['cantidad'];
 	            $detalles->inventario_id = $producto['id'];
 	            $detalles->sub_total = $producto['sub_total'];
-		        $detalles->iva = $producto['iva'];
-		        $detalles->total = $producto['total'];
+		          $detalles->iva = $producto['iva'];
+		          $detalles->total = $producto['total'];
 	            $detalles->save();
 	            //settype($producto['cantidad'],"integer");
 
