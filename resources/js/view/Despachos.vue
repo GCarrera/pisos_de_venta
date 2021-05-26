@@ -67,7 +67,7 @@
 							<tr v-for="(despacho, index) in despachos" :key="index">
 								<td>{{despacho.created_at}} {{despacho.id}}</td>
 								<th>{{despacho.type == 1? "Despacho" : "Retiro"}}</th>
-								<td v-if="despacho.confirmado == null" class="font-weight-bold">Pendiente</td>
+								<td v-if="despacho.confirmado == 4" class="font-weight-bold">Pendiente</td>
 								<td v-else class="font-weight-bold">{{despacho.confirmado == 1 ? "Confirmado" : "Negado"}}</td>
 								<td>
 									<button type="button" class="btn btn-primary" @click="showModalDetalles(despacho.id)">Ver</button>
