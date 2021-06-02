@@ -204,10 +204,11 @@
 					console.log(response);
 					let productos = response.data;
 					axios.post('http://localhost/pisos_de_venta/public/api/auditoria', {idpisoventa: this.id, productosauditoria: productos}).then(response => {
-						console.log(response.data);
+						console.log(response);
 						if (response.data) {
 							this.cambiar_aud();
-							//window.location="http://localhost/pisos_de_venta/public/inventario";
+							window.location="http://localhost/pisos_de_venta/public/inventario";
+							console.log("EXITO");
 						}
 						//this.sincro_exitosa = true
 					}).catch(e => {

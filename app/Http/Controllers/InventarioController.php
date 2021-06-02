@@ -47,25 +47,45 @@ class InventarioController extends Controller
 
     public function auditoria(Request $request)
     {
-      foreach ($request->productosauditoria as $value) {
 
-        $inventory_id = $value['inventario']['inventory_id'];
-        $cantidadnueva = $value['cantidad'];
+      try{
 
-        $producto = Inventario::select('id')->where('inventory_id', $inventory_id)->first();
-        $idunventario = $producto['id'];
+          DB::beginTransaction();
+          foreach ($request->productosauditoria as $value) {
 
-        $inventarioexist = Inventario_piso_venta::with('inventario')->where('piso_venta_id', $request->idpisoventa)->where('inventario_id', $idunventario)->orderBy('id', 'desc')->exists();
-        if ($inventarioexist) {
-          $inventario = Inventario_piso_venta::with('inventario')->where('piso_venta_id', $request->idpisoventa)->where('inventario_id', $idunventario)->orderBy('id', 'desc')->first();
-          $inventario->cantidad = $cantidadnueva;
+            $inventory_id = $value['inventario']['inventory_id'];
+            $cantidadnueva = $value['cantidad'];
+            $nombrenuevo = $value['inventario']['name'];
 
-          $inventario->save();
-        }
+            $producto = Inventario::select('id')->where('inventory_id', $inventory_id)->orderBy('id', 'desc')->first();
+            $idunventario = $producto['id'];
 
+            $inventarioexist = Inventario_piso_venta::where('piso_venta_id', $request->idpisoventa)->where('inventario_id', $idunventario)->first();
+            //return $inventarioexist;
+            if (isset($inventarioexist->id)) {
+              $inventarioexist->cantidad = $cantidadnueva;
+              $inventarioexist->save();
+
+              $productoupdate = Inventario::where('inventory_id', $inventory_id)->update(['name' => $nombrenuevo]);
+
+              //return $inventarioexist;
+              //return "inventarioexist";
+              //return $idunventario;
+              //$inventario->inventario->name = $nombrenuevo;
+
+            }
+
+          }
+          DB::commit();
+
+          return response()->json(true);
+
+      }catch(Exception $e){
+
+          DB::rollback();
+          return response()->json($e);
       }
 
-      return response()->json(true);
     }
 
     public function ultimo_inventory()
