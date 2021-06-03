@@ -3,10 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Inventario extends Model
 {
-    //
+  use SoftDeletes;
+
     public function piso_venta()
     {
     	return $this->belongsToMany('App\Piso_venta', 'inventario_piso_ventas')->using('App\Inventario_piso_venta')->withPivot([

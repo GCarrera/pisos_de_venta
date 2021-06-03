@@ -59,6 +59,14 @@ class InventarioController extends Controller
 
             $producto = Inventario::select('id')->where('inventory_id', $inventory_id)->orderBy('id', 'desc')->first();
             $idunventario = $producto['id'];
+            $invdeletes = Inventario::where('inventory_id', $inventory_id)->where('id', "!=", $idunventario)->get();
+            foreach ($invdeletes as $value) {
+              $preciodelete = Precio::where('inventario_id', $value['id'])->first();
+              if (isset($preciodelete['id'])) {
+                $preciodelete->delete();
+              }
+            }
+            $producto = Inventario::where('inventory_id', $inventory_id)->where('id', '!=', $idunventario)->forceDelete();
 
             $inventarioexist = Inventario_piso_venta::where('piso_venta_id', $request->idpisoventa)->where('inventario_id', $idunventario)->first();
             //return $inventarioexist;
@@ -76,6 +84,23 @@ class InventarioController extends Controller
             }
 
           }
+
+          foreach ($request->softdeletes as $value) {
+            $id = $value["id"];
+            $deletes = Inventory::find($id);
+            if (isset($deletes->id)) {
+              $inventariodeletes = Inventario::where('inventory_id', $id)->first();
+              if (isset($inventariodeletes->id)) {
+                $inventarioid = $inventariodeletes->id;
+                //return $inventarioid;
+                $invpv = Inventario_piso_venta::where('inventario_id', $inventarioid)->delete();
+                $inventariodeletes = Inventario::where('inventory_id', $id)->delete();
+              }
+              $deletes->delete();
+            }
+
+          }
+
           DB::commit();
 
           return response()->json(true);

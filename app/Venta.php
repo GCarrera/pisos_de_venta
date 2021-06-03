@@ -19,7 +19,7 @@ class Venta extends Model
 
     public function detalle()
     {
-        return $this->belongsToMany('App\Inventario', 'detalle_ventas')->using('App\Detalle_venta')->withPivot([
+        return $this->belongsToMany('App\Inventario', 'detalle_ventas')->withTrashed()->using('App\Detalle_venta')->withPivot([
                             'cantidad',
                             'sub_total',
                             'iva',
