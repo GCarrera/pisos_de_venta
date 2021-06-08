@@ -23,15 +23,49 @@ class UsersController extends Controller
 
     public function get_piso_venta()
     {
-    	$usuario = Auth::user()->piso_venta->id;
+      try {
+        DB::beginTransaction();
+        $usuario = Auth::user()->piso_venta->id;
 
-    	$piso_venta = Piso_venta::where('user_id', $usuario)->first();
+        try {
+          DB::beginTransaction();
+          $piso_venta = Piso_venta::where('user_id', $usuario)->first();
 
-    	$sincronizacion = Sincronizacion::where('piso_venta_id', $usuario)->orderBy('id', 'desc')->first();
+          DB::commit();
+        } catch (Exception $e) {
+          DB::rollback();
+          return response()->json($e);
+        }
 
-        $caja = Vaciar_caja::where('piso_venta_id', $usuario)->orderBy('id', 'desc')->first();
+        try {
+          DB::beginTransaction();
+          $sincronizacion = Sincronizacion::where('piso_venta_id', $usuario)->orderBy('id', 'desc')->first();
 
-    	return response()->json(['piso_venta' => $piso_venta, 'sincronizacion' => $sincronizacion, 'caja' => $caja]);
+          DB::commit();
+        } catch (Exception $e) {
+          DB::rollback();
+          return response()->json($e);
+        }
+
+        try {
+          DB::beginTransaction();
+          $caja = Vaciar_caja::where('piso_venta_id', $usuario)->orderBy('id', 'desc')->first();
+
+          DB::commit();
+        } catch (Exception $e) {
+          DB::rollback();
+          return response()->json($e);
+        }
+
+        DB::commit();
+
+        return response()->json(['piso_venta' => $piso_venta, 'sincronizacion' => $sincronizacion, 'caja' => $caja]);
+
+      } catch (Exception $e) {
+        DB::rollback();
+        return response()->json($e);
+      }
+
     }
 
     public function get_dolar()

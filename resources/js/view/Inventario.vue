@@ -241,21 +241,26 @@
 
 
 				//PRECIOS
-				//ULTIMO PRODUCTO DE INVENTORY REGISTRADO
+				//ULTIMA FEHA DE CREATED AT LOCAL
 				axios.get('http://localhost/pisos_de_venta/public/api/ultimo-inventory').then(response => {
-					//console.log(response.data)
+					console.log("ultimas fechas created_at y updated_at");
+					console.log(response)
 					let ultimoInventory = response.data
 					//TRAEMOS DE LA WEB TODOS LOS PRODUCTOS APARTIR DEL ULTIMO ID
-					//axios.get('http://mipuchitoex.com/api/get-inventory/'+ultimoInventory).then(response => {//WEB
-					axios.get('http://mipuchito.com/api/get-inventory/'+ultimoInventory).then(response => {//WEB
-
-						//console.log(response)
-						let productos = response.data
+					//axios.get('http://mipuchito.com/api/get-inventory/'+ultimoInventory).then(response => {//WEB
+					axios.post('http://mipuchito.com/api/get-inventorybk', {id: ultimoInventory}).then(response => {//WEB
+						console.log("productos nuevos y productos actualizados");
+						console.log(response)
+						var productosCreated = response.data.created
+						var productosUpdated = response.data.updated
+						var preciosUpdated = response.data.productUpdated
+						var productosDeleted = response.data.deleted
 						//REGISTRAMOS LOS NUEVOS PRODUCTOS
-						if (productos.length > 0) {
+						if (productosCreated.length > 0) {
 							//console.log(productos);
 							console.log("hay que registrar")
-							axios.post('http://localhost/pisos_de_venta/public/api/registrar-inventory', {productos: productos}).then(response => {
+							axios.post('http://localhost/pisos_de_venta/public/api/registrar-inventory', {productos: productosCreated}).then(response => {
+								console.log("dentro del axios registrar");
 
 								console.log(response.data);
 								if (response.data == true) {
@@ -271,103 +276,104 @@
 							});
 
 						}else{
-							console.log("no hay productos para registrar")
+							console.log("no hay productos nuevos")
 						}
 
-						//ACTUALIZAMOS LOS PRECIOS
-						//ANCLAR PRODUCTOS A UN INVENTORY_ID
-						//OBTENEMOS DE LOS PISOS TODOS LOS QUE INVENTORY_ID == NUll
-						axios.get('http://localhost/pisos_de_venta/public/api/get-inventories-id').then(response => {
-							console.log(response);
-							let inventario = response.data;
+						if (productosUpdated.length > 0) {
+							console.log("hay que actualizar");
+							console.log(productosUpdated);
+							axios.post('http://localhost/pisos_de_venta/public/api/actualizar-inventory', {productos: productosUpdated}).then(response => {
+								console.log("dentro del axios");
 
-							if (inventario.length > 0) {
-								//LOS BUSCAMOS EN LA WEB A VER SI SE LE ASIGNO UN INVENTORY_ID
-								axios.post('http://mipuchito.com/api/get-inventories', {inventario: inventario, piso_venta: this.id}).then(response => {
+								console.log(response);
+								if (response.data == true) {
+									console.log("productos actualizados exitosamente")
 
-									console.log(response);
-									let nuevoInventario = response.data;
-									//ACTUALIZAMOS EN LOCAL LOS INVENTORY_ID
-									axios.post('http://localhost/pisos_de_venta/public/api/actualizar-inventory-id', {inventario: nuevoInventario}).then(response => {
+									//SINC
+									this.sincron.precios = true;
+									//this.sincron.precios = true;
 
-										console.log(response);
-										//ACTUALIZAMOS LOS PRECIOS
+								}
+							}).catch(e => {
+								console.log(e.response)
+								this.error = true;
+								this.cambiar()
+							});
 
-										axios.get('http://mipuchito.com/api/get-precios-inventory/'+this.id).then(response => {//WEB
+						}else{
+							console.log("no hay productos actualizados")
+						}
 
-											console.log(response)
-											let inventory = response.data.inventory
-											let inventario = response.data.inventario
+						if (preciosUpdated.length > 0) {
+							console.log("hay que actualizar precios");
+							console.log(preciosUpdated);
+							axios.post('http://localhost/pisos_de_venta/public/api/actualizar-products', {precios: preciosUpdated}).then(response => {
+								console.log("dentro del axios");
 
-											axios.post('http://localhost/pisos_de_venta/public/api/actualizar-precios-inventory', {productos: inventory, precios: inventario}).then(response => {
+								console.log(response);
+								if (response.data == true) {
+									console.log("productos actualizados exitosamente")
 
-												console.log(response.data)
-												//SINC
-												this.sincron.precios = true;
-											}).catch(e => {
-												console.log(e.response)
-												this.error = true;
-												this.cambiar()
-											});
-										}).catch(e => {
-											console.log(e.response)
-											this.error = true;
-											this.cambiar()
-										});
+									//SINC
+									this.sincron.precios = true;
+									//this.sincron.precios = true;
 
-									}).catch(e => {
-										console.log(e.response)
-									});
+								}
+							}).catch(e => {
+								console.log(e.response)
+								this.error = true;
+								this.cambiar()
+							});
 
-								}).catch(e => {
-									console.log(e.response)
-								});
-							}else{
-								console.log("no hay productos para anclar")
-								//ACTUALIZAMOS LOS PRECIOS
+						}else{
+							console.log("no hay productos actualizados")
+						}
 
-								axios.get('http://mipuchito.com/api/get-precios-inventory/'+this.id).then(response => {//WEB
+						if (productosDeleted.length > 0) {
+							console.log("hay que eliminar productos");
+							console.log(productosDeleted);
+							axios.post('http://localhost/pisos_de_venta/public/api/borrar-inventory', {productos: productosDeleted}).then(response => {
+								console.log("dentro del axios");
 
-									console.log(response)
-									let inventory = response.data.inventory
-									let inventario = response.data.inventario
+								console.log(response);
+								if (response.data == true) {
+									console.log("productos eliminados exitosamente")
 
-									axios.post('http://localhost/pisos_de_venta/public/api/actualizar-precios-inventory', {productos: inventory, precios: inventario}).then(response => {
+									//SINC
+									this.sincron.precios = true;
+									//this.sincron.precios = true;
 
-										console.log(response.data)
-										//SINC
-										this.sincron.precios = true;
-										this.get_inventario();
-			   							this.get_id();
-									 	this.cambiar()
-										axios.post('http://mipuchito.com/api/sincronizacion', {id: this.id}).then(response => {
-											axios.post('http://localhost/pisos_de_venta/public/api/sincronizacion', {id: this.id}).then(response => {
-		       							this.sincro_exitosa = true
-		       							window.location="http://localhost/pisos_de_venta/public/inventario";
-											}).catch(e => {
-												console.log(e.response)
-												this.error = true;
-												this.cambiar()
-											});
-										}).catch(e => {
-											console.log(e.response)
-											this.error = true;
-											this.cambiar()
-										});
-									}).catch(e => {
-										console.log(e.response)
-										this.error = true;
-										this.cambiar()
-									});
+								}
+							}).catch(e => {
+								console.log(e.response)
+								this.error = true;
+								this.cambiar()
+							});
+
+						}else{
+							console.log("no hay productos eliminados")
+						}
+
+						if (this.error == false) {
+
+							axios.post('http://mipuchito.com/api/sincronizacion', {id: this.id}).then(response => {
+								axios.post('http://localhost/pisos_de_venta/public/api/sincronizacion', {id: this.id}).then(response => {
+									this.sincro_exitosa = true
+									window.location="http://localhost/pisos_de_venta/public/inventario";
 								}).catch(e => {
 									console.log(e.response)
 									this.error = true;
 									this.cambiar()
 								});
-							}
-						}).catch(e => {
-							console.log(e.response)
-						});
+							}).catch(e => {
+								console.log(e.response)
+								this.error = true;
+								this.cambiar()
+							});
+
+						}
+
+
 					}).catch(e => {
 						console.log(e.response)
 						this.error = true;
@@ -382,10 +388,12 @@
 
 
 		    },// fin del sincronizar
-		    cambiar(){
+
+		  cambiar(){
 				console.log("btn cambio")
 				this.loading = !this.loading;
 			},
+
 			cambiar_aud(){
 				this.loading_aud = !this.loading_aud;
 			},

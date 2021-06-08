@@ -57,6 +57,9 @@ Route::prefix('api')->group(function(){
 	Route::get('/ultimo-inventory', 'InventarioController@ultimo_inventory');
 	Route::get('/get-inventory/{id}', 'InventarioController@get_inventory');//WEB
 	Route::post('/registrar-inventory', 'InventarioController@store_inventory');
+	Route::post('/actualizar-inventory', 'InventarioController@update_inventory');
+	Route::post('/actualizar-products', 'InventarioController@update_products');
+	Route::post('/borrar-inventory', 'InventarioController@deleted_inventory');
 	Route::get('/get-precios-inventory', 'InventarioController@get_precios_inventory');//WEB
 	Route::post('/actualizar-precios-inventory', 'InventarioController@actualizar_precios_inventory');
   Route::post('/auditoria', 'InventarioController@auditoria');//AUDITORIA
@@ -74,6 +77,8 @@ Route::prefix('api')->group(function(){
 
 	//DESPACHOS
 	Route::get('/get-despachos', 'DespachosController@get_despachos');
+	Route::get('/get-retiros', 'DespachosController@get_retiros');
+	Route::get('/get-retiros-web', 'DespachosController@get_retiros_web');
 	Route::post('/confirmar-despacho', 'DespachosController@confirmar_despacho');
 	Route::post('/negar-despacho', 'DespachosController@negar_despacho');
 	Route::get('/get-despachos-sin-confirmacion/{piso_venta_id}', 'DespachosController@get_despachos_sin_confirmacion');

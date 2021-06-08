@@ -72,10 +72,10 @@
 								<td>
 									<button type="button" class="btn btn-primary" @click="showModalDetalles(despacho.id)">Ver</button>
 									<!--<button class="btn btn-primary" data-toggle="modal" data-target="#modalVer">Ver</button>-->
-									<button class="btn btn-success" v-if="despacho.confirmado == null" @click="confirmar(despacho.id, index)" :disabled="loadingDes">
+									<button class="btn btn-success" v-if="despacho.confirmado == 4" @click="confirmar(despacho.id, index)" :disabled="loadingDes">
 										Confirmar
 									</button>
-									<button class="btn btn-danger" v-if="despacho.confirmado == null" @click="negar(despacho.id, index)" :disabled="loadingDes">
+									<button class="btn btn-danger" v-if="despacho.confirmado == 4" @click="negar(despacho.id, index)" :disabled="loadingDes">
 										Negar
 									</button>
 								</td>
@@ -233,31 +233,79 @@
 								console.log(despachosConfirmados);
 								//GUARDAR LOS DATOS ANTERIORES EN LA WEB
 								axios.post('http://mipuchito.com/api/actualizar-confirmados', {despachos: despachosConfirmados, piso_venta_id: this.id}).then(response => {//DEL LADO DE LA WEB PARA ACTUALIZAR LAS CONFIRMACIONES
-									axios.post('http://mipuchito.com/api/sincronizacion', {id: this.id}).then(response => {
-										axios.post('http://localhost/pisos_de_venta/public/api/sincronizacion', {id: this.id}).then(response => {
 
-											this.cambiar()
-											//console.log(response);
-											//SINC
-											this.sincron.despachos = true;
-											console.log('error message');
-											console.log(this.error_message);
-											if (this.error_message == null) {
-												console.log('vacio');
-												this.sincro_exitosa = true
-												window.location="http://localhost/pisos_de_venta/public/despachos";
-											}
+									console.log("actualizar despachos confirmados");
 
+									axios.get('http://mipuchito.com/api/ultimo-retiro/'+this.id).then(response => {
+
+										console.log("ultimo retiro guardado en web");
+
+										var ultimoretiro = response.data;
+										console.log(ultimoretiro);
+
+										if (ultimoretiro.length > 0) {
+
+											axios.post('http://localhost/pisos_de_venta/public/api/get-retiros-web', {id: ultimoretiro}).then(response => {
+
+												console.log("retiros nuevos");
+
+												var retirosnuevos = response.data;
+
+												console.log(retirosnuevos);
+
+												if (retirosnuevos.length > 0) {
+
+													axios.post('http://mipuchito.com/api/store-retiros', {retiros: retirosnuevos}).then(response => {
+
+														console.log("guardar retiros en web");
+
+													}).catch(e => {
+														console.log(e.response)
+														this.error = true;
+														this.cambiar()
+													});
+
+												}
+
+											}).catch(e => {
+												console.log(e.response)
+												this.error = true;
+												this.cambiar()
+											});
+
+										}
+										axios.post('http://mipuchito.com/api/sincronizacion', {id: this.id}).then(response => {
+											axios.post('http://localhost/pisos_de_venta/public/api/sincronizacion', {id: this.id}).then(response => {
+
+												this.cambiar()
+												//console.log(response);
+												//SINC
+												this.sincron.despachos = true;
+												console.log('error message');
+												console.log(this.error_message);
+												if (this.error_message == null) {
+													console.log('vacio');
+													this.sincro_exitosa = true
+													window.location="http://localhost/pisos_de_venta/public/despachos";
+												}
+
+											}).catch(e => {
+												console.log(e.response)
+												this.error = true;
+												this.cambiar()
+											});
 										}).catch(e => {
 											console.log(e.response)
 											this.error = true;
 											this.cambiar()
 										});
+
 									}).catch(e => {
 										console.log(e.response)
 										this.error = true;
 										this.cambiar()
 									});
+
 								}).catch(e => {
 									console.log(e.response)
 									this.error = true;

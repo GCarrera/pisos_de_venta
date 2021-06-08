@@ -40,6 +40,25 @@ class DespachosController extends Controller
         return response()->json($despachos);
     }
 
+    public function get_retiros()
+    {
+        $usuario = Auth::user()->piso_venta->id;
+
+        $despachos = Despacho::with('productos')->where('piso_venta_id', $usuario)->where('type', 2)->orderBy('id', 'desc')->paginate(20);
+
+        return response()->json($despachos);
+    }
+
+    public function get_retiros_web(Request $request)
+    {
+        $usuario = Auth::user()->piso_venta->id;
+        $id = $request->id['id_extra'];
+
+        $despachos = Despacho::with('productos')->where('piso_venta_id', $usuario)->where('type', 2)->where('id', '>', $id)->get();
+
+        return response()->json($despachos);
+    }
+
     public function confirmar_despacho(Request $request)
     {
         $usuario = Auth::user()->piso_venta->id;
@@ -96,7 +115,7 @@ class DespachosController extends Controller
         $despacho = Despacho::with(['productos' => function($articulo){
 
         }])->findOrFail($request->id);
-        $despacho->confirmado = 0;
+        $despacho->confirmado = 2;
         $despacho->save();
 
         foreach ($despacho->productos as $valor) {
@@ -168,7 +187,8 @@ class DespachosController extends Controller
     {
         $usuario = Auth::user()->piso_venta->id;
 
-        $despacho = Despacho::select('id_extra')->where('piso_venta_id', $usuario)->where('id_extra', '!=', 'NULL')->orderBy('id', 'desc')->first();
+        //$despacho = Despacho::select('id_extra')->where('piso_venta_id', $usuario)->where('id_extra', '!=', 'NULL')->orderBy('id', 'desc')->first();
+        $despacho = Despacho::select('id_extra')->where('piso_venta_id', $usuario)->where('id_extra', '!=', 'NULL')->where('type', '!=', '2')->orderBy('id', 'desc')->first();
 
         return response()->json($despacho);
     }
@@ -194,6 +214,7 @@ class DespachosController extends Controller
                 $registro->id_extra = $despacho['id_extra'];
                 $registro->piso_venta_id = $despacho['piso_venta_id'];
                 $registro->type = $despacho['type'];
+                $registro->confirmado = $despacho['confirmado'];
                 $registro->created_at = $despacho['created_at'];
                 $registro->save();
 
@@ -301,7 +322,7 @@ class DespachosController extends Controller
 
         foreach ($request->despachos as $valor) {
 
-            $despachos[] = Despacho::with('productos')->where('id_extra', $valor['id_extra'])->first();
+            $despachos[] = Despacho::with('productos')->where('id_extra', $valor['id_extra'])->where('type', 1)->first();
         }
 
 

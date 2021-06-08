@@ -25,6 +25,7 @@ class CreateInventoriesTable extends Migration
             $table->string('total_qty_prod');
 
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
