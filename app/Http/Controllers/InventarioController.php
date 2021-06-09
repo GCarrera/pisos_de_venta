@@ -67,6 +67,10 @@ class InventarioController extends Controller
                 if (isset($preciodelete['id'])) {
                   $preciodelete->delete();
                 }
+                $invpvdelete = Inventario_piso_venta::where('inventario_id', $value['id'])->first();
+                if (isset($invpvdelete['id'])) {
+                  $invpvdelete->delete();
+                }
               }
               $producto = Inventario::where('inventory_id', $inventory_id)->where('id', '!=', $idunventario)->forceDelete();
 
@@ -145,8 +149,8 @@ class InventarioController extends Controller
               $inventariodeletes = Inventario::where('inventory_id', $id)->first();
               if (isset($inventariodeletes->id)) {
                 $inventarioid = $inventariodeletes->id;
-                //return $inventarioid;
                 $invpv = Inventario_piso_venta::where('inventario_id', $inventarioid)->delete();
+                $invpre = Precio::where('inventario_id', $inventarioid)->delete();
                 $inventariodeletes = Inventario::where('inventory_id', $id)->delete();
               }
               $deletes->delete();
@@ -359,6 +363,24 @@ class InventarioController extends Controller
                 $product->inventory_id = $producto['inventory_id'];
                 $product->save();
               }
+
+              $idinventario = Inventario::where('inventory_id', $producto['inventory_id'])->first();
+              if (isset($idinventario->id)) {
+                $precio = Precio::where('inventory_id', $idinventario->id)->first();
+                if (isset($precio->id)) {
+                  $precio->costo = $producto['cost'];
+                  $precio->iva_porc = $producto['iva_percent'];
+                  $precio->iva_menor = $producto['retail_iva_amount'];
+                  $precio->total_menor = $producto['retail_total_price'];
+                  $precio->iva_mayor = $producto['wholesale_iva_amount'];
+                  $precio->total_mayor = $producto['wholesale_total_individual_price'];
+                  $precio->oferta = $producto['oferta'];
+                  $precio->save();
+                }
+              }
+
+
+
 
               DB::commit();
 
