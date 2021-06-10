@@ -347,7 +347,7 @@ class InventarioController extends Controller
                 $product->oferta = $producto['oferta'];
                 $product->save();
               } else {
-                $product = new Product();
+                /*$product = new Product();
                 $product->cost = $producto['cost'];
                 $product->iva_percent = $producto['iva_percent'];
                 $product->retail_margin_gain = $producto['retail_margin_gain'];
@@ -361,7 +361,7 @@ class InventarioController extends Controller
                 $product->wholesale_iva_amount = $producto['wholesale_iva_amount'];
                 $product->oferta = $producto['oferta'];
                 $product->inventory_id = $producto['inventory_id'];
-                $product->save();
+                $product->save();*/
               }
 
               $idinventario = Inventario::where('inventory_id', $producto['inventory_id'])->first();
