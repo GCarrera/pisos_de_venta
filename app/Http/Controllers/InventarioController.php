@@ -366,7 +366,7 @@ class InventarioController extends Controller
 
               $idinventario = Inventario::where('inventory_id', $producto['inventory_id'])->first();
               if (isset($idinventario->id)) {
-                $precio = Precio::where('inventory_id', $idinventario->id)->first();
+                $precio = Precio::where('inventario_id', $idinventario->id)->first();
                 if (isset($precio->id)) {
                   $precio->costo = $producto['cost'];
                   $precio->iva_porc = $producto['iva_percent'];
