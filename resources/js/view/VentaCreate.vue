@@ -26,7 +26,7 @@
 
 				<h1 class="text-center">Nueva venta:</h1>
 				<hr>
-				<form method="post" @submit.prevent="" onkeydown="return event.key != 'Enter';"><!--Formulario-->
+				<form method="post" @submit.prevent="" @keyup.alt.enter="venderTec" onkeydown="return event.key != 'Enter';"><!--Formulario-->
 
 					<div>
 						<div class="form-row align-items-center">
@@ -186,13 +186,19 @@
 				axios.get('http://localhost/pisos_de_venta/public/api/ventas-datos-create').then(response => {
 
 					console.log(response);
-					this.inventario_completo = response.data
+					//this.inventario_completo = response.data
 					//this.inventario_compra = response.data
-
+					console.log("axios get datos");
 					response.data.forEach(item => {
-						let datos = {value: item.inventario.id , text: item.inventario.name}
-						this.inventario.push(datos);
+						if (item.inventario != null) {
+							let datos = {value: item.inventario.id , text: item.inventario.name}
+							this.inventario_completo.push(item);
+							this.inventario.push(datos);
+						}
 					});
+					console.log("luego del forEach");
+					console.log(this.inventario);
+
 				}).catch(e => {
 
 				});
@@ -218,7 +224,7 @@
 
 					console.log(this.articulo_compra);
 				}else{
-
+					console.log("establecer_nombre");
 					let resultado = this.inventario_completo.find(element => element.inventario.id == id)
 					this.articulo.id = id;
 					this.articulo.nombre = resultado.inventario.name;
@@ -279,6 +285,11 @@
 				}
 
 			},
+			venderTec(){
+				if (this.productos.length > 0) {
+					this.vender();
+				}
+			},
 			vender(){
 				this.error = false;
 				console.log('estoy en el vender');
@@ -310,7 +321,7 @@
 						console.log('el mensaje',this.error_message)
 						this.error = true;
 						this.showAlert();
-						window.location="http://localhost/pisos_de_venta/public/ventas/create";
+						//window.location="http://localhost/pisos_de_venta/public/ventas/create";
 
 					}else{
 						this.cantidad_disponible = null

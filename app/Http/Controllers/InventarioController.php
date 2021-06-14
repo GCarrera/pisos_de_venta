@@ -34,7 +34,7 @@ class InventarioController extends Controller
         //    $inventario->where('name', 'quo');
         //}])->where('piso_venta_id', $usuario)->whereHas('inventario')->get();
 
-        $inventario  = Inventario_piso_venta::with('inventario.precio')->where('piso_venta_id', $usuario)->whereHas('inventario', function($q)use($request){
+        $inventario  = Inventario_piso_venta::with('inventario.precio')->where('cantidad', '>', 0.000)->where('piso_venta_id', $usuario)->whereHas('inventario', function($q)use($request){
            // $q->where('name', 'quo');
             if ($request->search != null) {
 

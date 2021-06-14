@@ -58,7 +58,7 @@ class VentasController extends Controller
     {
     	$usuario = Auth::user()->piso_venta->id;
 
-    	$inventario = Inventario_piso_venta::with('inventario.precio')->where('piso_venta_id', $usuario)->get();
+    	$inventario = Inventario_piso_venta::with('inventario.precio')->where('cantidad', '>', 0.000)->where('piso_venta_id', $usuario)->get();
 
     	return response()->json($inventario);
     }
@@ -369,9 +369,23 @@ class VentasController extends Controller
 
     public function ventas_sin_registrar($piso_venta, $id)
     {
-    	$ventas = Venta::with('detalle', 'detalle.precio')->where('piso_venta_id', $piso_venta)->where('id_extra', '>', $id)->get();
+      try {
 
-    	return response()->json($ventas);
+        DB::beginTransaction();
+
+        $ventas = Venta::with('detalle', 'detalle.precio')->where('piso_venta_id', $piso_venta)->where('id_extra', '>', $id)->get();
+
+        DB::commit();
+
+        return response()->json($ventas);
+
+      } catch (Exception $e) {
+
+        DB::rollback();
+  			return response()->json($e);
+
+      }
+
     }
 
     public function registrar_ventas(Request $request) //WEB
