@@ -200,7 +200,7 @@
 					console.log(this.inventario);
 
 				}).catch(e => {
-
+					console.log(e.response);
 				});
 			},
 			get_dolar() {
