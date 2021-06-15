@@ -369,6 +369,9 @@ class VentasController extends Controller
 
     public function ventas_sin_registrar($piso_venta, $id)
     {
+      if ($id == 0) {
+        $id = 1;
+      }
       try {
 
         DB::beginTransaction();
