@@ -369,14 +369,12 @@ class VentasController extends Controller
 
     public function ventas_sin_registrar($piso_venta, $id)
     {
-      if ($id == 0) {
-        $id = 1;
-      }
       try {
 
         DB::beginTransaction();
 
-        $ventas = Venta::with('detalle', 'detalle.precio')->where('piso_venta_id', $piso_venta)->where('id_extra', '>', $id)->get();
+        //$ventas = Venta::with('detalle', 'detalle.precio')->where('piso_venta_id', $piso_venta)->where('id_extra', '>', $id)->get();
+        $ventas = Venta::where('piso_venta_id', $piso_venta)->where('id_extra', '>', $id)->get();
 
         DB::commit();
 
