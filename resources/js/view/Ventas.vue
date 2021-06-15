@@ -639,8 +639,10 @@ export default{
 						//EVALUAMOS QUE EXISTA LA PROPIEDAD EN CASO DE SER LA PRIMERA VENTA
 						if (response.data.hasOwnProperty('id_extra')) {
 							var ultima_venta = response.data.id_extra;
+							console.log("lleno");
 						} else {
-							var ultima_venta = '0'
+							var ultima_venta = 0
+							console.log("vacio");
 						}
 						console.log(ultima_venta);
 
