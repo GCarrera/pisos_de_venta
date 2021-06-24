@@ -54,58 +54,122 @@ class DespachosController extends Controller
         $usuario = Auth::user()->piso_venta->id;
         $id = $request->id['id_extra'];
 
-        $despachos = Despacho::with('productos')->where('piso_venta_id', $usuario)->where('type', 2)->where('id', '>', $id)->get();
+        try {
+            DB::beginTransaction();
+            $despachos = Despacho::with('productos')->where('piso_venta_id', $usuario)->where('type', 2)->where('id', '>', $id)->get();
+    
+            return response()->json($despachos);
+            DB::commit();
+        } catch (\Exception $e) {
+            return response()->json($e);
+        }
 
-        return response()->json($despachos);
     }
 
     public function confirmar_despacho(Request $request)
     {
-        $usuario = Auth::user()->piso_venta->id;
+        try {
+            DB::beginTransaction();
 
-        $despacho = Despacho::with(['productos' => function($producto){
+            $usuario = Auth::user()->piso_venta->id;
 
-        }])->findOrFail($request->id);
-        $despacho->confirmado = 1;
-        $despacho->save();
+            $despacho = Despacho::with(['productos' => function($producto){
+            }])->findOrFail($request->id);
+            $despacho->confirmado = 1;
+            $despacho->save();
 
-
-        foreach ($despacho->productos as $valor) {
-            //RESTAMOS DE INVENTORY DE PROMETHEUS
-            $inventario = Inventory::findOrFail($valor->id);
-            $inventario->total_qty_prod -= $valor->pivot->cantidad;
-            $inventario->quantity = $inventario->total_qty_prod / $inventario->qty_per_unit;
-            $inventario->save();
-            //BUSCAMOS EL ID EN INVENTARIO
-            $producto = Inventario::select('id')->where('inventory_id', $valor->pivot->inventory_id)->orderBy('id', 'desc')->first();
-
-            $inventario = Inventario_piso_venta::with('inventario')->where('piso_venta_id', $usuario)->where('inventario_id', $producto->id)->orderBy('id', 'desc')->first();
-
-            if ($inventario['id'] == null) {
-                $inventario = new Inventario_piso_venta();
-                $inventario['inventario_id'] = $producto->id;
-                $inventario['piso_venta_id'] = $usuario;
-                $inventario['cantidad'] = $valor->pivot->cantidad;
+            foreach ($despacho->productos as $valor) {
+                //RESTAMOS DE INVENTORY DE PROMETHEUS
+                $inventario = Inventory::findOrFail($valor->id);
+                $inventario->total_qty_prod -= $valor->pivot->cantidad;
+                $inventario->quantity = $inventario->total_qty_prod / $inventario->qty_per_unit;
                 $inventario->save();
-            }else{
-                //SI ES UN DESPACHO O ES UN RETIRO
-                if($despacho->type == 1){
+                //BUSCAMOS EL ID EN INVENTARIO
+                $producto = Inventario::select('id')->where('inventory_id', $valor->pivot->inventory_id)->orderBy('id', 'desc')->first();
+
+                if (isset($producto->id)) {
+                    $inventario = Inventario_piso_venta::with('inventario')->where('piso_venta_id', $usuario)->where('inventario_id', $producto->id)->orderBy('id', 'desc')->first();
+
+                    if ($inventario['id'] == null) {
+                        $inventario = new Inventario_piso_venta();
+                        $inventario['inventario_id'] = $producto->id;
+                        $inventario['piso_venta_id'] = $usuario;
+                        $inventario['cantidad'] = $valor->pivot->cantidad;
+                        $inventario->save();
+                    }else{
+                        //SI ES UN DESPACHO O ES UN RETIRO
+                        if($despacho->type == 1){
 
 
-                        $inventario->cantidad += $valor->pivot->cantidad;
+                                $inventario->cantidad += $valor->pivot->cantidad;
 
-                }else{
+                        }else{
 
-                        $inventario->cantidad -= $valor->pivot->cantidad;
+                                $inventario->cantidad -= $valor->pivot->cantidad;
 
-                }
+                        }
+                    }
+                    $inventario->save();
+                } else {
+                    
+                    $inventarioval = Inventory::where('id', $valor->pivot->inventory_id)->first();
+
+                    if (isset($inventarioval->id)) {
+                        $articulo = new Inventario();
+                        $articulo->name = $inventarioval->name;
+                        $articulo->unit_type_mayor = $inventarioval->unit_type_mayor;
+                        $articulo->unit_type_menor = $inventarioval->unit_type_menor;
+                        $articulo->inventory_id = $inventarioval->inventory_id;
+                        $articulo->status = $inventarioval->status;
+                        $articulo->piso_venta_id = $inventarioval->piso_venta_id;
+                        $articulo->save();
+
+                        $inventariopv = Inventario_piso_venta::select('id')->where('inventario_id', $articulo->id)->first();
+
+                        if (isset($inventariopv->id)) {
+                        $inventariopv->cantidad += $valor->pivot->cantidad;
+                        $inventariopv->save();
+                        } else {
+                        $inventario = new Inventario_piso_venta();
+                        $inventario->inventario_id = $articulo->id;
+                        $inventario->piso_venta_id = $usuario;
+                        $inventario->cantidad = $valor->pivot->cantidad;
+                        $inventario->save();
+                        }
+
+                        $precioval = Product::where('inventory_id', $valor->pivot->inventory_id)->first();
+
+                        //return response()->json($precioval);
+
+                        if (isset($precioval->id)) {
+                            //REGISTRAMOS LOS PRECIOS
+                            $precio = new Precio();
+                            $precio->costo = $precioval['cost'];
+                            $precio->iva_porc = $precioval['iva_percent'];
+                            $precio->iva_menor = $precioval['retail_iva_amount'];
+                            $precio->sub_total_menor = $precioval['retail_total_price'] - $precioval['retail_iva_amount'];
+                            $precio->total_menor = $precioval['retail_total_price'];
+                            $precio->iva_mayor = $precioval['wholesale_iva_amount'];
+                            $precio->sub_total_mayor = $precioval['wholesale_packet_price'];
+                            $precio->total_mayor = $precio->sub_total_mayor + $precio->iva_mayor;
+                            $precio->oferta = $precioval['oferta'];
+                            $precio->inventario_id = $articulo->id;
+                            $precio->save();
+                        }
+
+                    }
+
+                }       
+
             }
-            $inventario->save();
 
-
+            DB::commit();
+            return response()->json($despacho);
+            
+        } catch (\Exception $e) {
+            return response()->json($e);
         }
-
-        return response()->json($despacho);
+        
     }
 
     public function negar_despacho(Request $request)
@@ -118,7 +182,7 @@ class DespachosController extends Controller
         $despacho->confirmado = 2;
         $despacho->save();
 
-        foreach ($despacho->productos as $valor) {
+        /*foreach ($despacho->productos as $valor) {
             //BUSCAMOS EL ID EN INVENTARIO
             $producto = Inventario::select('id')->where('inventory_id', $valor->pivot->inventory_id)->orderBy('id', 'desc')->first();
 
@@ -146,7 +210,7 @@ class DespachosController extends Controller
             $inventario->save();
 
 
-        }
+        }*/
         /*
         foreach ($despacho->productos as $valor) {
 

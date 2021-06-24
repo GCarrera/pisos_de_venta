@@ -78,7 +78,7 @@ Route::prefix('api')->group(function(){
 	//DESPACHOS
 	Route::get('/get-despachos', 'DespachosController@get_despachos');
 	Route::get('/get-retiros', 'DespachosController@get_retiros');
-	Route::get('/get-retiros-web', 'DespachosController@get_retiros_web');
+	Route::post('/get-retiros-web', 'DespachosController@get_retiros_web');
 	Route::post('/confirmar-despacho', 'DespachosController@confirmar_despacho');
 	Route::post('/negar-despacho', 'DespachosController@negar_despacho');
 	Route::get('/get-despachos-sin-confirmacion/{piso_venta_id}', 'DespachosController@get_despachos_sin_confirmacion');
