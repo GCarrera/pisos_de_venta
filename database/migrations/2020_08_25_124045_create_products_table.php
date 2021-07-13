@@ -22,7 +22,8 @@ class CreateProductsTable extends Migration
             $table->string('retail_iva_amount');
             $table->string('image');
             $table->string('wholesale_margin_gain');
-            $table->string('wholesale_packet_price');
+            //$table->string('wholesale_packet_price');
+            $table->decimal('wholesale_packet_price', 20, 3);
             $table->string('wholesale_total_individual_price');
             $table->string('wholesale_total_packet_price');
             $table->string('wholesale_iva_amount');

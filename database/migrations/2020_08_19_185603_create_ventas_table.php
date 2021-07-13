@@ -22,6 +22,7 @@ class CreateVentasTable extends Migration
             $table->enum('type', ['1', '2'])->comment('1:venta,2:compra');
             $table->bigInteger('id_extra')->nullable();
             $table->boolean('anulado')->nullable();
+            $table->enum('pago', ['1', '2'])->comment('1:divisa,2:bss');
             $table->timestamps();
 
             $table->foreign('piso_venta_id')->references('id')->on('piso_ventas');
