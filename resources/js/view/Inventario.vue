@@ -208,7 +208,7 @@
 						console.log(response);
 						if (response.data) {
 							this.cambiar_aud();
-							//window.location="http://localhost/pisos_de_venta/public/inventario";
+							window.location="http://localhost/pisos_de_venta/public/inventario";
 							console.log("EXITO");
 						}
 						//this.sincro_exitosa = true
@@ -390,7 +390,7 @@
 							axios.post('http://www.mipuchito.com/api/sincronizacion', {id: this.id}).then(response => {
 								axios.post('http://localhost/pisos_de_venta/public/api/sincronizacion', {id: this.id}).then(response => {
 									this.sincro_exitosa = true
-									//window.location="http://localhost/pisos_de_venta/public/inventario";
+									window.location="http://localhost/pisos_de_venta/public/inventario";
 								}).catch(e => {
 									console.log(e.response)
 									this.error = true;
