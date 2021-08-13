@@ -59,10 +59,12 @@ Route::prefix('api')->group(function(){
 	Route::post('/registrar-inventory', 'InventarioController@store_inventory');
 	Route::post('/actualizar-inventory', 'InventarioController@update_inventory');
 	Route::post('/actualizar-products', 'InventarioController@update_products');
+	Route::post('/verify-product-price', 'InventarioController@verify_product_price');
 	Route::post('/borrar-inventory', 'InventarioController@deleted_inventory');
 	Route::get('/get-precios-inventory', 'InventarioController@get_precios_inventory');//WEB
-	Route::post('/actualizar-precios-inventory', 'InventarioController@actualizar_precios_inventory');
-  Route::post('/auditoria', 'InventarioController@auditoria');//AUDITORIA
+  	Route::post('/auditoria', 'InventarioController@auditoria');//AUDITORIA
+  	Route::post('/all-product-price', 'InventarioController@all_product_price');//Actualizar Precios
+
 
   //SOLICITUDES
   Route::get('/get-solicitudes', 'PisoVentasController@get_solicitudes');
