@@ -15,19 +15,19 @@ Route::get('/', function () {
     return view('index');
 })->name('index');
 //INVENTARIO
-Route::get('/inventario', 'InventarioController@index')->name('inventario.index');
+Route::get('/inventario', 'InventarioController@index')->name('inventario.index')->middleware('session');
 //VENTAS
-Route::get('/ventas', 'VentasController@index')->name('ventas.index');
-Route::get('/ventas/create', 'VentasController@create')->name('ventas.create');
-Route::get('/ventas/create-compra', 'VentasController@create_compra')->name('ventas.create.compra');
+Route::get('/ventas', 'VentasController@index')->name('ventas.index')->middleware('session');
+Route::get('/ventas/create', 'VentasController@create')->name('ventas.create')->middleware('session');
+Route::get('/ventas/create-compra', 'VentasController@create_compra')->name('ventas.create.compra')->middleware('session');
 //DESPACHOS
-Route::get('/despachos', 'DespachosController@index')->name('despachos.index');
+Route::get('/despachos', 'DespachosController@index')->name('despachos.index')->middleware('session');
 //RETIROS
-Route::get('/retiros', 'DespachosController@index_retiros')->name('retiros.index');
+Route::get('/retiros', 'DespachosController@index_retiros')->name('retiros.index')->middleware('session');
 //COMPRAS
-Route::get('/compras', 'ComprasController@index')->name('compras.index');
+Route::get('/compras', 'ComprasController@index')->name('compras.index')->middleware('session');
 //DESPACHOS ALMACEN
-Route::get('/despachos-almacen', 'DespachosController@index_almacen')->name('despachos.almacen.index');
+Route::get('/despachos-almacen', 'DespachosController@index_almacen')->name('despachos.almacen.index')->middleware('session');
 Route::get('/despachos/create', 'DespachosController@create')->name('despachos.create');
 Route::post('/despachos-almacen', 'DespachosController@store')->name('despachos.store');
 //SOLICITUDES
@@ -35,7 +35,7 @@ Route::get('/solicitudes', 'PisoVentasController@solicitudes')->name('solicitude
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', 'HomeController@index')->name('home')->middleware('session');
 
 
 //RUTA DE PRUEBAS
