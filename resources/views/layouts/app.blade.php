@@ -146,17 +146,22 @@
                 		</div>
           	      	<div class="modal-body">
 
-          			<p class="text-center">Monto Actual: <span id="spanDolarAct"></span>.</p>
-          			<p class="text-center">Establesca un nuevo precio.</p>
+                        <h6 class="font-weight-bold text-success text-center">Dolar Trabajo: <span id="spanDolarAct"></span> / Dolar Oficial: <span id="spanDolarO"></span></h6>
 
-          			<form action="{{ action('PisoVentasController@establecer_dolar') }}" method="post">
-          				@csrf
-          				<div class="text-center">
-          				<input type="text" placeholder="Ejem: 310000" name="precio">
-          				BS
-          				<button class="btn btn-primary" type="submit">Establecer</button>
-          				</div>
-          			</form>
+                        <p class="text-center">Establesca un nuevo precio.</p>
+            
+                        <form action="{{ action('PisoVentasController@establecer_dolar')}}" method="post">
+                            @csrf
+                            <div class="text-center">
+                            <input type="text" placeholder="Ejem: 310000" name="precio">
+                            BS (Trabajo)
+                            <hr>
+                            <input type="text" placeholder="Ejem: 310000" name="precioo">
+                            BS (Oficial)
+                            <hr>
+                            <button class="btn btn-primary" type="submit">Establecer</button>
+                            </div>
+                        </form>
 
           	      	</div>
 
@@ -175,7 +180,9 @@
       url : `http://localhost/pisos_de_venta/public/api/get-dolar`
     })
     .done((data) => {
+        console.log(data);
       $('#spanDolarAct').text(new Intl.NumberFormat("de-DE", {minimumFractionDigits: 2}).format(data.dolar));
+      $('#spanDolarO').text(new Intl.NumberFormat("de-DE", {minimumFractionDigits: 2}).format(data.dolaro));
       //console.log(data);
     })
     .fail((err)=> {

@@ -7,5 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class Dolar extends Model
 {
     //
-    protected $fillable = ['price'];
+    //protected $fillable = ['price'];
 }

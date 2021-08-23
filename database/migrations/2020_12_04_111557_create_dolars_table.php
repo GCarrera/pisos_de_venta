@@ -16,6 +16,7 @@ class CreateDolarsTable extends Migration
         Schema::create('dolars', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->decimal('price', 20, 2);
+            $table->decimal('priceo', 20, 2);
             $table->timestamps();
         });
     }

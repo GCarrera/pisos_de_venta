@@ -200,11 +200,14 @@
 			handleOk(){
 				this.cambiar_aud();
 				console.log("empieza audotioria");
-				axios.post('http://mipuchito.com/api/auditoria', {id: this.id}).then(response => {
+				axios.post('http://www.mipuchito.com/api/auditoria', {id: this.id}).then(response => {
+					console.log("data del servidor con inventario del pv y productos borrados");
 					console.log(response);
 					let productos = response.data.productos;
 					let softdeletes = response.data.softdeletes;
-					axios.post('http://localhost/pisos_de_venta/public/api/auditoria', {idpisoventa: this.id, productosauditoria: productos, softdeletes: softdeletes}).then(response => {
+					let cantidades = response.data.cantidades;
+					axios.post('http://localhost/pisos_de_venta/public/api/auditoria', {idpisoventa: this.id, productosauditoria: productos, softdeletes: softdeletes, cantidades: cantidades}).then(response => {
+						console.log('Actualizar inventory products y sofdelete');
 						console.log(response);
 						if (response.data) {
 							this.cambiar_aud();

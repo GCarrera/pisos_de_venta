@@ -110,7 +110,7 @@
 		      			<div class="col-md-3">
 									<span class="small"> BsS {{mostar_total_total}}</span><br>
 									<span v-if="checked_divisa" class="small"> BsS {{mostar_descuento}}</span><br>
-									<span v-if="checked_divisa" class="small"> BsS {{mostar_total_descuento}}</span>
+									<span v-if="checked_divisa" class="small"> BsS {{mostar_total_descuento}} / $ {{ mostar_total_descuento_dolar }}</span>
 		      				<span class="d-none"> Bs {{mostar_sub_total}}</span><br>
 			      			<!-- <span class="small">{{iva_total}}</span><br> -->
 		      			</div>
@@ -142,6 +142,7 @@
 				productos: [],//LISTA DE PRODUCTOS QUE VOY A AGREGAR
 				iva:"",
 				dolar:0,
+				dolaro:0,
 				articulo: {
 					id: 0,
 					nombre: "",
@@ -207,6 +208,7 @@
 				axios.get('http://localhost/pisos_de_venta/public/api/get-dolar').then(response =>{
 					console.log(response)
 					this.dolar = response.data.dolar;
+					this.dolaro = response.data.dolaro;
 				}).catch(e => {
 					console.log(e.response);
 				});
@@ -423,6 +425,15 @@
 				console.log("funcion mostrar_total_total");
 				console.log(this.total_total);
 				let total = this.total_total-(this.total_total*0.03);
+				//AGREGAR PRECIO DOLAR AQUI
+				let n = new Intl.NumberFormat("de-DE", {minimumFractionDigits: 2}).format(total)
+				//let a = n +",00"
+				return n
+			},
+			mostar_total_descuento_dolar(){
+				console.log("funcion mostrar_total_total_dolar");
+				console.log(this.total_total);
+				let total = (this.total_total-(this.total_total*0.03))/this.dolaro;
 				//AGREGAR PRECIO DOLAR AQUI
 				let n = new Intl.NumberFormat("de-DE", {minimumFractionDigits: 2}).format(total)
 				//let a = n +",00"

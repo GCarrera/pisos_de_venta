@@ -72,7 +72,8 @@ class UsersController extends Controller
     {
       $dolar = Dolar::orderby('id','DESC')->first();
       $datadolar = $dolar['price'];
-      return response()->json(['dolar' => $datadolar]);
+      $datadolaro = $dolar['priceo'];
+      return response()->json(['dolar' => $datadolar, 'dolaro' => $datadolaro]);
     }
 
     public function vaciar_caja()

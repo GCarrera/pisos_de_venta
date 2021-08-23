@@ -53,6 +53,88 @@ class InventarioController extends Controller
           DB::beginTransaction();
           foreach ($request->productosauditoria as $value) {
 
+            $inventory = Inventory::find($value['id']);
+            if (isset($inventory->product_name)) {
+              $inventory->product_name = $value['product_name'];
+              $inventory->description = $value['description'];
+              $inventory->quantity = $value['quantity'];
+              $inventory->unit_type = $value['unit_type'];
+              $inventory->unit_type_menor = $value['unit_type_menor'];
+              $inventory->qty_per_unit = $value['qty_per_unit'];
+              $inventory->status = $value['status'];
+              $inventory->total_qty_prod = $value['total_qty_prod'];
+              $inventory->updated_at = $value['updated_at'];
+              $inventory->save();
+            }
+            
+            $product = Product::where('inventory_id', $value['id'])->first();
+            if (isset($product->id)) {
+              $product->cost = $value['product']['cost'];
+              $product->iva_percent = $value['product']['iva_percent'];
+              $product->retail_margin_gain = $value['product']['retail_margin_gain'];
+              $product->retail_total_price = $value['product']['retail_total_price'];
+              $product->retail_iva_amount = $value['product']['retail_iva_amount'];
+              $product->image = $value['product']['image'];
+              $product->wholesale_margin_gain = $value['product']['wholesale_margin_gain'];
+              $product->wholesale_packet_price = $value['product']['wholesale_packet_price'];
+              $product->wholesale_total_individual_price = $value['product']['wholesale_total_individual_price'];
+              $product->wholesale_total_packet_price = $value['product']['wholesale_total_packet_price'];
+              $product->wholesale_iva_amount = $value['product']['wholesale_iva_amount'];
+              $product->oferta = $value['product']['oferta'];
+              $product->updated_at = $value['product']['updated_at'];
+              $product->save();
+            }
+          }          
+          
+          foreach ($request->cantidades as $value) {
+
+            $idinventory = $value['inventario']['inventory_id'];
+
+            $inventario = Inventario::select('id')->where('inventory_id', $idinventory)->first();
+            if (isset($inventario->id)) {
+              $idinventario = $inventario->id;
+              $invpv = Inventario_piso_venta::where('inventario_id', $idinventario)->first();
+              $invpv->cantidad = $value['cantidad'];
+              $invpv->save();
+            }
+          }
+
+          foreach ($request->softdeletes as $value) {
+            $id = $value["id"];
+            $deletes = Inventory::find($id);
+            if (isset($deletes->id)) {
+              $inventariodeletes = Inventario::where('inventory_id', $id)->first();
+              if (isset($inventariodeletes->id)) {
+                $inventarioid = $inventariodeletes->id;
+                $invpv = Inventario_piso_venta::where('inventario_id', $inventarioid)->delete();
+                $invpre = Precio::where('inventario_id', $inventarioid)->delete();
+                $inventariodeletes = Inventario::where('inventory_id', $id)->delete();
+              }
+              $deletes->delete();
+            }
+
+          }
+
+          DB::commit();
+
+          return response()->json(true);
+
+      }catch(Exception $e){
+
+          DB::rollback();
+          return response()->json($e);
+      }
+
+    }
+    
+    public function auditoriabk(Request $request)
+    {
+
+      try{
+
+          DB::beginTransaction();
+          foreach ($request->productosauditoria as $value) {
+
             $inventory_id = $value['inventario']['inventory_id'];
             $cantidadnueva = $value['cantidad'];
             $nombrenuevo = $value['inventario']['name'];
