@@ -16,6 +16,7 @@ class DolarsSeeder extends Seeder
       DB::table('dolars')->insert([
           [
               'price' => '1000000',              
+              'priceo' => '1000000',              
               'created_at' => now()
           ],
       ]);
