@@ -95,10 +95,12 @@ class InventarioController extends Controller
             $inventario = Inventario::where('inventory_id', $idinventory)->first();
             if (isset($inventario->id)) {
               $idinventario = $inventario->id;
-              return response()->json($cantidadnew);
+              //return response()->json($cantidadnew);
               $invpv = Inventario_piso_venta::where('inventario_id', $idinventario)->first();
-              $invpv->cantidad = $cantidadnew;
-              $invpv->save();
+              if (isset($invpv->id)) {
+                $invpv->cantidad = $cantidadnew;
+                $invpv->save();
+              }
             }
           }
 
