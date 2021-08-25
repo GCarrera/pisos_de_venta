@@ -91,6 +91,7 @@ class InventarioController extends Controller
             $idinventory = $value['inventario']['inventory_id'];
 
             $cantidadnew = (isset($value['cantidad'])) ? $value['cantidad'] : 0; 
+            return response()->json($cantidadnew);
 
             $inventario = Inventario::select('id')->where('inventory_id', $idinventory)->first();
             if (isset($inventario->id)) {
