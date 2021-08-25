@@ -96,7 +96,7 @@ class InventarioController extends Controller
             if (isset($inventario->id)) {
               $idinventario = $inventario->id;
               $invpv = Inventario_piso_venta::where('inventario_id', $idinventario)->first();
-              $invpv->cantidad = $value['cantidad'];
+              $invpv->cantidad = $cantidadnew;
               $invpv->save();
             }
           }
