@@ -211,7 +211,7 @@
 						console.log(response);
 						if (response.data) {
 							this.cambiar_aud();
-							window.location="http://localhost/pisos_de_venta/public/inventario";
+							//window.location="http://localhost/pisos_de_venta/public/inventario";
 							console.log("EXITO");
 						}
 						//this.sincro_exitosa = true
