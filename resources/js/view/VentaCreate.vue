@@ -101,9 +101,10 @@
 
 		      			<div class="col-md-3 text-right">
 
-		      				<span class="font-weight-bold small">Total:</span><br>
-		      				<span v-if="checked_divisa" class="font-weight-bold small">Descuento:</span><br>
-		      				<span v-if="checked_divisa" class="font-weight-bold small">Total con Descuento:</span>
+		      				<span v-if="checked_divisa" class="small text-success">Sub Total:</span>
+		      				<span v-else class="small">Total:</span><br>
+		      				<span v-if="checked_divisa" class="small text-success">Descuento:</span><br>
+		      				<span v-if="checked_divisa" class="small text-success">Total:</span>
 
 		      			</div>
 
