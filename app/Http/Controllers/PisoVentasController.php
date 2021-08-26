@@ -204,12 +204,20 @@ class PisoVentasController extends Controller
     }
     public function establecer_dolar(Request $request)
   	{
-  		$dolar = new Dolar();
+      $precio = ($request->precio > 0) ? $request->precio : false;
+      $precioo = ($request->precioo > 0) ? $request->precioo : false;
 
-  		$dolar->price = $request->precio;
-  		$dolar->priceo = $request->precioo;
-  		$dolar->save();
+      if ($precio != false && $precioo != false) {
+        $dolar = new Dolar();
+  
+        $dolar->price = $request->precio;
+        $dolar->priceo = $request->precioo;
+        $dolar->save();
+        
+        return redirect()->back()->with('success', 'Nuevo precio del dolar establecido.');
+      } else {
+        return redirect()->back()->with('errordolar', 'Por favor ingrese montos validos para el dolar.');
+      }
 
-  		return redirect()->back()->with('success', 'Nuevo precio del dolar establecido.');
   	}
 }

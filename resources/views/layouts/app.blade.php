@@ -148,15 +148,15 @@
 
                         <h6 class="font-weight-bold text-success text-center">Dolar Trabajo: <span id="spanDolarAct"></span> / Dolar Oficial: <span id="spanDolarO"></span></h6>
 
-                        <p class="text-center">Establesca un nuevo precio.</p>
+                        <p class="text-center">Establesca un nuevo precio.</p>                        
             
                         <form action="{{ action('PisoVentasController@establecer_dolar')}}" method="post">
                             @csrf
                             <div class="text-center">
-                            <input type="text" placeholder="Ejem: 310000" name="precio">
+                            <input type="text" placeholder="Ejem: 310000" name="precio" required>
                             BS (Trabajo)
                             <hr>
-                            <input type="text" placeholder="Ejem: 310000" name="precioo">
+                            <input type="text" placeholder="Ejem: 310000" name="precioo" required>
                             BS (Oficial)
                             <hr>
                             <button class="btn btn-primary" type="submit">Establecer</button>
@@ -167,7 +167,38 @@
 
               	</div>
             	</div>
-          </div>
+          </div>            
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body">
+                    ...
+                    </div>
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+                </div>
+            </div>
+            @if (session('errordolar'))
+                <div class="toast" data-autohide="false" style="position: absolute; z-index: 1; margin-left: 51px; margin-top: 15px;">
+                    <div class="toast-header" style="color: #721c24; background-color: #f8d7da; border-color: #f5c6cb;">
+                        <strong class="mr-auto text-danger">Precio del Dolar</strong>
+                        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
+                    </div>
+                    <div class="toast-body" style="color: #721c24; background-color: #f8d7da; border-color: #f5c6cb;">
+                        {{ session('errordolar') }}
+                    </div>
+                </div>
+            @endif            
             @yield('content')
         </main>
     </div>
@@ -175,6 +206,9 @@
 <script src="{{ asset('js/jquery-3.4.1.min.js') }}"></script>
 <script type="text/javascript">
   $(document).ready( function () {
+
+    $('.toast').toast('show');
+    setTimeout(function(){ $('.toast').toast('hide'); }, 10000);
 
     $.get({
       url : `http://localhost/pisos_de_venta/public/api/get-dolar`
