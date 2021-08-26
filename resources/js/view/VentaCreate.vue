@@ -109,7 +109,12 @@
 		      			</div>
 
 		      			<div class="col-md-3">
+							  <template v-if="checked_divisa">
+									<span class="small"> BsS {{mostar_total_total}} / $ {{ mostar_total_total_dolar }}</span><br>
+							  </template>
+							  <template v-else>
 									<span class="small"> BsS {{mostar_total_total}}</span><br>
+							  </template>
 									<span v-if="checked_divisa" class="small"> BsS {{mostar_descuento}}</span><br>
 									<span v-if="checked_divisa" class="small"> BsS {{mostar_total_descuento}} / $ {{ mostar_total_descuento_dolar }}</span>
 		      				<span class="d-none"> Bs {{mostar_sub_total}}</span><br>
@@ -436,6 +441,15 @@
 				console.log(this.total_total);
 				let total = (this.total_total-(this.total_total*0.03))/this.dolaro;
 				//AGREGAR PRECIO DOLAR AQUI
+				let n = new Intl.NumberFormat("de-DE", {minimumFractionDigits: 2}).format(total)
+				//let a = n +",00"
+				return n
+			},
+			mostar_total_total_dolar(){
+				console.log("funcion mostar_total_total_dolar");
+				console.log(this.total_total);
+				//AGREGAR PRECIO DOLAR AQUI
+				let total = this.total_total/this.dolaro;				
 				let n = new Intl.NumberFormat("de-DE", {minimumFractionDigits: 2}).format(total)
 				//let a = n +",00"
 				return n
