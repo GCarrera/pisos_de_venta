@@ -29,7 +29,7 @@ Route::get('/compras', 'ComprasController@index')->name('compras.index')->middle
 //DESPACHOS ALMACEN
 Route::get('/despachos-almacen', 'DespachosController@index_almacen')->name('despachos.almacen.index')->middleware('session');
 Route::get('/despachos/create', 'DespachosController@create')->name('despachos.create');
-Route::post('/despachos-almacen', 'DespachosController@store')->name('despachos.store');
+//Route::post('/despachos-almacen', 'DespachosController@store')->name('despachos.store'); 
 //SOLICITUDES
 Route::get('/solicitudes', 'PisoVentasController@solicitudes')->name('solicitudes.index');
 
@@ -93,7 +93,7 @@ Route::prefix('api')->group(function(){
 
 	//DESPACHOS ALMACEN
 	Route::get('/despachos-datos-create', 'DespachosController@get_datos_create');
-	Route::post('/despachos', 'DespachosController@store');
+	//Route::post('/despachos', 'DespachosController@store');
 	Route::get('/get-despachos-almacen', 'DespachosController@get_despachos_almacen');
 	Route::post('/despachos-retiro', 'DespachosController@store_retiro');
 	Route::post('/id-extra-retiro', 'DespachosController@id_extra_retiro');

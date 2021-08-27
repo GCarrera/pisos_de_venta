@@ -315,9 +315,9 @@
 						{
 							sub_total: this.sub_total,
 						 	iva: this.iva_total,
-						  total: this.total,
+						  	total: this.total,
 							divisa: this.checked_divisa,
-						  type: this.type
+						  	type: this.type
 						},
 						productos:this.productos
 					}).then(response => {
@@ -342,7 +342,7 @@
 					  	timer: 1500
 					})
 					setTimeout(function () {
-						//window.location = "/pisos_de_venta/public/ventas/create";
+						window.location = "/pisos_de_venta/public/ventas/create";
 					}, 1500);
 					//window.location = "/ventas/create";
 					// setTimeout((1500) => {
@@ -357,6 +357,7 @@
 					this.error = true;
 					this.showAlert();
 					console.log(e)
+					console.log(e.response)
 				})
 
 

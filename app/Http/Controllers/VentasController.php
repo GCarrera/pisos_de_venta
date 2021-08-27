@@ -93,7 +93,7 @@ class VentasController extends Controller
 	        foreach ($request->productos as $producto) {
             //CALCULO DE GANANCIA
             $idinventario = $producto['id'];
-            $idinventory = Inventario::where('id', $idinventario)->select('inventory_id')->first();
+            $idinventory = Inventario::where('id', $idinventario)->select('inventory_id', 'name')->first();
             $prueba = Inventory::where('id', $idinventory->inventory_id)->first()->product()->select('retail_margin_gain')->first();
             if (isset($prueba->retail_margin_gain)) {
               $porcentajeganancia = $prueba->retail_margin_gain;
@@ -123,6 +123,10 @@ class VentasController extends Controller
 	            	DB::rollback();
 
 	            }
+
+				DB::table('logs')->insert(
+                    ['accion' => 'Vender '.$producto['cantidad'].' productos - quedan '.$inventario->cantidad, 'usuario' => auth()->user()->email, 'producto' => $idinventory->name, 'created_at' => Carbon::now() ]
+                  );
 
 	            $inventario->save();
 	        }

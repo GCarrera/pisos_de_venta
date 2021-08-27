@@ -486,7 +486,6 @@
 <div class="modal-footer">
 	<button type="submit" class="btn btn-danger" @click="comprar" :disabled="productos_comprar <= 0">Compra</button>
 </div>
-</form>
 
 </b-modal>
 
@@ -664,7 +663,7 @@ export default{
 
 									//SINC
 									this.sincron.ventas = true;
-									this.sync_anulados();
+									//this.sync_anulados();
 								}else{
 
 									this.showAlert();
@@ -677,7 +676,7 @@ export default{
 							}else{
 								//SINC
 								this.sincron.ventas = true;
-								this.sync_anulados();
+								//this.sync_anulados();
 							}
 						}).catch(e => {
 							console.log(e.response)

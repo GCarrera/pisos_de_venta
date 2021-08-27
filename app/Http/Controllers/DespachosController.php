@@ -85,7 +85,7 @@ class DespachosController extends Controller
                 $inventario->quantity = $inventario->total_qty_prod / $inventario->qty_per_unit;
                 $inventario->save();
                 //BUSCAMOS EL ID EN INVENTARIO
-                $producto = Inventario::select('id')->where('inventory_id', $valor->pivot->inventory_id)->orderBy('id', 'desc')->first();
+                $producto = Inventario::select('id', 'name')->where('inventory_id', $valor->pivot->inventory_id)->orderBy('id', 'desc')->first();
 
                 if (isset($producto->id)) {
                     $inventario = Inventario_piso_venta::with('inventario')->where('piso_venta_id', $usuario)->where('inventario_id', $producto->id)->orderBy('id', 'desc')->first();
@@ -110,6 +110,8 @@ class DespachosController extends Controller
                         }
                     }
                     $inventario->save();
+
+                    $nameproduct = $producto->name;
                 } else {
                     
                     $inventarioval = Inventory::where('id', $valor->pivot->inventory_id)->first();
@@ -157,9 +159,15 @@ class DespachosController extends Controller
                             $precio->save();
                         }
 
+                        $nameproduct = $inventarioval->name;
+
                     }
 
-                }       
+                }
+
+                DB::table('logs')->insert(
+                    ['accion' => 'Despacho aceptado '.$valor->pivot->cantidad.' productos - quedan '.$inventario->cantidad, 'usuario' => auth()->user()->email, 'inventories' => $nameproduct, 'created_at' => Carbon::now() ]
+                  );
 
             }
 
@@ -181,68 +189,6 @@ class DespachosController extends Controller
         }])->findOrFail($request->id);
         $despacho->confirmado = 2;
         $despacho->save();
-
-        /*foreach ($despacho->productos as $valor) {
-            //BUSCAMOS EL ID EN INVENTARIO
-            $producto = Inventario::select('id')->where('inventory_id', $valor->pivot->inventory_id)->orderBy('id', 'desc')->first();
-
-            $inventario = Inventario_piso_venta::with('inventario')->where('piso_venta_id', $usuario)->where('inventario_id', $producto->id)->orderBy('id', 'desc')->first();
-
-            if ($inventario['id'] == null) {
-                $inventario = new Inventario_piso_venta();
-                $inventario['inventario_id'] = $producto->id;
-                $inventario['piso_venta_id'] = $usuario;
-                $inventario['cantidad'] = 0.00;
-                $inventario->save();
-            }else{
-                //SI ES UN DESPACHO O ES UN RETIRO
-                if($despacho->type == 1){
-
-
-                        $inventario->cantidad = 0.00;
-
-                }else{
-
-                        $inventario->cantidad = 0.00;
-
-                }
-            }
-            $inventario->save();
-
-
-        }*/
-        /*
-        foreach ($despacho->productos as $valor) {
-
-            $producto = Inventario_piso_venta::whereHas('inventario', function($q){
-                    $q->where('inventory_id', $valor->pivot->inventory_id);
-                })->orderBy('id', 'desc')->first();
-
-            $inventario = Inventario_piso_venta::with('inventario')->where('piso_venta_id', $usuario)->where('inventario_id', $producto->id)->orderBy('id', 'desc')->first();
-
-            if ($inventario->id == null) {
-                $inventario = new Inventario_piso_venta();
-                $inventario->inventario_id = $producto->id;
-                $inventario->piso_venta_id = $usuario
-                $inventario->cantidad = $valor->pivot->cantidad;
-                $inventario->save();
-            }else{
-                //SI ES UN DESPACHO O ES UN RETIRO
-                if($despacho->type == 1){
-
-
-                        $inventario->cantidad += $valor->pivot->cantidad;
-
-                }else{
-
-                        $inventario->cantidad -= $valor->pivot->cantidad;
-
-                }
-            }
-            $inventario->save();
-
-        }
-        */
 
         return response()->json($despacho);
     }
@@ -294,7 +240,7 @@ class DespachosController extends Controller
                     $detalles->inventory_id = $producto['pivot']['inventory_id'];
                     $detalles->save();
 
-                    //SUMAMOS AL STOCK
+                    //Agregar a Inventario
                     $inventario = Inventario_piso_venta::whereHas('inventario', function($q)use($producto){
                         $q->where('inventory_id', $producto['pivot']['inventory_id']);
                     })->where('piso_venta_id', $despacho['piso_venta_id'])->orderBy('id', 'desc')->first();
@@ -343,13 +289,13 @@ class DespachosController extends Controller
                         }
                         */
                     }
-                  } else {
-                    // SI NO EXISTE EL PRODUCTO EN INVENTARIO
-                    // ENVIAR ERROR DE SINCRONIZAR INVENTARIO PRIMERO
-                    $error = "Productos nuevos en Despachos. Por Favor Sincronice Inventario Primero";
-                    return response()->json($error);
+                } else {
+                // SI NO EXISTE EL PRODUCTO EN INVENTARIO
+                // ENVIAR ERROR DE SINCRONIZAR INVENTARIO PRIMERO
+                $error = "Productos nuevos en Despachos. Por Favor Sincronice Inventario Primero";
+                return response()->json($error);
 
-                  }
+                }
 
 
                   //return response()->json($inventarioval);
@@ -430,7 +376,7 @@ class DespachosController extends Controller
         return response()->json($despachos);
     }
 
-    public function store(Request $request)
+    /*public function store(Request $request)
     {
         try{
 
@@ -511,7 +457,7 @@ class DespachosController extends Controller
             DB::rollback();
             return response()->json($e);
         }
-    }
+    }*/
 
     public function store_retiro(Request $request)
     {
