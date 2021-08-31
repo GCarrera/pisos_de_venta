@@ -167,7 +167,7 @@ class DespachosController extends Controller
                 }
 
                 DB::table('logs')->insert(
-                    ['accion' => 'Despacho aceptado '.$valor->pivot->cantidad.' productos - quedan '.$inventario->cantidad, 'usuario' => auth()->user()->email, 'inventories' => $nameproduct, 'created_at' => Carbon::now() ]
+                    ['accion' => 'Despacho aceptado '.$valor->pivot->cantidad.' productos - quedan '.$inventario->cantidad, 'usuario' => auth()->user()->email, 'producto' => $nameproduct, 'created_at' => Carbon::now() ]
                   );
 
             }
@@ -190,6 +190,10 @@ class DespachosController extends Controller
         }])->findOrFail($request->id);
         $despacho->confirmado = 2;
         $despacho->save();
+
+        DB::table('logs')->insert(
+            ['accion' => 'Despacho negado '.$request->id, 'usuario' => auth()->user()->email, 'producto' => 'Ver despacho', 'created_at' => Carbon::now() ]
+          );
 
         return response()->json($despacho);
     }

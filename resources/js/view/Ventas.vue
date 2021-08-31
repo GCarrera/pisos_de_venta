@@ -632,7 +632,7 @@ export default{
 					let piso_venta_id = response.data;
 					//OBTENEMOS DE LA WEB LA ULTIMA VENTA QUE TIENE REGISTRADA CON NUESTRO PISO DE VENTA
 					console.log('primera peticion '+piso_venta_id)
-					axios.get('http://mipuchito.com/api/ultima-venta/'+piso_venta_id).then(response => {//WEB
+					axios.get('http://www.mipuchito.com/api/ultima-venta/'+piso_venta_id).then(response => {//WEB
 						console.log(response);
 						console.log('segunda peticion')
 						//EVALUAMOS QUE EXISTA LA PROPIEDAD EN CASO DE SER LA PRIMERA VENTA
@@ -655,7 +655,7 @@ export default{
 							if (ventas.length > 0) {
 
 							//EN ESE CASO REGISTRAMOS LAS VENTAS EN LA WEB
-							axios.post('http://mipuchito.com/api/registrar-ventas', {ventas: ventas, piso_venta_id: piso_venta_id}).then(response => {
+							axios.post('http://www.mipuchito.com/api/registrar-ventas', {ventas: ventas, piso_venta_id: piso_venta_id}).then(response => {
 								console.log(response);
 
 								console.log('cuarta peticion')
@@ -696,7 +696,7 @@ export default{
 				});
 
 				//ACTUALIZAR MONTO EN LA WEB
-				axios.put('http://mipuchito.com/api/actualizar-dinero-piso-venta/'+this.id, {dinero: this.piso_venta_selected.dinero}).then(response => {//EN LA WEB
+				axios.put('http://www.mipuchito.com/api/actualizar-dinero-piso-venta/'+this.id, {dinero: this.piso_venta_selected.dinero}).then(response => {//EN LA WEB
 					console.log(response);
 					console.log('5ta peticion');
 					//SINC
@@ -710,7 +710,7 @@ export default{
 				//ACTUALIZAR VACIADAS DE CAJA
 
 				//SOLICITAMOS EL ULTIMO QUE TENGA
-				axios.get('http://mipuchito.com/api/ultima-vaciada-caja/'+this.id).then(response => {//WEB
+				axios.get('http://www.mipuchito.com/api/ultima-vaciada-caja/'+this.id).then(response => {//WEB
 					console.log(response);
 					console.log('6ta peticion')
 					let ultima_caja = response.data;
@@ -725,9 +725,9 @@ export default{
 
 						if (cajas.length > 0) {
 
-							axios.post('http://mipuchito.com/api/registrar-cajas', {cajas: cajas}).then(response => {//WEB
+							axios.post('http://www.mipuchito.com/api/registrar-cajas', {cajas: cajas}).then(response => {//WEB
 								console.log(response);
-								axios.post('http://mipuchito.com/api/sincronizacion', {id: this.id}).then(response => {
+								axios.post('http://www.mipuchito.com/api/sincronizacion', {id: this.id}).then(response => {
 									console.log(response);
 									axios.post('http://localhost/pisos_de_venta/public/api/sincronizacion', {id: this.id}).then(response => {
 										console.log('Sincronizar listo');
@@ -754,7 +754,7 @@ export default{
 								this.cambiar()
 							});
 						}else{
-							axios.post('http://mipuchito.com/api/sincronizacion', {id: this.id}).then(response => {
+							axios.post('http://www.mipuchito.com/api/sincronizacion', {id: this.id}).then(response => {
 								console.log(response);
 								axios.post('http://localhost/pisos_de_venta/public/api/sincronizacion', {id: this.id}).then(response => {
 									console.log('Sincronizar listo');
@@ -763,7 +763,7 @@ export default{
 									this.sincron.vaciar_caja = true;
 									this.sincro_exitosa = true;
 									this.cambiar()
-									//window.location="http://localhost/pisos_de_venta/public/ventas";
+									window.location="http://localhost/pisos_de_venta/public/ventas";
 
 								}).catch(e => {
 									console.log(e.response)
