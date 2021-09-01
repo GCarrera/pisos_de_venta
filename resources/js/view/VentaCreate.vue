@@ -32,7 +32,7 @@
 						<div class="form-row align-items-center">
 							<div class="form-group col-md-3">
 								<label>Producto:</label>
-								<v-select id="producto" @input="setFocus" :labelSearchPlaceholder="labelSearch" :labelNotFound="labelNot" :labelTitle="labelTit" :options="inventario" v-model="selectedValue" searchable showDefaultOption/>
+								<v-select id="producto" class="small" @input="setFocus" :labelSearchPlaceholder="labelSearch" :labelNotFound="labelNot" :labelTitle="labelTit" :options="inventario" v-model="selectedValue" searchable showDefaultOption/>
 
 								<!--
 							    <select class="form-control" v-model="articulo.id" @change="establecer_nombre(articulo.id)">
@@ -198,7 +198,11 @@
 					console.log("axios get datos");
 					response.data.forEach(item => {
 						if (item.inventario != null) {
-							let datos = {value: item.inventario.id , text: item.inventario.name}
+							let price = new Intl.NumberFormat("de-DE", {minimumFractionDigits: 2, maximumFractionDigits: 2}).format(item.inventario.precio.total_menor * this.dolar)
+							console.log(price);
+							let prico = item.inventario.precio.total_menor * this.dolar
+							console.log(prico);
+							let datos = {value: item.inventario.id , text: item.inventario.name+' - '+price}
 							this.inventario_completo.push(item);
 							this.inventario.push(datos);
 						}
@@ -217,6 +221,7 @@
 					this.dolaro = response.data.dolaro;
 				}).catch(e => {
 					console.log(e.response);
+					window.reload();
 				});
 			},
 			establecer_nombre(id, compra){//COLOCAR EL NOMBRE AL PRODUCTO QUE ESTOY AGREGANDO
