@@ -110,11 +110,11 @@
 			</td>
 			<td>
 				<button type="button" class="btn btn-primary" @click="showModalDetalles(venta.id)">Ver</button>
+				<b-button v-b-tooltip.hover title="Anular Venta" size="sm" @click="delmodal(venta, venta.id, $event.target)" class="mr-1" variant="danger">
+					<b-icon-trash></b-icon-trash>
+				</b-button>
 				<!--<button class="btn btn-danger" type="button" @click="showModalAnular(venta.id)" v-if="venta.anulado == null">Anular</button>-->
 			</td>
-
-
-
 
 			<!-- Modal VER DETALLES, FACTURA -->
 			<b-modal :id="'modal-detalles-'+venta.id" size="lg" title="Detalles de la venta">
@@ -161,31 +161,46 @@
 					</div>
 
 				</div>
-			</b-modal>
-
-			<!--MODAL DE ANULAR FACTURA-->
-
-			<div class="modal fade" :id="'modal-anular-'+venta.id" tabindex="-1" aria-labelledby="modalANular" aria-hidden="true">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-								<span aria-hidden="true">&times;</span>
-							</button>
-						</div>
-						<div class="modal-body">
-							¿Esta seguro que desea anular la venta?
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-							<button type="button" class="btn btn-danger" @click="anular(venta.id, index)">Anular</button>
-						</div>
-					</div>
-				</div>
-			</div>
+			</b-modal>			
 
 		</tr>
+
+		<!-- Modal ANULAR VENTA -->
+			<b-modal id="modalDel" size="sm" :title="delModal.title" @hide="resetDelModal" @ok="delOk" @cancel="delCancel">
+				<template #default="{  }">
+					<b-container fluid>
+					<b-form ref="form" @submit.stop.prevent="delOk">
+						<b-form-group
+						label="Codigo"
+						label-for="codDel"
+						:invalid-feedback="feedbackDel"
+						:state="delState"
+						>
+
+						<b-form-input
+							id="codDel"
+							v-model="codDel"
+							:state="delState"
+							type="password"
+							required
+							placeholder="*****"
+							size="sm"
+						></b-form-input>
+
+						</b-form-group>
+
+					</b-form>
+					</b-container>
+				</template>
+				<template #modal-footer="{ ok, cancel }">
+					<b-button size="sm" variant="primary" @click="ok(delModal.idDel)">
+						Continuar
+					</b-button>
+					<b-button size="sm" @click="cancel()">
+						Cancelar
+					</b-button>
+				</template>
+			</b-modal>
 
 		<tr v-if="ventas == []">
 			<td class="text-center">No hay ventas registradas</td>
@@ -196,298 +211,6 @@
 <div class="overflow-auto">
 	<b-pagination v-model="currentPage" @change="paginar($event)" :per-page="per_page"  :total-rows="total_paginas" size="sm"></b-pagination>
 </div>
-
-
-<!-- Modal NUEVA VENTA-->
-<b-modal id="modal-nuevo" size="lg" title="Realizar ua nueva venta" hide-footer>
-
-	<form method="post" @submit.prevent=""><!--Formulario-->
-
-		<div>
-			<div class="form-row">
-				<div class="form-group col-md-3">
-					<label for="producto">Producto:</label>
-					<select class="form-control" v-model="articulo.id" @change="establecer_nombre(articulo.id)">
-						<option value="0">Seleecion producto</option>
-						<option v-for="(prod, index) in inventario" :key="index" :value="prod.inventario.id">{{prod.inventario.name}}</option>
-					</select>
-				</div>
-
-				<div class="form-group col-md-3">
-					<label for="cantidad">Cantidad disponible:</label>
-					<input type="number" name="cantidad_disponible" id="cantidad_disponible" placeholder="" class="form-control" v-model="cantidad_disponible" disabled="">
-				</div>
-
-				<div class="form-group col-md-3">
-					<label for="cantidad">Cantidad al menor:</label>
-					<input type="number" name="cantidad" id="cantidad" placeholder="Cantidad" class="form-control" v-model="articulo.cantidad">
-				</div>
-
-				<div class="form-group col-md-3">
-					<label class="text-center" for="">Acción:</label><br>
-					<button class="btn btn-primary btn-block" type="button" @click="agregar_producto()" :disabled="disabled_venta">Agregar</button>
-				</div>
-			</div>
-		</div>
-
-		<table class="table table-bordered">
-			<thead>
-				<tr>
-					<th>Producto</th>
-					<th>cantidad</th>
-					<th>Sub total</th>
-					<th>Iva</th>
-					<th>Total</th>
-					<th>Acciones</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr v-for="(produc_enviar, index) in productos" :key="index">
-					<td>{{produc_enviar.nombre}}</td>
-					<td>{{produc_enviar.cantidad}}</td>
-					<td>{{produc_enviar.sub_total}}</td>
-					<td>{{produc_enviar.iva}}</td>
-					<td>{{produc_enviar.total}}</td>
-					<td>
-						<button class="btn btn-danger" type="button" @click="eliminar(index)">Eliminar</button>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-
-		<div class="row">
-			<div class="col-md-7">
-
-			</div>
-
-			<div class="col-md-2 text-right">
-				<span class="font-weight-bold small">Sub total:</span><br>
-				<span class="font-weight-bold small">iva:</span><br>
-				<br>
-				<span class="font-weight-bold small">Total:</span>
-
-			</div>
-
-			<div class="col-md-3">
-				<span class="small">{{sub_total_total}}</span><br>
-				<span class="small">{{iva_total}}</span><br>
-				<br>
-				<span class="small">{{total_total}}</span>
-			</div>
-
-		</div>
-
-		<div class="modal-footer">
-			<button type="submit" class="btn btn-primary" @click="vender" :disabled="productos.length <= 0">Vender</button>
-		</div>
-	</form>
-
-</b-modal>
-
-
-<!-- Modal NUEVA COMPRA-->
-<b-modal id="modal-compra" size="lg" title="Realizar ua nueva compra" hide-footer>
-
-	<div >
-<!--
-<div class="form-row">
-<div class="form-group col-md-4">
-<label for="producto">Producto:</label>
-<select class="form-control" v-model="articulo_compra.id" @change="establecer_nombre(articulo_compra.id, 'compra')">
-<option value="0">Seleecion producto</option>
-<option v-for="(prod, index) in inventario_compra" :key="index" :value="prod.inventario.id">{{prod.inventario.name}}</option>
-</select>
-</div>
-
-<div class="form-group col-md-4">
-<label for="cantidad">Cantidad al menor:</label>
-<input type="number" name="cantidad" id="cantidad" placeholder="Cantidad" class="form-control" v-model="articulo_compra.cantidad">
-</div>
-
-<div class="form-group col-md-4">
-<label class="text-center" for="">Acción:</label><br>
-<button class="btn btn-primary btn-block" type="button" @click="agregar_producto('compra')">Agregar</button>
-</div>
-</div>
--->
-<!---->
-
-<div >
-	<h6>Nuevo producto:</h6>
-	<div class="row">
-		<div class="col-md-4">
-			<div class="form-group">
-				<label for="name-product">Nombre</label>
-				<input type="text" class="form-control" id="name-product" placeholder="Harina pan" v-model="articulo_compra.nombre">
-			</div>
-		</div>
-
-		<div class="col-md-4">
-			<div class="form-group">
-				<label for="cantidad-menor">Cantidad</label>
-				<input type="number" class="form-control" id="cantidad" placeholder="8" v-model="articulo_compra.cantidad">
-			</div>
-		</div>
-
-		<div class="col-md-4">
-			<div class="form-group">
-				<label for="unidad">Unidad</label>
-				<input type="text" class="form-control" id="unidad" placeholder="Kg" v-model="articulo_compra.unidad">
-			</div>
-		</div>
-<!--
-<div class="col-md-3">
-<div class="form-group">
-<label for="unidad-mayor">Unidad al mayor</label>
-<input type="number" class="form-control" id="unidad-mayor" placeholder="Bulto">
-</div>
-</div>
-
-<div class="col-md-6">
-<div class="form-group">
-<label for="cantidad-menor-por-mayor">Cantidad de paquetes que trae al mayor</label>
-<input type="number" class="form-control" id="cantidad-menor-por-mayor" placeholder="20">
-
-</div>
-</div>
--->
-</div>
-
-<div class="row">
-	<div class="col-md-4">
-		<div class="form-group">
-			<label for="costo">Costo:</label>
-			<input type="number" class="form-control" id="costo" placeholder="250000" v-model.number="articulo_compra.costo">
-		</div>
-	</div>
-
-	<div class="col-md-4">
-		<div class="form-group">
-			<label for="margen-ganancia">margen de ganancia(%):</label>
-			<input type="number" class="form-control" id="margen-ganancia" placeholder="20" v-model.number="articulo_compra.margen_ganancia">
-		</div>
-	</div>
-
-	<div class="col-md-4">
-		<div class="form-group">
-			<label for="iva-porc">Iva(%):</label>
-			<input type="number" class="form-control" id="iva-porc" placeholder="8" v-model.number="articulo_compra.iva_porc">
-		</div>
-	</div>
-
-	<div class="col-md-3">
-		<div class="form-group">
-			<label for="subtotal-menor">Sub total:</label>
-			<input type="number" class="form-control" id="subtotal-menor" placeholder="300000" v-model.number="articulo_compra.sub_total" disabled>
-			<span class="" v-show="false">{{sub_total_comprar}}</span>
-		</div>
-	</div>
-
-	<div class="col-md-3">
-		<div class="form-group">
-			<label for="iva">Iva:</label>
-			<input type="number" class="form-control" id="iva" placeholder="50000" v-model.number="articulo_compra.iva" disabled>
-			<span class="" v-show="false">{{iva_total_comprar}}</span>
-		</div>
-	</div>
-
-	<div class="col-md-3">
-		<div class="form-group">
-			<label for="total">total:</label>
-			<input type="number" class="form-control" id="total" placeholder="350000" v-model.number="articulo_compra.total" disabled>
-			<span class="" v-show="false">{{total_comprar}}</span>
-		</div>
-	</div>
-
-	<div class="col-md-3">
-		<label >Acción:</label>
-		<button type="button" class="btn btn-primary btn-block" @click="agregar_producto('compra')" :disabled="disabled_compra">Agregar</button>
-	</div>
-</div>
-<!--
-<p>Precio al mayor</p>
-<div class="row">
-<div class="col-md-4">
-<div class="form-group">
-<label for="subtotal-mayor">Sub total:</label>
-<input type="number" class="form-control" id="subtotal-ayorr" placeholder="1500000">
-</div>
-</div>
-
-<div class="col-md-4">
-<div class="form-group">
-<label for="iva-mayor">Iva(%):</label>
-<input type="number" class="form-control" id="iva-mayor" placeholder="12">
-</div>
-</div>
-
-<div class="col-md-4">
-<div class="form-group">
-<label for="total-mayor">total:</label>
-<input type="email" class="form-control" id="total-mayor" placeholder="1800000">
-</div>
-</div>
-
-<div class="col-md-12">
-<button type="submit" class="btn btn-primary">Registrar</button>
-</div>
-</div>
--->
-</div>
-</div>
-
-<table class="table table-bordered">
-	<thead>
-		<tr>
-			<th>Producto</th>
-			<th>cantidad</th>
-			<th>Sub total</th>
-			<th>Iva</th>
-			<th>Total</th>
-			<th>Acciones</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr v-for="(produc_enviar, index) in productos_comprar" :key="index">
-			<td>{{produc_enviar.nombre}}</td>
-			<td>{{produc_enviar.cantidad}}</td>
-			<td>{{produc_enviar.sub_total}}</td>
-			<td>{{produc_enviar.iva}}</td>
-			<td>{{produc_enviar.total}}</td>
-			<td>
-				<button class="btn btn-danger" type="button" @click="eliminar(index, 'comprar')">Eliminar</button>
-			</td>
-		</tr>
-	</tbody>
-</table>
-
-<div class="row">
-	<div class="col-md-7">
-
-	</div>
-
-	<div class="col-md-2 text-right">
-		<span class="font-weight-bold small">Sub total:</span><br>
-		<span class="font-weight-bold small">iva:</span><br>
-		<br>
-		<span class="font-weight-bold small">Total:</span>
-
-	</div>
-
-	<div class="col-md-3">
-		<span class="small">{{sub_total_total_comprar}}</span><br>
-		<span class="small">{{iva_total_total_comprar}}</span><br>
-		<br>
-		<span class="small">{{total_total_comprar}}</span>
-	</div>
-
-</div>
-
-<div class="modal-footer">
-	<button type="submit" class="btn btn-danger" @click="comprar" :disabled="productos_comprar <= 0">Compra</button>
-</div>
-
-</b-modal>
 
 </div>
 </div>
@@ -501,6 +224,15 @@
 export default{
 	data(){
 		return{
+			feedbackDel: "El Codigo no coincide",
+			delState: null,
+			codDel: "",
+			delModal: {
+				id: 'del-modal',
+				title: '',
+				content: '',
+				idDel: ''
+			},
 			count:{
 				ventas: 0,
 				compras: 0,
@@ -566,6 +298,49 @@ export default{
 		}
 	},
 	methods:{
+		delmodal(item, index, button) {
+			this.delModal.title = `Anular Venta: FC-00${item.id}`
+			this.delModal.idDel = item.id
+			this.$root.$emit('bv::show::modal', 'modalDel', button)
+		},
+		resetDelModal() {
+			if (this.delState != false) {
+				this.delModal.title = ''
+				this.delModal.content = ''
+				this.delModal.idDel = ''
+				this.codDel = ''	
+			}
+		},
+		delOk(bvModalEvt){
+			var plus = parseFloat(this.codDel);
+			if (this.codDel == 'Nostradamus') {
+				console.log("Enviar peticion de anular");
+				console.log(this.delModal.idDel);				
+
+				axios.post('http://localhost/pisos_de_venta/public/api/negar-venta', {
+					id: this.delModal.idDel
+				})
+				.then(response=>{
+					console.log("anular exitoso");
+					if (response.data != false) {
+						console.log(response);
+						//window.location = "/admin/inventariov";
+						location.reload();
+					} else {
+						console.log("No se puede borrar la venta es muy antigua");
+					}
+				}).catch(e => {
+					console.log("error al anular");
+					console.log(e.response)
+				});				
+			} else {
+				this.delState = false
+				bvModalEvt.preventDefault()
+			}
+		},
+		delCancel(){
+			this.delState = null
+		},
 		resumen_dia(){
 
 			axios.get('http://localhost/pisos_de_venta/public/api/resumen-dia').then(response => {
@@ -815,6 +590,7 @@ export default{
 
 				console.log(this.despachos)
 			}).catch(e => {
+				window.reload()
 				console.log(e.response)
 			});
 

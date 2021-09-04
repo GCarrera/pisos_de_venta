@@ -104,7 +104,8 @@ Route::prefix('api')->group(function(){
 	Route::get('/ventas-datos-create', 'VentasController@get_datos_create');
 	Route::post('/ventas', 'VentasController@store');
 	Route::post('/ventas-comprar', 'VentasController@store_compra');
-	Route::put('/anular/{id}', 'VentasController@anular');
+	//Route::put('/anular/{id}', 'VentasController@anular');
+	Route::post('/negar-venta', 'VentasController@negar_venta');
 	//SINCRONIZACION
 	Route::get('/ultima-sincronizacion/{id}', 'SincronizacionController@ultimo');
 	Route::post('/sincronizacion', 'SincronizacionController@store')->name('sincronizacion.store');

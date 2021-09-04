@@ -11,6 +11,7 @@ use DB;
 use App\Inventory;
 use App\Inventario;
 use App\Precio;
+use App\Sincronizacion;
 use App\Piso_venta;
 use Carbon\Carbon;
 
@@ -44,10 +45,10 @@ class VentasController extends Controller
     		$fecha_i = new Carbon($request->fecha_i);
     		$fecha_f = new Carbon($request->fecha_f);
 
-    		$ventas = Venta::with(['detalle'])->where('piso_venta_id', $usuario)->whereDate('created_at','>=', $fecha_i)->whereDate('created_at','<=', $fecha_f)->orderBy('id', 'desc')->paginate(30);
+    		$ventas = Venta::with(['detalle'])->where('piso_venta_id', $usuario)->where('status', 1)->whereDate('created_at','>=', $fecha_i)->whereDate('created_at','<=', $fecha_f)->orderBy('id', 'desc')->paginate(30);
     	}else{
 
-    		$ventas = Venta::with(['detalle'])->where('piso_venta_id', $usuario)->orderBy('id', 'desc')->paginate(30);
+    		$ventas = Venta::with(['detalle'])->where('piso_venta_id', $usuario)->where('status', 1)->orderBy('id', 'desc')->paginate(30);
     	}
 
         return response()->json($ventas);
@@ -91,14 +92,14 @@ class VentasController extends Controller
           $ganancia = 0;
 
 	        foreach ($request->productos as $producto) {
-            //CALCULO DE GANANCIA
-            $idinventario = $producto['id'];
-            $idinventory = Inventario::where('id', $idinventario)->select('inventory_id', 'name')->first();
-            $prueba = Inventory::where('id', $idinventory->inventory_id)->first()->product()->select('retail_margin_gain')->first();
-            if (isset($prueba->retail_margin_gain)) {
-              $porcentajeganancia = $prueba->retail_margin_gain;
-              $ganancia += ($producto['total']*$porcentajeganancia)/100;
-            }
+				//CALCULO DE GANANCIA
+				$idinventario = $producto['id'];
+				$idinventory = Inventario::where('id', $idinventario)->select('inventory_id', 'name')->first();
+				$prueba = Inventory::where('id', $idinventory->inventory_id)->first()->product()->select('retail_margin_gain')->first();
+				if (isset($prueba->retail_margin_gain)) {
+				$porcentajeganancia = $prueba->retail_margin_gain;
+				$ganancia += ($producto['total']*$porcentajeganancia)/100;
+				}
 	        	//REGISTRAMOS EL PRODUCTO EN LOS DETALLES DE LA VENTA
 	            $detalles = new Detalle_venta();
 	            $detalles->venta_id = $venta->id;
@@ -138,9 +139,13 @@ class VentasController extends Controller
             $ganancia_total = $ganancia-($ganancia*0.03);
             $piso_venta->dinero += $venta_total;
             $piso_venta->gain += $ganancia_total;
+			$venta->gain = $ganancia_total;
+	        $venta->save();
           } else {
             $piso_venta->dinero += $venta->total;
             $piso_venta->gain += $ganancia;
+			$venta->gain = $ganancia;
+	        $venta->save();
           }
 	        $piso_venta->save();
 
@@ -302,7 +307,7 @@ class VentasController extends Controller
 		}
     }
 
-    public function anular($id)
+    public function negar_venta(Request $request)
     {
     	try{
 
@@ -310,20 +315,24 @@ class VentasController extends Controller
 
 	    	$usuario = Auth::user()->piso_venta->id;
 
-	    	$venta = Venta::with('detalle')->findOrFail($id);
+	    	$venta = Venta::with('detalle')->findOrFail($request->id);
+			$sincronizacion = Sincronizacion::where('piso_venta_id', $usuario)->orderBy('id', 'desc')->first();
 
-	    	$venta->anulado = 0;
+			if ($sincronizacion->updated_at > $venta->created_at) {
+				return response()->json(false);
+			}
+
+	    	$venta->status = 2;
 	    	$venta->save();
 
 	    	$piso_venta = Piso_venta::where('user_id', $usuario)->orderBy('id', 'desc')->first();
 	    	//RESTAMOS O SUMAMOS DEL DINERO QUE POSEE EL PISO DE VENTA
 	    	if ($venta->type == 1) {
-
-	    	$piso_venta->dinero -= $venta->total;
-
-	    	}else if($venta->type == 2){
-
-	    	$piso_venta->dinero += $venta->total;
+				
+				$piso_venta->dinero -= $venta->total;
+				$piso_venta->gain -= $venta->gain;
+				$piso_venta->save();
+				
 	    	}
 
 	    	foreach($venta->detalle as $producto){
@@ -332,11 +341,7 @@ class VentasController extends Controller
 
 		    	if ($venta->type == 1) {
 
-		    	$inventario->cantidad += $producto->pivot->cantidad;
-
-		    	}else if($venta->type == 2){
-
-		    	$inventario->cantidad -= $producto->pivot->cantidad;
+		    		$inventario->cantidad += $producto->pivot->cantidad;
 
 		    	}
 
@@ -345,7 +350,7 @@ class VentasController extends Controller
 		    }
 
 		    DB::commit();
-
+			
 	    	return response()->json($venta);
 
 	    }catch(Exception $e){
@@ -377,8 +382,8 @@ class VentasController extends Controller
 
         DB::beginTransaction();
 
-        $ventas = Venta::with('detalle', 'detalle.precio')->where('piso_venta_id', $piso_venta)->where('id_extra', '>', $id)->get();
-        //$ventas = Venta::with('detalle', 'detalle.precio')->where('piso_venta_id', $piso_venta)->where('id_extra', '>', 5221)->get();
+        //$ventas = Venta::with('detalle', 'detalle.precio')->where('piso_venta_id', $piso_venta)->where('id_extra', '>', $id)->get();        
+        $ventas = Venta::with('detalle', 'detalle.precio')->where('piso_venta_id', $piso_venta)->where('id_extra', '>', $id)->where('status', 1)->get();        
 
         DB::commit();
 
