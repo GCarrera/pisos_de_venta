@@ -153,10 +153,10 @@
                         <form action="{{ action('PisoVentasController@establecer_dolar')}}" method="post">
                             @csrf
                             <div class="text-center">
-                            <input type="text" placeholder="Ejem: 310000" name="precio" required>
+                            <input type="text" placeholder="Ejem: 310000" name="precio" id="precio" required onkeyup="formattMoney(this)">
                             BS (Trabajo)
                             <hr>
-                            <input type="text" placeholder="Ejem: 310000" name="precioo" required>
+                            <input type="text" placeholder="Ejem: 310000" name="precioo" id="precioo" required onkeyup="formattMoneyO(this)">
                             BS (Oficial)
                             <hr>
                             <button class="btn btn-primary" type="submit">Establecer</button>
@@ -205,6 +205,37 @@
 </body>
 <script src="{{ asset('js/jquery-3.4.1.min.js') }}"></script>
 <script type="text/javascript">
+    function formattMoney(){
+        $("#precio").on({
+            "focus": function (event) {
+                $(event.target).select();
+            },
+            "keyup": function (event) {
+                $(event.target).val(function (index, value ) {
+                    return value.replace(/\D/g, "")
+                                .replace(/([0-9])([0-9]{2})$/, '$1,$2')
+                                .replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ".");
+                });
+            }
+        });
+    };
+    
+    function formattMoneyO(){
+        $("#precioo").on({
+            "focus": function (event) {
+                $(event.target).select();
+            },
+            "keyup": function (event) {
+                $(event.target).val(function (index, value ) {
+                    return value.replace(/\D/g, "")
+                                .replace(/([0-9])([0-9]{2})$/, '$1,$2')
+                                .replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ".");
+                });
+            }
+        });
+    };
+    
+
   $(document).ready( function () {
 
     $('.toast').toast('show');
