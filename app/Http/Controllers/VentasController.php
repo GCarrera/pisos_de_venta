@@ -13,6 +13,7 @@ use App\Inventario;
 use App\Precio;
 use App\Sincronizacion;
 use App\Piso_venta;
+use App\Product;
 use Carbon\Carbon;
 
 class VentasController extends Controller
@@ -20,8 +21,15 @@ class VentasController extends Controller
     //
     public function index()
     {
-
     	return view('ventas.index');
+    }
+	
+	public function null()
+    {
+		$usuario = Auth::user()->piso_venta->id;
+		$ventas = Venta::with(['detalle'])->where('piso_venta_id', $usuario)->where('status', 1)->orderBy('id', 'desc');
+		$piso_venta = Piso_venta::where('user_id', $usuario)->first();
+    	return view('ventas.null')->with('ventas', $ventas)->with('piso_venta', $piso_venta);
     }
 
     public function create()
@@ -95,7 +103,10 @@ class VentasController extends Controller
 				//CALCULO DE GANANCIA
 				$idinventario = $producto['id'];
 				$idinventory = Inventario::where('id', $idinventario)->select('inventory_id', 'name')->first();
-				$prueba = Inventory::where('id', $idinventory->inventory_id)->first()->product()->select('retail_margin_gain')->first();
+				$pruebaa = Inventory::where('id', $idinventory->inventory_id)->select('id')->first();
+				DB::rollback();
+				return response()->json($pruebaa);
+				$prueba = Product::where('inventory_id', $pruebaa->id)->select('retail_margin_gain')->first();
 				if (isset($prueba->retail_margin_gain)) {
 				$porcentajeganancia = $prueba->retail_margin_gain;
 				$ganancia += ($producto['total']*$porcentajeganancia)/100;

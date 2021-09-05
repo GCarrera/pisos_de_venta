@@ -199,9 +199,9 @@
 					response.data.forEach(item => {
 						if (item.inventario != null) {
 							let price = new Intl.NumberFormat("de-DE", {minimumFractionDigits: 2, maximumFractionDigits: 2}).format(item.inventario.precio.total_menor * this.dolar)
-							console.log(price);
+							//console.log(price);
 							let prico = item.inventario.precio.total_menor * this.dolar
-							console.log(prico);
+							//console.log(prico);
 							let datos = {value: item.inventario.id , text: item.inventario.name+' - '+price}
 							this.inventario_completo.push(item);
 							this.inventario.push(datos);
@@ -347,7 +347,7 @@
 					  	timer: 1500
 					})
 					setTimeout(function () {
-						window.location = "/pisos_de_venta/public/ventas/create";
+						//window.location = "/pisos_de_venta/public/ventas/create";
 					}, 1500);
 					//window.location = "/ventas/create";
 					// setTimeout((1500) => {
