@@ -18,6 +18,7 @@ Route::get('/', function () {
 Route::get('/inventario', 'InventarioController@index')->name('inventario.index')->middleware('session');
 //VENTAS
 Route::get('/ventas', 'VentasController@index')->name('ventas.index')->middleware('session');
+Route::get('/ventas-null', 'VentasController@null')->name('ventas.null')->middleware('session');
 Route::get('/ventas/create', 'VentasController@create')->name('ventas.create')->middleware('session');
 Route::get('/ventas/create-compra', 'VentasController@create_compra')->name('ventas.create.compra')->middleware('session');
 //DESPACHOS

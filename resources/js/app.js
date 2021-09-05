@@ -24,6 +24,7 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 Vue.component('inventario', require('./view/Inventario.vue').default);
 Vue.component('solicitudes', require('./view/Solicitudes.vue').default);
 Vue.component('ventas', require('./view/Ventas.vue').default);
+Vue.component('ventas-null', require('./view/VentasNull.vue').default);
 Vue.component('despachos', require('./view/Despachos.vue').default);
 Vue.component('retiros', require('./view/Retiros.vue').default);
 Vue.component('despachos-almacen', require('./view/Despachos-almacen.vue').default);

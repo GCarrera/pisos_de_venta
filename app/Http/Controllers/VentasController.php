@@ -27,8 +27,8 @@ class VentasController extends Controller
 	public function null()
     {
 		$usuario = Auth::user()->piso_venta->id;
-		$ventas = Venta::with(['detalle'])->where('piso_venta_id', $usuario)->where('status', 1)->orderBy('id', 'desc');
-		$piso_venta = Piso_venta::where('user_id', $usuario)->first();
+		$ventas = Venta::with(['detalle'])->where('piso_venta_id', $usuario)->where('status', 2)->get();
+		$piso_venta = Piso_venta::where('user_id', $usuario)->get();
     	return view('ventas.null')->with('ventas', $ventas)->with('piso_venta', $piso_venta);
     }
 

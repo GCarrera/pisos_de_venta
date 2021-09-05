@@ -51,9 +51,24 @@
                             <a class="nav-link" href="{{ route('solicitudes.index') }}">Solicitudes <font-awesome-icon icon="user"/></a>
                         </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('ventas.index') }}" >Lista de Ventas </a>
+                        <li class="nav-item dropdown">
+                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                Ventas<span class="caret"></span>
+                            </a>
+
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{{ route('ventas.index') }}">
+                                Lista
+                                </a>
+                                <a class="dropdown-item" href="{{ route('ventas.null') }}">
+                                Anuladas
+                                </a>
+                            </div>
                         </li>
+
+                        {{--<li class="nav-item">
+                            <a class="nav-link" href="{{ route('ventas.index') }}" >Lista de Ventas </a>
+                        </li>--}}
 
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('ventas.create') }}" >Vender </a>
