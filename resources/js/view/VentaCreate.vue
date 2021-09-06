@@ -124,7 +124,7 @@
 		      		</div>
 
 		      		<div class="row">
-			        	<button type="submit" class="btn btn-primary ml-auto" @click="vender" :disabled="productos.length <= 0">Vender</button>
+			        	<button type="submit" id="btn-submit" class="btn btn-primary ml-auto" @click="vender" :disabled="productos.length <= 0">Vender</button>
 			      	</div>
 		      	</form>
 	      	</div>
@@ -307,6 +307,7 @@
 				this.error = false;
 				console.log('estoy en el vender');
 				console.log(this.productos);
+				$('#btn-submit').hide();
 				// console.log(
 				// 		 this.sub_total,
 				// 	 	 this.iva,
