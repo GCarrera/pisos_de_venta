@@ -101,16 +101,15 @@ class VentasController extends Controller
 
 	        foreach ($request->productos as $producto) {
 				//CALCULO DE GANANCIA
-				$idinventario = $producto['id'];
+				$idinventario = $producto['id']; //590
 				$idinventory = Inventario::where('id', $idinventario)->select('inventory_id', 'name')->first();
-				$pruebaa = Inventory::where('id', $idinventory->inventory_id)->select('id')->first();
-				$idinventoryyes = $pruebaa->id;
-				$prueba = Product::where('inventory_id', $idinventoryyes)->select('retail_margin_gain')->first();
+				$idinventariosql = $idinventory->inventory_id; //950
+				//return response()->json([$idinventario, $idinventariosql]);
+				$prueba = Product::where('inventory_id', $idinventariosql)->select('retail_margin_gain')->first();
 				if (isset($prueba->retail_margin_gain)) {
 					$porcentajeganancia = $prueba->retail_margin_gain;
 					$ganancia += ($producto['total']*$porcentajeganancia)/100;
 				}
-				//return response()->json($ganancia);
 	        	//REGISTRAMOS EL PRODUCTO EN LOS DETALLES DE LA VENTA
 	            $detalles = new Detalle_venta();
 	            $detalles->venta_id = $venta->id;

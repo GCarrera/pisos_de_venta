@@ -90,7 +90,7 @@
 								>
 
 								<template #cell(actions)="row">
-									<b-button v-b-tooltip.hover title="Editar" size="sm" @click="detailmodal(row.item, row.index, $event.target)" class="mr-1" variant="info">
+									<b-button v-b-tooltip.hover title="Ver" size="sm" @click="detailmodal(row.item, row.index, $event.target)" class="mr-1" variant="info">
 										<b-icon-search></b-icon-search>
 									</b-button>
 								</template>
