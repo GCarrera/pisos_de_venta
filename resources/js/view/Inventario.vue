@@ -437,6 +437,7 @@
 					this.dolar = response.data.dolar;
 				}).catch(e => {
 					console.log(e.response);
+					location.reload();
 				});
 			},
 			get_piso_venta(){
@@ -448,6 +449,7 @@
 
 				}).catch(e => {
 					console.log(e.response);
+					location.reload();
 				});
 			},
 			get_inventario(){

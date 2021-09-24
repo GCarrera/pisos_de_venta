@@ -51,10 +51,11 @@ class InventarioController extends Controller
       try{
 
           DB::beginTransaction();
+          $return = "Comienzo";
           foreach ($request->productosauditoria as $value) {
-
+      
             $inventory = Inventory::find($value['id']);
-            if (isset($inventory->product_name)) {
+            if (isset($inventory->product_name)) {              
               $inventory->product_name = $value['product_name'];
               $inventory->description = $value['description'];
               $inventory->quantity = $value['quantity'];
@@ -65,6 +66,8 @@ class InventarioController extends Controller
               $inventory->total_qty_prod = $value['total_qty_prod'];
               $inventory->updated_at = $value['updated_at'];
               $inventory->save();
+
+              $return = "Inventory";
             }
             
             $product = Product::where('inventory_id', $value['id'])->first();
@@ -83,12 +86,67 @@ class InventarioController extends Controller
               $product->oferta = $value['product']['oferta'];
               $product->updated_at = $value['product']['updated_at'];
               $product->save();
+
+              $return = "Product";
+
+              $idinventario = Inventario::where('inventory_id', $value['id'])->first();
+              if (isset($idinventario->id)) {
+                $precio = Precio::where('inventario_id', $idinventario->id)->first();
+                if (isset($precio->id)) {
+                  $precio->costo = $value['product']['cost'];
+                  $precio->iva_porc = $value['product']['iva_percent'];
+                  $precio->iva_menor = $value['product']['retail_iva_amount'];
+                  $precio->total_menor = $value['product']['retail_total_price'];
+                  $precio->iva_mayor = $value['product']['wholesale_iva_amount'];
+                  $precio->total_mayor = $value['product']['wholesale_total_individual_price'];
+                  $precio->oferta = $value['product']['oferta'];
+                  $precio->save();
+                } else {
+                  $precio = new Precio();
+                  $precio->costo = $value['product']['cost'];
+                  $precio->iva_porc = $value['product']['iva_percent'];
+                  $precio->iva_menor = $value['product']['retail_iva_amount'];
+                  $precio->total_menor = $value['product']['retail_total_price'];
+                  $precio->iva_mayor = $value['product']['wholesale_iva_amount'];
+                  $precio->total_mayor = $value['product']['wholesale_total_individual_price'];
+                  $precio->oferta = $value['product']['oferta'];
+                  $precio->sub_total_menor = $value['retail_total_price'] - $value['retail_iva_amount'];
+                  $precio->inventario_id = $idinventario->id;
+                  $precio->save();
+                }
+
+                $return = "Precio Update";
+              } else {
+                $articulo = new Inventario();
+                $articulo->name = $value['product_name'];
+                $articulo->unit_type_mayor = $value['unit_type'];
+                $articulo->unit_type_menor = $value['unit_type_menor'];
+                $articulo->inventory_id = $value['id'];
+                $articulo->status = $value['status'];
+                $articulo->piso_venta_id = 2;
+                $articulo->save();
+
+                $precio = new Precio();
+                $precio->costo = $value['product']['cost'];
+                $precio->iva_porc = $value['product']['iva_percent'];
+                $precio->iva_menor = $value['product']['retail_iva_amount'];
+                $precio->total_menor = $value['product']['retail_total_price'];
+                $precio->iva_mayor = $value['product']['wholesale_iva_amount'];
+                $precio->total_mayor = $value['product']['wholesale_total_individual_price'];
+                $precio->oferta = $value['product']['oferta'];
+                $precio->sub_total_menor = $value['product']['retail_total_price'] - $value['product']['retail_iva_amount'];
+                $precio->inventario_id = $articulo->id;
+                $precio->save();
+
+                $return = "Precio New";
+              }
             }
           }          
           
           foreach ($request->cantidades as $value) {
 
             $idinventory = $value['inventario']['inventory_id'];
+            $pisoventa = $value['piso_venta_id'];
 
             $cantidadnew = (isset($value['cantidad'])) ? $value['cantidad'] : 0; 
             
@@ -100,6 +158,36 @@ class InventarioController extends Controller
               if (isset($invpv->id)) {
                 $invpv->cantidad = $cantidadnew;
                 $invpv->save();
+              } else {
+                $cantidad = new Inventario_piso_venta();
+                  $cantidad->inventario_id = $idinventario;
+                  $cantidad->cantidad = $cantidadnew;
+                  $cantidad->piso_venta_id = $pisoventa;
+                  $cantidad->save();
+              }
+            } else {
+              $inventory = Inventory::where('id', $idinventory)->first();
+              if (isset($inventory->id)) {
+                $articulo = new Inventario();
+                $articulo->name = $inventory['product_name'];
+                $articulo->unit_type_mayor = $inventory['unit_type'];
+                $articulo->unit_type_menor = $inventory['unit_type_menor'];
+                $articulo->inventory_id = $inventory['id'];
+                $articulo->status = $inventory['status'];
+                $articulo->piso_venta_id = $pisoventa;
+                $articulo->save();
+
+                $invpv = Inventario_piso_venta::where('inventario_id', $articulo->id)->first();
+                if (isset($invpv->id)) {
+                  $invpv->cantidad = $cantidadnew;
+                  $invpv->save();
+                } else {
+                  $cantidad = new Inventario_piso_venta();
+                  $cantidad->inventario_id = $articulo->id;
+                  $cantidad->cantidad = $cantidadnew;
+                  $cantidad->piso_venta_id = $pisoventa;
+                  $cantidad->save();
+                }
               }
             }
           }
@@ -122,7 +210,7 @@ class InventarioController extends Controller
 
           DB::commit();
 
-          return response()->json(true);
+          return response()->json($return);
 
       }catch(Exception $e){
 
