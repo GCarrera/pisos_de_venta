@@ -469,7 +469,7 @@ class InventarioController extends Controller
             DB::beginTransaction();
             foreach ($request->productos as $producto) {
 
-              $inventory = Inventory::find($producto['id']);
+              $inventory = Inventory::withTrashed()->find($producto['id']);
 
                 $inventory->product_name = $producto['product_name'];
                 $inventory->description = $producto['description'];
@@ -480,6 +480,7 @@ class InventarioController extends Controller
                 $inventory->status = $producto['status'];
                 $inventory->total_qty_prod = $producto['total_qty_prod'];
                 $inventory->updated_at = $producto['updated_at'];
+                $inventory->deleted_at = NULL;
                 $inventory->save();
                 
               }

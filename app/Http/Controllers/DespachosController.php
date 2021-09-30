@@ -236,71 +236,71 @@ class DespachosController extends Controller
                 foreach ($despacho['productos'] as $producto) {
                   $inventarioval = Inventory::select('id')->where('id', $producto['pivot']['inventory_id'])->exists();
                   //return response()->json($inventarioval);
-                  if ($inventarioval) {
-                    // SI EXITE EL PRODUCTO EN INVENTARIO
-                    //REGISTRAMOS LOS PRODUCTOS
-                    $detalles = new Despacho_detalle();
-                    $detalles->despacho_id = $registro->id;
-                    $detalles->cantidad = $producto['pivot']['cantidad'];
-                    $detalles->inventory_id = $producto['pivot']['inventory_id'];
-                    $detalles->save();
+                    if ($inventarioval) {
+                        // SI EXITE EL PRODUCTO EN INVENTARIO
+                        //REGISTRAMOS LOS PRODUCTOS
+                        $detalles = new Despacho_detalle();
+                        $detalles->despacho_id = $registro->id;
+                        $detalles->cantidad = $producto['pivot']['cantidad'];
+                        $detalles->inventory_id = $producto['pivot']['inventory_id'];
+                        $detalles->save();
 
-                    //Agregar a Inventario
-                    $inventario = Inventario_piso_venta::whereHas('inventario', function($q)use($producto){
-                        $q->where('inventory_id', $producto['pivot']['inventory_id']);
-                    })->where('piso_venta_id', $despacho['piso_venta_id'])->orderBy('id', 'desc')->first();
-                    //SI NO ENCUENTRA EL PRODUCTO LO REGISTRA
-                    if ($inventario['id'] == null) {
-                        $articulo = new Inventario();
-                        $articulo->name = $producto['product_name'];
-                        $articulo->unit_type_mayor = $producto['unit_type'];
-                        $articulo->unit_type_menor = $producto['unit_type_menor'];
-                        $articulo->inventory_id = $producto['pivot']['inventory_id'];
-                        $articulo->status = $producto['status'];
-                        $articulo->piso_venta_id = $registro->piso_venta_id;
-                        $articulo->save();
-                        //$articulo->id_extra = $articulo->id;
-                        //$articulo->save();
-                        //REGISTRAMOS LOS PRECIOS
-                        $precio = new Precio();
-                        $precio->costo = $producto['product']['cost'];
-                        $precio->iva_porc = $producto['product']['iva_percent'];
-                        $precio->iva_menor = $producto['product']['retail_iva_amount'];
-                        $precio->sub_total_menor = $producto['product']['retail_total_price'] - $producto['product']['retail_iva_amount'];
-                        $precio->total_menor = $producto['product']['retail_total_price'];
-                        $precio->iva_mayor = $producto['product']['wholesale_iva_amount'] * $producto['qty_per_unit'];
-                        $precio->sub_total_mayor = $producto['product']['wholesale_packet_price'];
-                        $precio->total_mayor = $precio->sub_total_mayor + $precio->iva_mayor;
-                        $precio->oferta = $producto['product']['oferta'];
-                        $precio->inventario_id = $articulo->id;
-                        $precio->save();
-                        //$precio->costo =
-                        //REGISTRA LA CANTIDAD EN EL INVENTARIO DEL PISO DE VENTA
-                        /*
-                        $inventario = new Inventario_piso_venta();
-                        $inventario->inventario_id = $articulo->id;
-                        $inventario->piso_venta_id = $despacho['piso_venta_id'];
-                        $inventario->cantidad = $producto['pivot']['cantidad'];
-                        $inventario->save();
-                        */
-                    }else{
-                        //SI ES UN DESPACHO O UN RETIRO
-                        /*if($registro->type == 1){
-                            $inventario->cantidad += $producto['pivot']['cantidad'];
+                        //Agregar a Inventario
+                        $inventario = Inventario_piso_venta::whereHas('inventario', function($q)use($producto){
+                            $q->where('inventory_id', $producto['pivot']['inventory_id']);
+                        })->where('piso_venta_id', $despacho['piso_venta_id'])->orderBy('id', 'desc')->first();
+                        //SI NO ENCUENTRA EL PRODUCTO LO REGISTRA
+                        if ($inventario['id'] == null) {
+                            $articulo = new Inventario();
+                            $articulo->name = $producto['product_name'];
+                            $articulo->unit_type_mayor = $producto['unit_type'];
+                            $articulo->unit_type_menor = $producto['unit_type_menor'];
+                            $articulo->inventory_id = $producto['pivot']['inventory_id'];
+                            $articulo->status = $producto['status'];
+                            $articulo->piso_venta_id = $registro->piso_venta_id;
+                            $articulo->save();
+                            //$articulo->id_extra = $articulo->id;
+                            //$articulo->save();
+                            //REGISTRAMOS LOS PRECIOS
+                            $precio = new Precio();
+                            $precio->costo = $producto['product']['cost'];
+                            $precio->iva_porc = $producto['product']['iva_percent'];
+                            $precio->iva_menor = $producto['product']['retail_iva_amount'];
+                            $precio->sub_total_menor = $producto['product']['retail_total_price'] - $producto['product']['retail_iva_amount'];
+                            $precio->total_menor = $producto['product']['retail_total_price'];
+                            $precio->iva_mayor = $producto['product']['wholesale_iva_amount'] * $producto['qty_per_unit'];
+                            $precio->sub_total_mayor = $producto['product']['wholesale_packet_price'];
+                            $precio->total_mayor = $precio->sub_total_mayor + $precio->iva_mayor;
+                            $precio->oferta = $producto['product']['oferta'];
+                            $precio->inventario_id = $articulo->id;
+                            $precio->save();
+                            //$precio->costo =
+                            //REGISTRA LA CANTIDAD EN EL INVENTARIO DEL PISO DE VENTA
+                            /*
+                            $inventario = new Inventario_piso_venta();
+                            $inventario->inventario_id = $articulo->id;
+                            $inventario->piso_venta_id = $despacho['piso_venta_id'];
+                            $inventario->cantidad = $producto['pivot']['cantidad'];
                             $inventario->save();
+                            */
                         }else{
-                            $inventario->cantidad -= $producto['pivot']['cantidad'];
-                            $inventario->save();
+                            //SI ES UN DESPACHO O UN RETIRO
+                            /*if($registro->type == 1){
+                                $inventario->cantidad += $producto['pivot']['cantidad'];
+                                $inventario->save();
+                            }else{
+                                $inventario->cantidad -= $producto['pivot']['cantidad'];
+                                $inventario->save();
+                            }
+                            */
                         }
-                        */
-                    }
-                } else {
-                // SI NO EXISTE EL PRODUCTO EN INVENTARIO
-                // ENVIAR ERROR DE SINCRONIZAR INVENTARIO PRIMERO
-                $error = "Productos nuevos en Despachos. Por Favor Sincronice Inventario Primero";
-                return response()->json($error);
+                    } else {
+                        // SI NO EXISTE EL PRODUCTO EN INVENTARIO
+                        // ENVIAR ERROR DE SINCRONIZAR INVENTARIO PRIMERO
+                        $error = "Productos nuevos en Despachos. Por Favor Sincronice Inventario Primero - ".$producto['pivot']['inventory_id'] ;
+                        return response()->json($error);
 
-                }
+                    }
 
 
                   //return response()->json($inventarioval);

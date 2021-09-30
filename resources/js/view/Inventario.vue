@@ -262,6 +262,8 @@
 						if (productosCreated.length > 0) {
 							//console.log(productos);
 							console.log("hay que registrar")
+							this.alert_success = true
+							this.alert_message = "Registrando Productos Nuevos..."
 							axios.post('http://localhost/pisos_de_venta/public/api/registrar-inventory', {productos: productosCreated}).then(response => {
 								console.log("dentro del axios registrar");
 
@@ -280,11 +282,15 @@
 
 						}else{
 							console.log("no hay productos nuevos")
+							this.alert_success = true
+							this.alert_message = "No hay Productos Nuevos..."
 						}
 
 						if (productosUpdated.length > 0) {
 							console.log("hay que actualizar");
 							console.log(productosUpdated);
+							this.alert_success = true
+							this.alert_message = "Actualizando Datos de Prodructos..."
 							axios.post('http://localhost/pisos_de_venta/public/api/actualizar-inventory', {productos: productosUpdated}).then(response => {
 								console.log("dentro del axios");
 
@@ -305,11 +311,15 @@
 
 						}else{
 							console.log("no hay productos actualizados")
+							this.alert_success = true
+							this.alert_message = "No hay Actualizaciones en los Productos..."
 						}
 
 						if (preciosUpdated.length > 0) {
 							console.log("hay que actualizar precios");
 							console.log(preciosUpdated);
+							this.alert_success = true
+							this.alert_message = "Actualizando Precios de Prodructos..."
 							axios.post('http://localhost/pisos_de_venta/public/api/actualizar-products', {precios: preciosUpdated}).then(response => {
 								console.log("dentro del axios");
 
@@ -331,6 +341,8 @@
 						}else{
 							console.log("no hay productos actualizados por fecha update")
 							console.log("Ronda de Verificacion");
+							this.alert_success = true
+							this.alert_message = "Verificando ultimos detalles de precios..."
 
 							axios.post('http://localhost/pisos_de_venta/public/api/all-product-price').then(response => {
 								console.log("Data del PV a comparar");
@@ -366,6 +378,8 @@
 						if (productosDeleted.length > 0) {
 							console.log("hay que eliminar productos");
 							console.log(productosDeleted);
+							this.alert_success = true
+							this.alert_message = "Hay que eliminar algunos productos..."
 							axios.post('http://localhost/pisos_de_venta/public/api/borrar-inventory', {productos: productosDeleted}).then(response => {
 								console.log("dentro del axios");
 
@@ -392,6 +406,7 @@
 
 							axios.post('http://www.mipuchito.com/api/sincronizacion', {id: this.id}).then(response => {
 								axios.post('http://localhost/pisos_de_venta/public/api/sincronizacion', {id: this.id}).then(response => {
+									this.alert_success = false
 									this.sincro_exitosa = true
 									window.location="http://localhost/pisos_de_venta/public/inventario";
 								}).catch(e => {
