@@ -430,10 +430,11 @@ export default{
 							if (ventas.length > 0) {
 
 							//EN ESE CASO REGISTRAMOS LAS VENTAS EN LA WEB
+							console.log('Registrar ventas en el servidor exitoso')
 							axios.post('http://www.mipuchito.com/api/registrar-ventas', {ventas: ventas, piso_venta_id: piso_venta_id}).then(response => {
 								console.log(response);
 
-								console.log('cuarta peticion')
+								console.log('Registrar ventas en el servidor exitoso')
 								if (response.data == true) {
 
 									//SINC
