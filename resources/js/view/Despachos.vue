@@ -250,7 +250,7 @@
 										console.log(ultimoretiro);
 										console.log("ultimo retiro guardado en web");
 
-										if (ultimoretiro.id_extra != null) {
+										if (ultimoretiro.created_at != null) {
 											console.log("hay un retiro en la web");
 											axios.post('http://localhost/pisos_de_venta/public/api/get-retiros-web', {id: ultimoretiro}).then(response => {
 

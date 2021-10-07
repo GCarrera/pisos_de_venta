@@ -53,11 +53,11 @@ class DespachosController extends Controller
     public function get_retiros_web(Request $request)
     {
         $usuario = Auth::user()->piso_venta->id;
-        $id = $request->id['id_extra'];
+        $id = $request->id['created_at'];
 
         try {
             DB::beginTransaction();
-            $despachos = Despacho::with('productos')->where('piso_venta_id', $usuario)->where('type', 2)->where('id', '>', $id)->get();
+            $despachos = Despacho::with('productos')->where('piso_venta_id', $usuario)->where('type', 2)->where('created_at', '>', $id)->get();
     
             return response()->json($despachos);
             DB::commit();
