@@ -393,7 +393,7 @@ class VentasController extends Controller
         DB::beginTransaction();
 
         //$ventas = Venta::with('detalle', 'detalle.precio')->where('piso_venta_id', $piso_venta)->where('id_extra', '>', $id)->get();        
-        $ventas = Venta::with('detalle', 'detalle.precio')->where('piso_venta_id', $piso_venta)->where('id_extra', '>', $id)->where('status', 1)->limit(1555)->get();        
+        $ventas = Venta::with('detalle', 'detalle.precio')->where('piso_venta_id', $piso_venta)->where('created_at', '>', $id)->where('status', 1)->limit(1555)->get();        
 
         DB::commit();
 

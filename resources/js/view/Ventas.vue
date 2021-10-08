@@ -324,7 +324,7 @@ export default{
 					console.log("anular exitoso");
 					if (response.data != false) {
 						console.log(response);
-						//window.location = "/admin/inventariov";
+						window.location = "/admin/inventariov";
 						location.reload();
 					} else {
 						console.log("No se puede borrar la venta es muy antigua");
@@ -412,7 +412,7 @@ export default{
 						console.log('segunda peticion')
 						//EVALUAMOS QUE EXISTA LA PROPIEDAD EN CASO DE SER LA PRIMERA VENTA
 						if (response.data.hasOwnProperty('id_extra')) {
-							var ultima_venta = response.data.id_extra;
+							var ultima_venta = response.data.created_at;
 							console.log("lleno");
 						} else {
 							var ultima_venta = 0
