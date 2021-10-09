@@ -24,7 +24,7 @@
 		<b-alert show variant="success" fade dismissible v-if="alert_success == true">{{alert_message}}</b-alert>
 		<!---->
 		<b-alert show variant="success" fade dismissible v-if="sincro_exitosa == true">sincronozacion exitosa</b-alert>
-		<b-alert show variant="warning" fade dismissible v-if="sin_ventas == true"> no se han detectado ventas</b-alert>
+		<!--<b-alert show variant="warning" fade dismissible v-if="sin_ventas == true"> no se han detectado ventas</b-alert>-->
 		<b-alert show variant="danger" fade dismissible v-if="error == true">ah ocurido un error</b-alert>
 
 		<div class="row">
@@ -398,122 +398,117 @@ export default{
 			this.sincro_exitosa = false
 			this.sin_ventas = false
 			this.error = false
-				//VENTAS
-		//VENTAS
+			//VENTAS
 
-				//OBTENEMOS MI ID DE PISO DE VENTA
-				axios.get('http://localhost/pisos_de_venta/public/api/get-piso-venta-id').then(response => {
+			//ACTUALIZAR MONTO EN LA WEB
+			this.alert_success = true
+			this.alert_message = "Actualizando dinero en Prometheus..."
+			axios.put('http://www.mipuchito.com/api/actualizar-dinero-piso-venta/'+this.id, {dinero: this.piso_venta_selected.dinero}).then(response => {//EN LA WEB
+				console.log(response);
+				console.log('Actualizando dinero en Prometheus');
+				//SINC
+				//this.sincron.montos = true;
+			}).catch(e => {
+				console.log(e.response);
+				this.error = true;
+				this.cambiar()
+			});
+
+			//ACTUALIZAR VACIADAS DE CAJA
+
+			//SOLICITAMOS EL ULTIMO QUE TENGA
+			this.alert_success = true
+			this.alert_message = "Buscando ultima caja vaciada en Prometheus..."
+			axios.get('http://www.mipuchito.com/api/ultima-vaciada-caja/'+this.id).then(response => {//WEB
+				console.log(response);
+				console.log('Buscando ultima caja vaciada en Prometheus')
+				let ultima_caja = response.data;
+				if(ultima_caja == null){
+					ultima_caja = 0;
+				}
+				//SOLICITAMOS LAS VACIADAS QUE TENGO EN LOCAL
+				axios.get('http://localhost/pisos_de_venta/public/api/ultima-vaciada-caja-local/'+ultima_caja.id_extra).then(response => {
 					console.log(response);
-					let piso_venta_id = response.data;
-					//OBTENEMOS DE LA WEB LA ULTIMA VENTA QUE TIENE REGISTRADA CON NUESTRO PISO DE VENTA
-					console.log('primera peticion '+piso_venta_id)
-					axios.get('http://www.mipuchito.com/api/ultima-venta/'+piso_venta_id).then(response => {//WEB
-						console.log(response);
-						console.log('segunda peticion')
-						//EVALUAMOS QUE EXISTA LA PROPIEDAD EN CASO DE SER LA PRIMERA VENTA
-						if (response.data.hasOwnProperty('id_extra')) {
-							var ultima_venta = response.data.created_at;
-							console.log("lleno");
-						} else {
-							var ultima_venta = 0
-							console.log("vacio");
-						}
-						console.log(ultima_venta);
+					console.log('Ultima caja vaciada en local')
+					let cajas = response.data;
 
-						//OBTENEMOS TODAS LAS VENTAS QUE SEAN MAYOR AL ID_EXTRA QUE ACABO DE CONSEGUIR
-						axios.get('http://localhost/pisos_de_venta/public/api/ventas-sin-registrar/'+piso_venta_id+'/'+ultima_venta).then(response => {
+					if (cajas.length > 0) {
+						this.alert_success = true
+						this.alert_message = "Actualizando cajas vaciadas en Prometheus..."
+						axios.post('http://www.mipuchito.com/api/registrar-cajas', {cajas: cajas}).then(response => {//WEB
 							console.log(response);
-							console.log('tercera peticion')
-							let ventas = response.data
-							console.log(ventas);
-							//VALIDACION SI TRAJO ALGUNA VENTA
-							if (ventas.length > 0) {
-
-							//EN ESE CASO REGISTRAMOS LAS VENTAS EN LA WEB
-							console.log('Registrar ventas en el servidor exitoso')
-							axios.post('http://www.mipuchito.com/api/registrar-ventas', {ventas: ventas, piso_venta_id: piso_venta_id}).then(response => {
-								console.log(response);
-
-								console.log('Registrar ventas en el servidor exitoso')
-								if (response.data == true) {
-
-									//SINC
-									this.sincron.ventas = true;
-									//this.sync_anulados();
-								}else{
-
-									this.showAlert();
-								}
-							}).catch(e => {
-								console.log(e.response)
-								this.error = true;
-								this.cambiar()
-							})
-							}else{
-								//SINC
-								this.sincron.ventas = true;
-								//this.sync_anulados();
-							}
+							console.log('Actualizando cajas vaciadas en Prometheus');							
 						}).catch(e => {
 							console.log(e.response)
 							this.error = true;
 							this.cambiar()
-						})
-					}).catch(e => {
-						console.log(e.response)
-						this.error = true;
-						this.cambiar()
-					})
+						});
+					}else{
+						this.alert_success = true
+						this.alert_message = "No hay cajas vaciadas nuevas..."
+						console.log('No hay cajas vaciadas nuevas');						
 
+					}
 				}).catch(e => {
 					console.log(e.response)
 					this.error = true;
 					this.cambiar()
 				});
+			}).catch(e => {
+				console.log(e.response)
+				this.error = true;
+				this.cambiar()
+			});
 
-				//ACTUALIZAR MONTO EN LA WEB
-				axios.put('http://www.mipuchito.com/api/actualizar-dinero-piso-venta/'+this.id, {dinero: this.piso_venta_selected.dinero}).then(response => {//EN LA WEB
+			//OBTENEMOS MI ID DE PISO DE VENTA
+			axios.get('http://localhost/pisos_de_venta/public/api/get-piso-venta-id').then(response => {
+				console.log(response);
+				let piso_venta_id = response.data;
+				//OBTENEMOS DE LA WEB LA ULTIMA VENTA QUE TIENE REGISTRADA CON NUESTRO PISO DE VENTA
+				this.alert_success = true
+				this.alert_message = "Buscando la ultima venta registrada en Prometheus..."
+				console.log('Buscando la ultima venta registrada en Prometheus '+piso_venta_id)
+				axios.get('http://www.mipuchito.com/api/ultima-venta/'+piso_venta_id).then(response => {//WEB
 					console.log(response);
-					console.log('5ta peticion');
-					//SINC
-					this.sincron.montos = true;
-				}).catch(e => {
-					console.log(e.response);
-					this.error = true;
-					this.cambiar()
-				});
+					let ultima_venta = response.data.created_at
+					console.log('Ultima venta guardada en prometheus');
+					console.log(ultima_venta)				
 
-				//ACTUALIZAR VACIADAS DE CAJA
-
-				//SOLICITAMOS EL ULTIMO QUE TENGA
-				axios.get('http://www.mipuchito.com/api/ultima-vaciada-caja/'+this.id).then(response => {//WEB
-					console.log(response);
-					console.log('6ta peticion')
-					let ultima_caja = response.data;
-					if(ultima_caja == null){
-						ultima_caja = 0;
-					}
-					//SOLICITAMOS LAS VACIADAS QUE TENGO EN LOCAL
-					axios.get('http://localhost/pisos_de_venta/public/api/ultima-vaciada-caja-local/'+ultima_caja.id_extra).then(response => {
+					//OBTENEMOS TODAS LAS VENTAS QUE SEAN MAYOR AL ID_EXTRA QUE ACABO DE CONSEGUIR
+					axios.get('http://localhost/pisos_de_venta/public/api/ventas-sin-registrar/'+piso_venta_id+'/'+ultima_venta).then(response => {
 						console.log(response);
-						console.log('7 peticion')
-						let cajas = response.data;
+						console.log('Buscando ventas sin registrar')
+						let ventas = response.data
+						console.log(ventas);
+						//VALIDACION SI TRAJO ALGUNA VENTA
+						if (ventas.length > 0) {
 
-						if (cajas.length > 0) {
-
-							axios.post('http://www.mipuchito.com/api/registrar-cajas', {cajas: cajas}).then(response => {//WEB
+							//EN ESE CASO REGISTRAMOS LAS VENTAS EN LA WEB
+							this.alert_success = true
+							this.alert_message = "Enviando nuevas ventas a Prometheus..."
+							console.log('Enviando nuevas ventas a Prometheus')
+							axios.post('http://www.mipuchito.com/api/registrar-ventas', {ventas: ventas, piso_venta_id: piso_venta_id}).then(response => {
 								console.log(response);
+
+								console.log('Ventas registradas exitosamente')
+								this.sin_ventas = true
+
 								axios.post('http://www.mipuchito.com/api/sincronizacion', {id: this.id}).then(response => {
 									console.log(response);
+									this.alert_success = true
+									this.alert_message = "Terminando Sincronizacion..."
 									axios.post('http://localhost/pisos_de_venta/public/api/sincronizacion', {id: this.id}).then(response => {
-										console.log('Sincronizar listo');
+										console.log('Terminando Sincronizacion');
 										console.log(response);
-										console.log('8 peticion')
 										//SINC
-										this.sincron.vaciar_caja = true;
-										this.sincro_exitosa = true;
-										this.cambiar()
-										window.location="http://localhost/pisos_de_venta/public/ventas";
+										//this.sincron.vaciar_caja = true;
+										//this.sincro_exitosa = true;
+										//this.cambiar()
+										if (this.sin_ventas == true) {
+											window.location="http://localhost/pisos_de_venta/public/ventas";										
+										}
+										//window.location="http://localhost/pisos_de_venta/public/ventas";
+
 									}).catch(e => {
 										console.log(e.response)
 										this.error = true;
@@ -524,23 +519,40 @@ export default{
 									this.error = true;
 									this.cambiar()
 								});
+								if (response.data == true) {
+
+									//SINC
+									//this.sincron.ventas = true;
+									//this.sync_anulados();
+								}else{
+
+									this.showAlert();
+								}
 							}).catch(e => {
 								console.log(e.response)
 								this.error = true;
 								this.cambiar()
-							});
+							})
 						}else{
+							this.alert_success = true
+							this.alert_message = "No hay ventas nuevas que registrar..."
+							console.log('No hay ventas nuevas que registrar');
+							this.sin_ventas = true
 							axios.post('http://www.mipuchito.com/api/sincronizacion', {id: this.id}).then(response => {
 								console.log(response);
+								this.alert_success = true
+								this.alert_message = "Terminando Sincronizacion..."
 								axios.post('http://localhost/pisos_de_venta/public/api/sincronizacion', {id: this.id}).then(response => {
 									console.log('Sincronizar listo');
 									console.log(response);
+									console.log('Terminando Sincronizacion')
 									//SINC
-									this.sincron.vaciar_caja = true;
-									this.sincro_exitosa = true;
-									this.cambiar()
-									window.location="http://localhost/pisos_de_venta/public/ventas";
-
+									//this.sincron.vaciar_caja = true;
+									//this.sincro_exitosa = true;
+									//this.cambiar()
+									if (this.sin_ventas == true) {
+										window.location="http://localhost/pisos_de_venta/public/ventas";										
+									}
 								}).catch(e => {
 									console.log(e.response)
 									this.error = true;
@@ -551,18 +563,26 @@ export default{
 								this.error = true;
 								this.cambiar()
 							});
-
+							//SINC
+							//this.sincron.ventas = true;
+							//this.sync_anulados();
 						}
 					}).catch(e => {
-					console.log(e.response)
-					this.error = true;
-					this.cambiar()
-					});
+						console.log(e.response)
+						this.error = true;
+						this.cambiar()
+					})
 				}).catch(e => {
 					console.log(e.response)
 					this.error = true;
 					this.cambiar()
-				});
+				})
+
+			}).catch(e => {
+				console.log(e.response)
+				this.error = true;
+				this.cambiar()
+			});			
 
 		},
 		cambiar(){
@@ -714,8 +734,9 @@ export default{
 				//OBTENEMOS DE LA WEB LA ULTIMA VENTA QUE TIENE REGISTRADA CON NUESTRO PISO DE VENTA
 				axios.get('http://mipuchito.com/api/ultima-venta/'+piso_venta_id).then(response => {//WEB
 
-					let ultima_venta = response.data.id_extra
-						//console.log(ultima_venta)
+					let ultima_venta = response.data.created_at
+					console.log('Ultima venta guardada en prometheus');
+					console.log(ultima_venta)
 						//OBTENEMOS TODAS LAS VENTAS QUE SEAN MAYOR AL ID_EXTRA QUE ACABO DE CONSEGUIR
 					axios.get('http://localhost/pisos_de_venta/public/api/ventas-sin-registrar/'+piso_venta_id+'/'+ultima_venta).then(response => {
 

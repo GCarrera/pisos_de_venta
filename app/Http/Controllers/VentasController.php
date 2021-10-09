@@ -394,6 +394,7 @@ class VentasController extends Controller
 
         //$ventas = Venta::with('detalle', 'detalle.precio')->where('piso_venta_id', $piso_venta)->where('id_extra', '>', $id)->get();        
         $ventas = Venta::with('detalle', 'detalle.precio')->where('piso_venta_id', $piso_venta)->where('created_at', '>', $id)->where('status', 1)->limit(1555)->get();        
+        //$ventas = Venta::with('detalle', 'detalle.precio')->where('piso_venta_id', $piso_venta)->where('created_at', '>', '2021-10-05 16:08:12')->where('created_at', '<', '2021-10-08 12:30:12')->where('status', 1)->limit(1555)->get();        
 
         DB::commit();
 
