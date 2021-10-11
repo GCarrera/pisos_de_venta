@@ -84,7 +84,7 @@ class VentasController extends Controller
 			}
 		}
 
-    	return response()->json($inventarioSelect);
+    	return response()->json(['select' => $inventarioSelect, 'inventario' => $inventario]);
     }
 
     public function store(Request $request)

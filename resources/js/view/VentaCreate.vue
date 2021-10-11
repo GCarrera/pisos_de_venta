@@ -207,7 +207,8 @@
 							this.inventario.push(datos);
 						}
 					});*/
-					this.inventario = response.data
+					this.inventario_completo = response.data.inventario
+					this.inventario = response.data.select
 					console.log("Why??");
 					console.log("luego del forEach");
 					console.log(this.inventario);
