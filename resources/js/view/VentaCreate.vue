@@ -196,17 +196,19 @@
 					//this.inventario_completo = response.data
 					//this.inventario_compra = response.data
 					console.log("axios get datos");
-					response.data.forEach(item => {
+					/*response.data.forEach(item => {
 						if (item.inventario != null) {
 							let price = new Intl.NumberFormat("de-DE", {minimumFractionDigits: 2, maximumFractionDigits: 2}).format(item.inventario.precio.total_menor * this.dolar)
 							//console.log(price);
-							let prico = item.inventario.precio.total_menor * this.dolar
+							//let prico = item.inventario.precio.total_menor * this.dolar
 							//console.log(prico);
 							let datos = {value: item.inventario.id , text: item.inventario.name+' - '+price}
 							this.inventario_completo.push(item);
 							this.inventario.push(datos);
 						}
-					});
+					});*/
+					this.inventario = response.data
+					console.log("Why??");
 					console.log("luego del forEach");
 					console.log(this.inventario);
 

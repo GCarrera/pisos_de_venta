@@ -7,6 +7,7 @@ use App\Venta;
 use Illuminate\Support\Facades\Auth;
 use App\Inventario_piso_venta;
 use App\Detalle_venta;
+use App\Dolar;
 use DB;
 use App\Inventory;
 use App\Inventario;
@@ -69,7 +70,21 @@ class VentasController extends Controller
 
     	$inventario = Inventario_piso_venta::with('inventario.precio')->where('cantidad', '>', 0.000)->where('piso_venta_id', $usuario)->get();
 
-    	return response()->json($inventario);
+		$dolar = Dolar::orderby('id','DESC')->first();
+
+		setlocale(LC_MONETARY, 'it_IT');
+		
+		foreach ($inventario as $key => $value) {
+			if ($value['inventario'] != NULL) {
+				$price = $value['inventario']['precio']['total_menor'] * $dolar->price;
+				$price = number_format($price, 2, ',', '.');
+				$precio = $value['inventario']['name'].' - '.$price;
+				$datos = ['value' => $value['inventario']['id'], 'text' => $precio];
+				$inventarioSelect[] = $datos;
+			}
+		}
+
+    	return response()->json($inventarioSelect);
     }
 
     public function store(Request $request)
