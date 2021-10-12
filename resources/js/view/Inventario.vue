@@ -234,9 +234,17 @@
 						console.log('Actualizar inventory products y sofdelete');
 						console.log(response);
 						if (response.data) {
-							this.cambiar_aud();
-							window.location="http://localhost/pisos_de_venta/public/inventario";
-							console.log("EXITO");
+							axios.post('http://www.mipuchito.com/api/auditorias', {id: this.id}).then(response => {
+								console.log('Cambiando status en Prometheus');
+								console.log(response);
+								this.cambiar_aud();
+								window.location="http://localhost/pisos_de_venta/public/inventario";
+								console.log("EXITO");
+							}).catch(e => {
+								console.log(e.response)
+								this.error = true;
+								this.cambiar_aud();
+							});
 						}
 						//this.sincro_exitosa = true
 					}).catch(e => {
