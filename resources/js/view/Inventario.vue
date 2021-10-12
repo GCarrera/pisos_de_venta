@@ -32,29 +32,52 @@
 							</div>
 							</button>
 
-							<button class="btn btn-primary btn-block" v-b-modal.modal-auditoria>
+							<button class="btn btn-primary btn-block" v-b-modal.modal-auditoriap>
+								<span v-if="loading_audp == false">Auditoria Parcial</span>
+								<div class="spinner-border text-light text-center" role="status" v-if="loading_audp == true">
+								  	<span class="sr-only">Cargando...</span>
+								</div>
+							</button>
 
-							<span v-if="loading_aud == false">Auditoria</span>
-							<div class="spinner-border text-light text-center" role="status" v-if="loading_aud == true">
-							  	<span class="sr-only">Cargando...</span>
-							</div>
+							<!-- MODAL AUDITORIA -->
+							<b-modal id="modal-auditoriap" size="sm" title="Modificar cantidad" @ok="handleOkp">
+								<div class="d-block text-center">
+									<p>¿Esta segur@ que desea proceder con la auditoria parcial?</p>
+								</div>
+								<template #modal-footer="{ ok, cancel }">
+								<!-- Emulate built in modal footer ok and cancel button actions -->
+									<b-button size="sm" variant="success" @click="ok()">
+										Continuar
+									</b-button>
+									<b-button size="sm" variant="danger" @click="cancel()">
+										Cancelar
+									</b-button>
+								</template>
+							</b-modal>
+							<!-- FIN MODAL AUDITORIA -->
+							
+							<button class="btn btn-primary btn-block" v-b-modal.modal-auditoria>
+								<span v-if="loading_aud == false">Auditoria Total</span>
+								<div class="spinner-border text-light text-center" role="status" v-if="loading_aud == true">
+								  	<span class="sr-only">Cargando...</span>
+								</div>
 							</button>
 
 							<!-- MODAL AUDITORIA -->
 							<b-modal id="modal-auditoria" size="sm" title="Modificar cantidad" @ok="handleOk">
-					      <div class="d-block text-center">
-									<p>¿Esta segura que desea proceder con la auditoria?</p>
-					      </div>
+								<div class="d-block text-center">
+									<p>¿Esta segura que desea proceder con la auditoria total?</p>
+								</div>
 								<template #modal-footer="{ ok, cancel }">
-						      <!-- Emulate built in modal footer ok and cancel button actions -->
-						      <b-button size="sm" variant="success" @click="ok()">
-						        Continuar
-						      </b-button>
-						      <b-button size="sm" variant="danger" @click="cancel()">
-						        Cancelar
-						      </b-button>
-						    </template>
-					    </b-modal>
+								<!-- Emulate built in modal footer ok and cancel button actions -->
+									<b-button size="sm" variant="success" @click="ok()">
+										Continuar
+									</b-button>
+									<b-button size="sm" variant="danger" @click="cancel()">
+										Cancelar
+									</b-button>
+								</template>
+							</b-modal>
 							<!-- FIN MODAL AUDITORIA -->
 
 							<!--<button class="btn btn-warning btn-block" @click="precios">Precios</button>-->
@@ -168,6 +191,7 @@
 				sincronizacion:'',
 				loading:false,
 				loading_aud:false,
+				loading_audp:false,
 				id:'',
 				error: false,
 				piso_venta_selected:[],
@@ -213,6 +237,42 @@
 							this.cambiar_aud();
 							window.location="http://localhost/pisos_de_venta/public/inventario";
 							console.log("EXITO");
+						}
+						//this.sincro_exitosa = true
+					}).catch(e => {
+						console.log(e.response)
+						this.error = true;
+						this.cambiar_aud();
+					});
+				}).catch(e => {
+					console.log(e.response)
+					this.error = true;
+					this.cambiar_aud();
+				});
+			},
+			handleOkp(){
+				this.cambiar_audp();
+				console.log("empieza audotioria parcial");
+				axios.post('http://www.mipuchito.com/api/auditoriap', {id: this.id}).then(response => {
+					console.log("data del servidor con cantidades del pv");
+					console.log(response);
+					let cantidades = response.data.cantidades;
+					console.log(cantidades);
+					axios.post('http://localhost/pisos_de_venta/public/api/auditoriap', {idpisoventa: this.id, cantidades: cantidades}).then(response => {
+						console.log('Actualizar cantidades');
+						console.log(response);
+						if (response.data) {
+							axios.post('http://www.mipuchito.com/api/auditorias', {id: this.id}).then(response => {
+								console.log('Cambiando status en Prometheus');
+								console.log(response);
+								this.cambiar_aud();
+								window.location="http://localhost/pisos_de_venta/public/inventario";
+								console.log("EXITO");
+							}).catch(e => {
+								console.log(e.response)
+								this.error = true;
+								this.cambiar_aud();
+							});							
 						}
 						//this.sincro_exitosa = true
 					}).catch(e => {
@@ -445,6 +505,9 @@
 
 			cambiar_aud(){
 				this.loading_aud = !this.loading_aud;
+			},
+			cambiar_audp(){
+				this.loading_audp = !this.loading_audp;
 			},
 			get_dolar() {
 				axios.get('http://localhost/pisos_de_venta/public/api/get-dolar').then(response =>{

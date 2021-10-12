@@ -220,6 +220,75 @@ class InventarioController extends Controller
 
     }
     
+    public function auditoriap(Request $request)
+    {
+
+      try{
+
+          DB::beginTransaction();
+          $return = "Comienzo";                
+          
+          foreach ($request->cantidades as $value) {
+
+            $idinventory = $value['inventario']['inventory_id'];
+            $pisoventa = $value['piso_venta_id'];
+
+            $cantidadnew = (isset($value['cantidad'])) ? $value['cantidad'] : 0; 
+            
+            $inventario = Inventario::where('inventory_id', $idinventory)->first();
+            if (isset($inventario->id)) {
+              $idinventario = $inventario->id;
+              //return response()->json($cantidadnew);
+              $invpv = Inventario_piso_venta::where('inventario_id', $idinventario)->first();
+              if (isset($invpv->id)) {
+                $invpv->cantidad = $cantidadnew;
+                $invpv->save();
+              } else {
+                $cantidad = new Inventario_piso_venta();
+                  $cantidad->inventario_id = $idinventario;
+                  $cantidad->cantidad = $cantidadnew;
+                  $cantidad->piso_venta_id = $pisoventa;
+                  $cantidad->save();
+              }
+            } else {
+              $inventory = Inventory::where('id', $idinventory)->first();
+              if (isset($inventory->id)) {
+                $articulo = new Inventario();
+                $articulo->name = $inventory['product_name'];
+                $articulo->unit_type_mayor = $inventory['unit_type'];
+                $articulo->unit_type_menor = $inventory['unit_type_menor'];
+                $articulo->inventory_id = $inventory['id'];
+                $articulo->status = $inventory['status'];
+                $articulo->piso_venta_id = $pisoventa;
+                $articulo->save();
+
+                $invpv = Inventario_piso_venta::where('inventario_id', $articulo->id)->first();
+                if (isset($invpv->id)) {
+                  $invpv->cantidad = $cantidadnew;
+                  $invpv->save();
+                } else {
+                  $cantidad = new Inventario_piso_venta();
+                  $cantidad->inventario_id = $articulo->id;
+                  $cantidad->cantidad = $cantidadnew;
+                  $cantidad->piso_venta_id = $pisoventa;
+                  $cantidad->save();
+                }
+              }
+            }
+          }
+
+          DB::commit();
+
+          return response()->json($return);
+
+      }catch(Exception $e){
+
+          DB::rollback();
+          return response()->json($e);
+      }
+
+    }
+    
     public function auditoriabk(Request $request)
     {
 

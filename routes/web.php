@@ -64,6 +64,7 @@ Route::prefix('api')->group(function(){
 	Route::post('/borrar-inventory', 'InventarioController@deleted_inventory');
 	Route::get('/get-precios-inventory', 'InventarioController@get_precios_inventory');//WEB
   	Route::post('/auditoria', 'InventarioController@auditoria');//AUDITORIA
+  	Route::post('/auditoriap', 'InventarioController@auditoriap');//AUDITORIA PARCIAL
   	Route::post('/all-product-price', 'InventarioController@all_product_price');//Actualizar Precios
 
 
