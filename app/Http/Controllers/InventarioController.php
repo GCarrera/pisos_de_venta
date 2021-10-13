@@ -593,7 +593,7 @@ class InventarioController extends Controller
                 $product->updated_at = $producto['updated_at'];
                 $product->save();
               } else {
-                /*$product = new Product();
+                $product = new Product();
                 $product->cost = $producto['cost'];
                 $product->iva_percent = $producto['iva_percent'];
                 $product->retail_margin_gain = $producto['retail_margin_gain'];
@@ -607,7 +607,8 @@ class InventarioController extends Controller
                 $product->wholesale_iva_amount = $producto['wholesale_iva_amount'];
                 $product->oferta = $producto['oferta'];
                 $product->inventory_id = $producto['inventory_id'];
-                $product->save();*/
+                $product->updated_at = $producto['updated_at'];
+                $product->save();
               }
 
               $idinventario = Inventario::where('inventory_id', $producto['inventory_id'])->first();
@@ -617,10 +618,23 @@ class InventarioController extends Controller
                   $precio->costo = $producto['cost'];
                   $precio->iva_porc = $producto['iva_percent'];
                   $precio->iva_menor = $producto['retail_iva_amount'];
+                  $precio->sub_total_menor = $producto['retail_total_price'];
                   $precio->total_menor = $producto['retail_total_price'];
                   $precio->iva_mayor = $producto['wholesale_iva_amount'];
                   $precio->total_mayor = $producto['wholesale_total_individual_price'];
                   $precio->oferta = $producto['oferta'];
+                  $precio->save();
+                } else {
+                  $precio = new Precio();
+                  $precio->costo = $producto['cost'];
+                  $precio->iva_porc = $producto['iva_percent'];
+                  $precio->iva_menor = $producto['retail_iva_amount'];
+                  $precio->sub_total_menor = $producto['retail_total_price'];
+                  $precio->total_menor = $producto['retail_total_price'];
+                  $precio->iva_mayor = $producto['wholesale_iva_amount'];
+                  $precio->total_mayor = $producto['wholesale_total_individual_price'];
+                  $precio->oferta = $producto['oferta'];                  
+                  $precio->inventario_id = $idinventario->id;
                   $precio->save();
                 }
               }
