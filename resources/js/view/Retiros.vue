@@ -164,15 +164,18 @@
 			 //SOLICITO LOS PISOS DE VENTAS Y PRODUCTOS
 			 axios.get('http://localhost/pisos_de_venta/public/api/ventas-datos-create').then(response => {
 
-				 this.inventario = response.data
-				 //this.inventario_compra = response.data
-				 console.log(this.inventario);
+        this.inventario = response.data
+        //this.inventario_compra = response.data
+        console.log(this.inventario);
 
-				 this.inventario.forEach(item => {
-					 let datos = {value: item.id, text: item.inventario.name}
-           this.inventarioSelect.push(datos);
-				 });
-				 console.log(this.inventarioSelect);
+        /*this.inventario.forEach(item => {
+          let datos = {value: item.id, text: item.inventario.name}
+          this.inventarioSelect.push(datos);
+        });*/
+        this.inventario = response.data.inventario
+				this.inventarioSelect = response.data.select
+
+				console.log(this.inventarioSelect);
 			 }).catch(e => {
 				 console.log(e.response)
 			 });
