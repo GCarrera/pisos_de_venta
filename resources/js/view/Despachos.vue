@@ -285,7 +285,7 @@
 										}
 
 										console.log("fuera del if si hay retiros en la web");
-										axios.post('http://mipuchito.com/api/sincronizacion', {id: this.id}).then(response => {
+										axios.post('http://www.mipuchito.com/api/sincronizacion', {id: this.id}).then(response => {
 											axios.post('http://localhost/pisos_de_venta/public/api/sincronizacion', {id: this.id}).then(response => {
 
 												this.cambiar()
@@ -330,7 +330,7 @@
 							});
 						} else {
 							console.log("no hay despachos sin confirmar");
-							axios.post('http://mipuchito.com/api/sincronizacion', {id: this.id}).then(response => {
+							axios.post('http://www.mipuchito.com/api/sincronizacion', {id: this.id}).then(response => {
 								axios.post('http://localhost/pisos_de_venta/public/api/sincronizacion', {id: this.id}).then(response => {
 									//console.log("No hay despachos sin confirmar");
 									this.cambiar()
