@@ -175,8 +175,8 @@
         this.inventario = response.data.inventario
 				this.inventarioSelect = response.data.select
 
-				console.log(this.inventarioSelect);
-				console.log(this.inventario);
+				//console.log(this.inventarioSelect);
+				//console.log(this.inventario);
 			 }).catch(e => {
 				 console.log(e.response)
 			 });
@@ -238,7 +238,8 @@
        axios.post('http://localhost/pisos_de_venta/public/api/despachos-retiro', {productos: this.productos, piso_venta: this.id}).then(response => {
          console.log(response)
          var idlocal = response.data;
-         axios.post('http://mipuchito.com/api/store-retiro', {productos: this.productos, piso_venta: this.id}).then(response => {
+         window.location="http://localhost/pisos_de_venta/public/despachos";
+         /*axios.post('http://www.mipuchito.com/api/store-retiro', {productos: this.productos, piso_venta: this.id}).then(response => {
            console.log(response);
            var idextra = response.data;
            //this.despachos.splice(0,0, response.data);
@@ -253,14 +254,12 @@
              }).catch(e => {
                console.log(e.response)
                this.error = true;
-               this.cambiar()
              });
 
          }).catch(e => {
            console.log(e.response)
            this.error = true;
-           this.cambiar()
-         });
+         });*/
        }).catch(e => {
 
          console.log(e.response)
