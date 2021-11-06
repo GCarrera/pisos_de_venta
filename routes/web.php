@@ -88,6 +88,9 @@ Route::prefix('api')->group(function(){
 	Route::get('/get-despachos-sin-confirmacion/{piso_venta_id}', 'DespachosController@get_despachos_sin_confirmacion');
 	Route::post('/get-despachos-confirmados', 'DespachosController@get_despachos_confirmados');
 	Route::post('/actualizar-confirmados', 'DespachosController@actualizar_confirmaciones');
+	Route::get('/get-despachos-guardados', 'DespachosController@get_despachos_guardados');
+	Route::post('/actualizar-despachos-guardados', 'DespachosController@actualizar_guardados');
+
 
 	Route::post('/get-despachos-web', 'DespachosController@get_despachos_web');
 	Route::get('/ultimo-despacho', 'DespachosController@ultimo_despacho');

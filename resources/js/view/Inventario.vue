@@ -572,6 +572,7 @@
 
 				}).catch(e => {
 					console.log(e.response)
+					location.reload()
 				});
 			}
 		},

@@ -284,6 +284,38 @@
 
 										}
 
+										axios.get('http://localhost/pisos_de_venta/public/api/get-despachos-guardados/').then(response => {
+											console.log(response);
+											var despachosGuardados = response.data;
+											console.log("despachos guardados en pv");
+											console.log(despachosGuardados);
+											if (despachosGuardados.length > 0) {
+												axios.post('http://www.mipuchito.com/api/get-despachos-no-guardados', {despachos: despachosGuardados}).then(response => {
+													console.log("despachos no guardados en prometheus");
+													console.log(response);
+													var despachosNoguardados = response.data
+													console.log(despachosNoguardados);
+
+													axios.post('http://localhost/pisos_de_venta/public/api/actualizar-despachos-guardados', {despachos: despachosNoguardados}).then(response => {														
+														console.log(response);
+													}).catch(e => {
+														console.log(e.response)
+														this.error = true;
+														this.cambiar()
+													});
+
+												}).catch(e => {
+													console.log(e.response)
+													this.error = true;
+													this.cambiar()
+												});
+											}
+										}).catch(e => {
+											console.log(e.response)
+											this.error = true;
+											this.cambiar()
+										});
+
 										console.log("fuera del if si hay retiros en la web");
 										axios.post('http://www.mipuchito.com/api/sincronizacion', {id: this.id}).then(response => {
 											axios.post('http://localhost/pisos_de_venta/public/api/sincronizacion', {id: this.id}).then(response => {
@@ -330,6 +362,39 @@
 							});
 						} else {
 							console.log("no hay despachos sin confirmar");
+
+							axios.get('http://localhost/pisos_de_venta/public/api/get-despachos-guardados/'+this.id).then(response => {
+								var despachosGuardados = response.data;
+								console.log("despachos guardados en pv");
+								console.log(despachosGuardados);
+								if (despachosGuardados.length > 0) {
+									axios.post('http://www.mipuchito.com/api/get-despachos-no-guardados', {despachos: despachosGuardados}).then(response => {
+
+										console.log("despachos no guardados en prometheus");
+										console.log(response);
+										var despachosNoguardados = response.data
+										console.log(despachosNoguardados);
+
+										axios.post('http://localhost/pisos_de_venta/public/api/actualizar-despachos-guardados', {despachos: despachosNoguardados}).then(response => {														
+											console.log(response);
+										}).catch(e => {
+											console.log(e.response)
+											this.error = true;
+											this.cambiar()
+										});
+
+									}).catch(e => {
+										console.log(e.response)
+										this.error = true;
+										this.cambiar()
+									});
+								}
+							}).catch(e => {
+								console.log(e.response)
+								this.error = true;
+								this.cambiar()
+							});
+
 							axios.post('http://www.mipuchito.com/api/sincronizacion', {id: this.id}).then(response => {
 								axios.post('http://localhost/pisos_de_venta/public/api/sincronizacion', {id: this.id}).then(response => {
 									//console.log("No hay despachos sin confirmar");
@@ -406,6 +471,7 @@
 					console.log(this.despachos)
 				}).catch(e => {
 					console.log(e.response)
+					location.reload()
 				});
 			},
 			paginar(event){
