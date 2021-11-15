@@ -255,7 +255,7 @@ class DespachosController extends Controller
                                 $q->where('inventory_id', $producto['pivot']['inventory_id']);
                             })->where('piso_venta_id', $despacho['piso_venta_id'])->orderBy('id', 'desc')->first();
                             //SI NO ENCUENTRA EL PRODUCTO LO REGISTRA
-                            if ($inventario['id'] == null) {
+                            if (isset($inventario->id)) {
                                 $articulo = new Inventario();
                                 $articulo->name = $producto['product_name'];
                                 $articulo->unit_type_mayor = $producto['unit_type'];
