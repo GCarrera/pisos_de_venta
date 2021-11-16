@@ -78,25 +78,25 @@ class DespachosController extends Controller
             }])->findOrFail($request->id);
             $despacho->confirmado = 1;
             $despacho->save();
-
+            
             foreach ($despacho->productos as $valor) {
                 //RESTAMOS DE INVENTORY DE PROMETHEUS
-                $inventario = Inventory::findOrFail($valor->id);
-                $inventario->total_qty_prod -= $valor->pivot->cantidad;
-                $inventario->quantity = $inventario->total_qty_prod / $inventario->qty_per_unit;
-                $inventario->save();
+                $inventorie = Inventory::findOrFail($valor->id);
+                $inventorie->total_qty_prod -= $valor->pivot->cantidad;
+                $inventorie->quantity = $inventorie->total_qty_prod / $inventorie->qty_per_unit;
+                $inventorie->save();
                 //BUSCAMOS EL ID EN INVENTARIO
-                $producto = Inventario::select('id', 'name')->where('inventory_id', $valor->pivot->inventory_id)->orderBy('id', 'desc')->first();
-
+                $producto = Inventario::select('id', 'name')->where('inventory_id', $valor->id)->orderBy('id', 'desc')->first();
+                
                 if (isset($producto->id)) {
                     $inventario = Inventario_piso_venta::with('inventario')->where('piso_venta_id', $usuario)->where('inventario_id', $producto->id)->orderBy('id', 'desc')->first();
 
-                    if ($inventario['id'] == null) {
-                        $inventario = new Inventario_piso_venta();
-                        $inventario['inventario_id'] = $producto->id;
-                        $inventario['piso_venta_id'] = $usuario;
-                        $inventario['cantidad'] = $valor->pivot->cantidad;
-                        $inventario->save();
+                    if (!isset($inventario['id'])) {
+                        $newinventario = new Inventario_piso_venta();
+                        $newinventario['inventario_id'] = $producto->id;
+                        $newinventario['piso_venta_id'] = $usuario;
+                        $newinventario['cantidad'] = $valor->pivot->cantidad;
+                        $newinventario->save();
                     }else{
                         //SI ES UN DESPACHO O ES UN RETIRO
                         if($despacho->type == 1){
@@ -239,8 +239,8 @@ class DespachosController extends Controller
                     $registro->save();
 
                     foreach ($despacho['productos'] as $producto) {
-                    $inventarioval = Inventory::select('id')->where('id', $producto['pivot']['inventory_id'])->exists();
-                    //return response()->json($inventarioval);
+                        $inventarioval = Inventory::select('id')->where('id', $producto['pivot']['inventory_id'])->exists();
+                        //return response()->json($inventarioval);
                         if ($inventarioval) {
                             // SI EXITE EL PRODUCTO EN INVENTARIO
                             //REGISTRAMOS LOS PRODUCTOS
@@ -250,8 +250,8 @@ class DespachosController extends Controller
                             $detalles->inventory_id = $producto['pivot']['inventory_id'];
                             $detalles->save();
 
-                            //Agregar a Inventario
-                            $inventario = Inventario_piso_venta::whereHas('inventario', function($q)use($producto){
+                            //Agregar a Inventario - Se comento porque causaba duplicidad en los productos
+                            /*$inventario = Inventario_piso_venta::whereHas('inventario', function($q)use($producto){
                                 $q->where('inventory_id', $producto['pivot']['inventory_id']);
                             })->where('piso_venta_id', $despacho['piso_venta_id'])->orderBy('id', 'desc')->first();
                             //SI NO ENCUENTRA EL PRODUCTO LO REGISTRA
@@ -281,13 +281,13 @@ class DespachosController extends Controller
                                 $precio->save();
                                 //$precio->costo =
                                 //REGISTRA LA CANTIDAD EN EL INVENTARIO DEL PISO DE VENTA
-                                /*
+                                
                                 $inventario = new Inventario_piso_venta();
                                 $inventario->inventario_id = $articulo->id;
                                 $inventario->piso_venta_id = $despacho['piso_venta_id'];
                                 $inventario->cantidad = $producto['pivot']['cantidad'];
                                 $inventario->save();
-                                */
+                                
                             }else{
                                 //SI ES UN DESPACHO O UN RETIRO
                                 /*if($registro->type == 1){
@@ -297,8 +297,9 @@ class DespachosController extends Controller
                                     $inventario->cantidad -= $producto['pivot']['cantidad'];
                                     $inventario->save();
                                 }
-                                */
+                                
                             }
+                            */
                         } else {
                             // SI NO EXISTE EL PRODUCTO EN INVENTARIO
                             // ENVIAR ERROR DE SINCRONIZAR INVENTARIO PRIMERO
@@ -308,7 +309,7 @@ class DespachosController extends Controller
                         }
 
 
-                    //return response()->json($inventarioval);
+                        //return response()->json($inventarioval);
 
 
                     }

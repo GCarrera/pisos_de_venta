@@ -73,14 +73,20 @@ class VentasController extends Controller
 		$dolar = Dolar::orderby('id','DESC')->first();
 
 		setlocale(LC_MONETARY, 'it_IT');
+
+		//return response()->json(['select' => $dolar]);
 		
 		foreach ($inventario as $key => $value) {
 			if ($value['inventario'] != NULL) {
-				$price = $value['inventario']['precio']['total_menor'] * $dolar->price;
-				$price = number_format($price, 2, ',', '.');
-				$precio = $value['inventario']['name'].' - '.$price;
-				$datos = ['value' => $value['inventario']['id'], 'text' => $precio];
-				$inventarioSelect[] = $datos;
+				if (isset($value['inventario']['precio']['total_menor'])) {
+					$price = $value['inventario']['precio']['total_menor'] * $dolar->price;
+					$price = number_format($price, 2, ',', '.');
+					$precio = $value['inventario']['name'].' - '.$price;
+					$datos = ['value' => $value['inventario']['id'], 'text' => $precio];
+					$inventarioSelect[] = $datos;
+				} else {
+					return response()->json(['select' => $value]);
+				}
 			}
 		}
 
