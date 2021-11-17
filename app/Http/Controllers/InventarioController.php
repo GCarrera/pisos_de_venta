@@ -474,6 +474,21 @@ class InventarioController extends Controller
             DB::beginTransaction();
             foreach ($request->productos as $producto) {
 
+              $invselect = Inventory::withTrashed()->select('id')->where('id', $producto['id'])->first();
+
+              if (isset($invselect->id)) {
+                $invselect->product_name = $producto['product_name'];
+                $invselect->description = $producto['description'];
+                $invselect->quantity = $producto['quantity'];
+                $invselect->unit_type = $producto['unit_type'];
+                $invselect->unit_type_menor = $producto['unit_type_menor'];
+                $invselect->qty_per_unit = $producto['qty_per_unit'];
+                $invselect->status = $producto['status'];
+                $invselect->total_qty_prod = $producto['total_qty_prod'];
+                $invselect->updated_at = $producto['updated_at'];
+                $invselect->deleted_at = NULL;
+                $invselect->save();
+              } else {
                 $inventory = new Inventory();
                 $inventory->id = $producto['id'];
                 $inventory->product_name = $producto['product_name'];
@@ -517,6 +532,8 @@ class InventarioController extends Controller
                   }
 
                 }
+              }
+                              
             }
 
             DB::commit();
@@ -561,7 +578,7 @@ class InventarioController extends Controller
         }catch(Exception $e){
 
             DB::rollback();
-            return response()->json($e);
+            return response()->json($e).' - Variable: -'.$inventory;
         }
 
     }
