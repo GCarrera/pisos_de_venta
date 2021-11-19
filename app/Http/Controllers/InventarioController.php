@@ -557,6 +557,7 @@ class InventarioController extends Controller
 
               $inventory = Inventory::withTrashed()->find($producto['id']);
 
+              if ($inventory) {
                 $inventory->product_name = $producto['product_name'];
                 $inventory->description = $producto['description'];
                 $inventory->quantity = $producto['quantity'];
@@ -568,8 +569,9 @@ class InventarioController extends Controller
                 $inventory->updated_at = $producto['updated_at'];
                 $inventory->deleted_at = NULL;
                 $inventory->save();
+              }            
                 
-              }
+            }
               
               DB::commit();
 
