@@ -3,7 +3,7 @@
 		<div class="container">
 			 <b-alert show variant="success" fade dismissible v-if="alert_success == true">{{alert_message}}</b-alert>
 
-		    <b-alert show variant="success" fade dismissible v-if="sincro_exitosa == true">sincronozacion exitosa</b-alert>
+		    <b-alert show variant="success" fade dismissible v-if="sincro_exitosa == true">sincronización exitosa</b-alert>
 
 		    <b-alert show variant="danger" fade dismissible v-if="error == true">ah ocurrido un error</b-alert>
 
@@ -159,6 +159,7 @@
 			sincronizar(){
 				this.error=false
 				this.cambiar()
+				this.alert_message = "Comenzando Sincronización"
 				this.sincro_exitosa = false
 				let ultimoDespacho = 0;
 				let nuevosDespachos = [];
@@ -329,7 +330,7 @@
 												if (this.error_message == null) {
 													console.log('vacio');
 													this.sincro_exitosa = true
-													window.location="http://localhost/pisos_de_venta/public/despachos";
+													setTimeout(() => window.location="http://localhost/pisos_de_venta/public/despachos", 5000);
 												}
 
 											}).catch(e => {
@@ -405,7 +406,7 @@
 									if (this.error_message == null) {
 										console.log('no error');
 										this.sincro_exitosa = true
-										window.location="http://localhost/pisos_de_venta/public/despachos";
+										setTimeout(() => window.location="http://localhost/pisos_de_venta/public/despachos", 5000);
 									}
 								}).catch(e => {
 									console.log(e.response)

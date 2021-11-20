@@ -238,7 +238,7 @@
 								console.log('Cambiando status en Prometheus');
 								console.log(response);
 								this.cambiar_aud();
-								window.location="http://localhost/pisos_de_venta/public/inventario";
+								setTimeout(() => window.location="http://localhost/pisos_de_venta/public/inventario", 5000);
 								console.log("EXITO");
 							}).catch(e => {
 								console.log(e.response)
@@ -274,7 +274,7 @@
 								console.log('Cambiando status en Prometheus');
 								console.log(response);
 								this.cambiar_aud();
-								window.location="http://localhost/pisos_de_venta/public/inventario";
+								setTimeout(() => window.location="http://localhost/pisos_de_venta/public/inventario", 5000);
 								console.log("EXITO");
 							}).catch(e => {
 								console.log(e.response)
@@ -476,8 +476,7 @@
 								axios.post('http://localhost/pisos_de_venta/public/api/sincronizacion', {id: this.id}).then(response => {
 									this.alert_success = false
 									this.sincro_exitosa = true
-									setTimeout(() => window.location="http://localhost/pisos_de_venta/public/inventario", 1000);
-									//window.location="http://localhost/pisos_de_venta/public/inventario";
+									setTimeout(() => window.location="http://localhost/pisos_de_venta/public/inventario", 5000);									
 								}).catch(e => {
 									console.log(e.response)
 									this.error = true;
