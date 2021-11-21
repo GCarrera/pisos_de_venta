@@ -72,36 +72,61 @@ class InventarioController extends Controller
             
             $product = Product::where('inventory_id', $value['id'])->first();
             if (isset($product->id)) {
-              $product->cost = $value['product']['cost'];
-              $product->iva_percent = $value['product']['iva_percent'];
-              $product->retail_margin_gain = $value['product']['retail_margin_gain'];
-              $product->retail_total_price = $value['product']['retail_total_price'];
-              $product->retail_iva_amount = $value['product']['retail_iva_amount'];
-              $product->image = $value['product']['image'];
-              $product->wholesale_margin_gain = $value['product']['wholesale_margin_gain'];
-              $product->wholesale_packet_price = $value['product']['wholesale_packet_price'];
-              $product->wholesale_total_individual_price = $value['product']['wholesale_total_individual_price'];
-              $product->wholesale_total_packet_price = $value['product']['wholesale_total_packet_price'];
-              $product->wholesale_iva_amount = $value['product']['wholesale_iva_amount'];
-              $product->oferta = $value['product']['oferta'];
-              $product->updated_at = $value['product']['updated_at'];
-              $product->save();
+              if (isset($value['product']['cost'])) {
+                $product->cost = $value['product']['cost'];
+                $product->iva_percent = $value['product']['iva_percent'];
+                $product->retail_margin_gain = $value['product']['retail_margin_gain'];
+                $product->retail_total_price = $value['product']['retail_total_price'];
+                $product->retail_iva_amount = $value['product']['retail_iva_amount'];
+                $product->image = $value['product']['image'];
+                $product->wholesale_margin_gain = $value['product']['wholesale_margin_gain'];
+                $product->wholesale_packet_price = $value['product']['wholesale_packet_price'];
+                $product->wholesale_total_individual_price = $value['product']['wholesale_total_individual_price'];
+                $product->wholesale_total_packet_price = $value['product']['wholesale_total_packet_price'];
+                $product->wholesale_iva_amount = $value['product']['wholesale_iva_amount'];
+                $product->oferta = $value['product']['oferta'];
+                $product->updated_at = $value['product']['updated_at'];
+                $product->save();
 
-              $return = "Product";
+                $return = "Product";
 
-              $idinventario = Inventario::where('inventory_id', $value['id'])->first();
-              if (isset($idinventario->id)) {
-                $precio = Precio::where('inventario_id', $idinventario->id)->first();
-                if (isset($precio->id)) {
-                  $precio->costo = $value['product']['cost'];
-                  $precio->iva_porc = $value['product']['iva_percent'];
-                  $precio->iva_menor = $value['product']['retail_iva_amount'];
-                  $precio->total_menor = $value['product']['retail_total_price'];
-                  $precio->iva_mayor = $value['product']['wholesale_iva_amount'];
-                  $precio->total_mayor = $value['product']['wholesale_total_individual_price'];
-                  $precio->oferta = $value['product']['oferta'];
-                  $precio->save();
+                $idinventario = Inventario::where('inventory_id', $value['id'])->first();
+                if (isset($idinventario->id)) {
+                  $precio = Precio::where('inventario_id', $idinventario->id)->first();
+                  if (isset($precio->id)) {
+                    $precio->costo = $value['product']['cost'];
+                    $precio->iva_porc = $value['product']['iva_percent'];
+                    $precio->iva_menor = $value['product']['retail_iva_amount'];
+                    $precio->total_menor = $value['product']['retail_total_price'];
+                    $precio->iva_mayor = $value['product']['wholesale_iva_amount'];
+                    $precio->total_mayor = $value['product']['wholesale_total_individual_price'];
+                    $precio->oferta = $value['product']['oferta'];
+                    $precio->save();
+                  } else {
+                    $precio = new Precio();
+                    $precio->costo = $value['product']['cost'];
+                    $precio->iva_porc = $value['product']['iva_percent'];
+                    $precio->iva_menor = $value['product']['retail_iva_amount'];
+                    $precio->total_menor = $value['product']['retail_total_price'];
+                    $precio->iva_mayor = $value['product']['wholesale_iva_amount'];
+                    $precio->total_mayor = $value['product']['wholesale_total_individual_price'];
+                    $precio->oferta = $value['product']['oferta'];
+                    $precio->sub_total_menor = $value['retail_total_price'] - $value['retail_iva_amount'];
+                    $precio->inventario_id = $idinventario->id;
+                    $precio->save();
+                  }
+
+                  $return = "Precio Update";
                 } else {
+                  $articulo = new Inventario();
+                  $articulo->name = $value['product_name'];
+                  $articulo->unit_type_mayor = $value['unit_type'];
+                  $articulo->unit_type_menor = $value['unit_type_menor'];
+                  $articulo->inventory_id = $value['id'];
+                  $articulo->status = $value['status'];
+                  $articulo->piso_venta_id = 2;
+                  $articulo->save();
+
                   $precio = new Precio();
                   $precio->costo = $value['product']['cost'];
                   $precio->iva_porc = $value['product']['iva_percent'];
@@ -110,36 +135,18 @@ class InventarioController extends Controller
                   $precio->iva_mayor = $value['product']['wholesale_iva_amount'];
                   $precio->total_mayor = $value['product']['wholesale_total_individual_price'];
                   $precio->oferta = $value['product']['oferta'];
-                  $precio->sub_total_menor = $value['retail_total_price'] - $value['retail_iva_amount'];
-                  $precio->inventario_id = $idinventario->id;
+                  $precio->sub_total_menor = $value['product']['retail_total_price'] - $value['product']['retail_iva_amount'];
+                  $precio->inventario_id = $articulo->id;
                   $precio->save();
+
+                  $return = "Precio New";
                 }
-
-                $return = "Precio Update";
               } else {
-                $articulo = new Inventario();
-                $articulo->name = $value['product_name'];
-                $articulo->unit_type_mayor = $value['unit_type'];
-                $articulo->unit_type_menor = $value['unit_type_menor'];
-                $articulo->inventory_id = $value['id'];
-                $articulo->status = $value['status'];
-                $articulo->piso_venta_id = 2;
-                $articulo->save();
-
-                $precio = new Precio();
-                $precio->costo = $value['product']['cost'];
-                $precio->iva_porc = $value['product']['iva_percent'];
-                $precio->iva_menor = $value['product']['retail_iva_amount'];
-                $precio->total_menor = $value['product']['retail_total_price'];
-                $precio->iva_mayor = $value['product']['wholesale_iva_amount'];
-                $precio->total_mayor = $value['product']['wholesale_total_individual_price'];
-                $precio->oferta = $value['product']['oferta'];
-                $precio->sub_total_menor = $value['product']['retail_total_price'] - $value['product']['retail_iva_amount'];
-                $precio->inventario_id = $articulo->id;
-                $precio->save();
-
-                $return = "Precio New";
+                //ESTO PUEDE OCURRIR POR PRODUCTOS ANTIGUOS QUE HAN SIDO ELIMINADOS - TRAE PRODUCTOS SIN PRECIOS
+                DB::rollback();
+                return response()->json(['error' => 'Prometheus Trajo un Producto Sin Precio', 'valor' => $value]);
               }
+                            
             }
           }          
           
@@ -215,7 +222,7 @@ class InventarioController extends Controller
       }catch(Exception $e){
 
           DB::rollback();
-          return response()->json($e);
+          return response()->json(['error' => $e, 'valor' => $value]);
       }
 
     }
@@ -812,6 +819,35 @@ class InventarioController extends Controller
         $inventario = Inventario::with('inventory')->get();
 
     	return $inventario;
+    }
+    
+    public function delete_dupli()
+    {
+
+        $inventario = DB::table('inventarios')->select('id', 'name')->get();
+        $duplicados = [];
+        $originals = [];
+        foreach ($inventario as $key => $value) {
+          $nombre = $value->name;
+          $comp = DB::table('inventarios')->select('id', 'name')->where('name', $nombre)->count();
+          if ($comp > 1) {
+            $notdupli = array_search($nombre, $originals, false);
+            if (!$notdupli) {
+              $originals[$value->id] = $value->name;
+            } else {
+              $duplicados[$value->id] = $value->name;
+            }
+          }
+        }
+
+        foreach ($duplicados as $key => $value) {
+          $inv_pv = DB::table('inventario_piso_ventas')->where('inventario_id', $key)->delete();
+          $ventas = DB::table('detalle_ventas')->where('inventario_id', $key)->delete();
+          $prices = DB::table('precios')->where('inventario_id', $key)->delete();
+          $invent = DB::table('inventarios')->where('id', $key)->delete();
+        }
+        
+        return $duplicados;
     }
 
 }

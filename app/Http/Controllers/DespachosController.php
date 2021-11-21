@@ -130,14 +130,14 @@ class DespachosController extends Controller
                         $inventariopv = Inventario_piso_venta::select('id')->where('inventario_id', $articulo->id)->first();
 
                         if (isset($inventariopv->id)) {
-                        $inventariopv->cantidad += $valor->pivot->cantidad;
-                        $inventariopv->save();
+                            $inventariopv->cantidad += $valor->pivot->cantidad;
+                            $inventariopv->save();
                         } else {
-                        $inventario = new Inventario_piso_venta();
-                        $inventario->inventario_id = $articulo->id;
-                        $inventario->piso_venta_id = $usuario;
-                        $inventario->cantidad = $valor->pivot->cantidad;
-                        $inventario->save();
+                            $inventario = new Inventario_piso_venta();
+                            $inventario->inventario_id = $articulo->id;
+                            $inventario->piso_venta_id = $usuario;
+                            $inventario->cantidad = $valor->pivot->cantidad;
+                            $inventario->save();
                         }
 
                         $precioval = Product::where('inventory_id', $valor->pivot->inventory_id)->first();
@@ -158,10 +158,14 @@ class DespachosController extends Controller
                             $precio->oferta = $precioval['oferta'];
                             $precio->inventario_id = $articulo->id;
                             $precio->save();
+                        } else {
+                            return response()->json(['Error' => "Falta Sincronizar Inventario por el Precio"]);
                         }
 
                         $nameproduct = $inventarioval->name;
 
+                    } else {
+                        return response()->json(['Error' => "Falta Sincronizar Inventario"]);
                     }
 
                 }
