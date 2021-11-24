@@ -12,6 +12,7 @@ use App\Inventory;
 use App\Despacho_detalle;
 use DB;
 use App\Precio;
+use App\Product;
 use Carbon\Carbon;
 //use App\Inventory;
 
@@ -85,6 +86,8 @@ class DespachosController extends Controller
                 $inventorie->total_qty_prod -= $valor->pivot->cantidad;
                 $inventorie->quantity = $inventorie->total_qty_prod / $inventorie->qty_per_unit;
                 $inventorie->save();
+
+
                 //BUSCAMOS EL ID EN INVENTARIO
                 $producto = Inventario::select('id', 'name')->where('inventory_id', $valor->id)->orderBy('id', 'desc')->first();
                 
@@ -119,12 +122,12 @@ class DespachosController extends Controller
 
                     if (isset($inventarioval->id)) {
                         $articulo = new Inventario();
-                        $articulo->name = $inventarioval->name;
+                        $articulo->name = $inventarioval->product_name;
                         $articulo->unit_type_mayor = $inventarioval->unit_type_mayor;
                         $articulo->unit_type_menor = $inventarioval->unit_type_menor;
                         $articulo->inventory_id = $inventarioval->inventory_id;
                         $articulo->status = $inventarioval->status;
-                        $articulo->piso_venta_id = $inventarioval->piso_venta_id;
+                        $articulo->piso_venta_id = $usuario;
                         $articulo->save();
 
                         $inventariopv = Inventario_piso_venta::select('id')->where('inventario_id', $articulo->id)->first();
@@ -162,7 +165,7 @@ class DespachosController extends Controller
                             return response()->json(['Error' => "Falta Sincronizar Inventario por el Precio"]);
                         }
 
-                        $nameproduct = $inventarioval->name;
+                        $nameproduct = $inventarioval->product_name;
 
                     } else {
                         return response()->json(['Error' => "Falta Sincronizar Inventario"]);

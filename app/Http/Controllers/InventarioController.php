@@ -564,7 +564,7 @@ class InventarioController extends Controller
 
               $inventory = Inventory::withTrashed()->find($producto['id']);
 
-              if ($inventory) {
+              if (isset($inventory->id)) {
                 $inventory->product_name = $producto['product_name'];
                 $inventory->description = $producto['description'];
                 $inventory->quantity = $producto['quantity'];

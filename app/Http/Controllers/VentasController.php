@@ -85,7 +85,8 @@ class VentasController extends Controller
 					$datos = ['value' => $value['inventario']['id'], 'text' => $precio];
 					$inventarioSelect[] = $datos;
 				} else {
-					return response()->json(['select' => $value]);
+					//PARA COMPROBAR PRODUCTOS SIN PRECIOS
+					//return response()->json(['select' => $value]);
 				}
 			}
 		}
