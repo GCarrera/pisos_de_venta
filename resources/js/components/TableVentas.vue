@@ -70,7 +70,7 @@
 
 						      		<div class="row">
 						      			<div class="col-md-7">
-						      				
+
 						      			</div>
 
 						      			<div class="col-md-2 text-right">
@@ -87,7 +87,7 @@
 							   				<br>
 							      			<span>{{venta.total}}</span>
 						      			</div>
-						      			
+
 						      		</div>
 						      	</div>
 						     	<div class="modal-footer">
@@ -136,7 +136,7 @@
 				ventas: [],
 				pagination: {//PAGINACION DE RIMORSOFT
 				 'total' : 0,
-   				'current_page' : 0, 
+   				'current_page' : 0,
                 'per_page' : 0,
                 'last_page' : 0,
                 'from' : 0,
@@ -153,8 +153,8 @@
 			},
 			get_ventas(id){
 
-				axios.get('http://localhost/pisos_de_venta/public/api/ventas-compras', {params:{fecha_i: this.fecha_inicial, fecha_f: this.fecha_final}}).then(response => {
-					
+				axios.get(location.origin + '/api/ventas-compras', {params:{fecha_i: this.fecha_inicial, fecha_f: this.fecha_final}}).then(response => {
+
 					this.ventas = response.data.data;
 					this.pagination = response.data;
 					console.log(response);
@@ -167,11 +167,11 @@
 			},
 			getKeeps(page){
 
-				axios.get('http://localhost/pisos_de_venta/public/api/ventas-compras/'+'?page='+page).then(response => {
+				axios.get(location.origin + '/api/ventas-compras/'+'?page='+page).then(response => {
 					console.log(response.data)
 					this.ventas = response.data.data;
 					this.pagination = response.data;
-			
+
 				}).catch(e => {
 					console.log(e.response)
 				});

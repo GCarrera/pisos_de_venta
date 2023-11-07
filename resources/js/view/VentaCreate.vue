@@ -190,7 +190,7 @@
 			},
 			get_datos(){
 				//SOLICITO LOS PISOS DE VENTAS Y PRODUCTOS
-				axios.get('http://localhost/pisos_de_venta/public/api/ventas-datos-create').then(response => {
+				axios.get(location.origin + '/api/ventas-datos-create').then(response => {
 
 					console.log(response);
 					//this.inventario_completo = response.data
@@ -218,7 +218,7 @@
 				});
 			},
 			get_dolar() {
-				axios.get('http://localhost/pisos_de_venta/public/api/get-dolar').then(response =>{
+				axios.get(location.origin + '/api/get-dolar').then(response =>{
 					console.log(response)
 					this.dolar = response.data.dolar;
 					this.dolaro = response.data.dolaro;
@@ -319,7 +319,7 @@
 
 				// 	)
 				//AGREGAR PRECIO DOLAR AQUI
-				axios.post('http://localhost/pisos_de_venta/public/api/ventas',
+				axios.post(location.origin + '/api/ventas',
 					{venta:
 						{
 							sub_total: this.sub_total,
@@ -459,7 +459,7 @@
 				console.log("funcion mostar_total_total_dolar");
 				console.log(this.total_total);
 				//AGREGAR PRECIO DOLAR AQUI
-				let total = this.total_total/this.dolaro;				
+				let total = this.total_total/this.dolaro;
 				let n = new Intl.NumberFormat("de-DE", {minimumFractionDigits: 2}).format(total)
 				//let a = n +",00"
 				return n

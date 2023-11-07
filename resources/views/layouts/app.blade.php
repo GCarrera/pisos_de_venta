@@ -163,8 +163,8 @@
 
                         <h6 class="font-weight-bold text-success text-center">Dolar Trabajo: <span id="spanDolarAct"></span> / Dolar Oficial: <span id="spanDolarO"></span></h6>
 
-                        <p class="text-center">Establesca un nuevo precio.</p>                        
-            
+                        <p class="text-center">Establesca un nuevo precio.</p>
+
                         <form action="{{ action('PisoVentasController@establecer_dolar')}}" method="post">
                             @csrf
                             <div class="text-center">
@@ -182,7 +182,7 @@
 
               	</div>
             	</div>
-          </div>            
+          </div>
             <!-- Modal -->
             <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
@@ -213,7 +213,7 @@
                         {{ session('errordolar') }}
                     </div>
                 </div>
-            @endif            
+            @endif
             @yield('content')
         </main>
     </div>
@@ -234,7 +234,7 @@
             }
         });
     };
-    
+
     function formattMoneyO(){
         $("#precioo").on({
             "focus": function (event) {
@@ -249,7 +249,7 @@
             }
         });
     };
-    
+
 
   $(document).ready( function () {
 
@@ -257,7 +257,7 @@
     setTimeout(function(){ $('.toast').toast('hide'); }, 10000);
 
     $.get({
-      url : `http://localhost/pisos_de_venta/public/api/get-dolar`
+      url : location.origin + '/api/get-dolar'
     })
     .done((data) => {
         console.log(data);

@@ -29,11 +29,11 @@
 					        		</button>
 					      		</div>
 					      		<div class="modal-body">
-					     			
+
 					      			<h5 class="text-center font-weight-bold">{{producto.inventario.name}}</h5>
 
 					      			<table class="table table-bordered">
-					      	
+
 					      				<thead>
 					      					<tr>
 					      						<th>propiedades</th>
@@ -46,31 +46,31 @@
 					      					<tr>
 					      						<th>Cantidad</th>
 					      						<td>{{producto.cantidad}}</td>
-					      				
+
 					      					</tr>
-					      					
+
 					      					<tr>
 					      						<th>Unidad</th>
 					      						<td>{{producto.inventario.unit_type_menor}}</td>
-					      					
+
 					      					</tr>
 
 					      					<tr>
 					      						<td>Subtotal</td>
 					      						<td>{{producto.inventario.precio.sub_total_menor}}</td>
-					      					
+
 					      					</tr>
 
 					      					<tr>
 					      						<td>Iva</td>
 					      						<td>{{producto.inventario.precio.iva_menor}}</td>
-					      					
+
 					      					</tr>
 
 					      					<tr>
 					      						<td>Total</td>
 					      						<td>{{producto.inventario.precio.total_menor}}</td>
-					      			
+
 					      					</tr>
 
 
@@ -124,7 +124,7 @@
 				productos: [],
 				pagination: {//PAGINACION DE RIMORSOFT
 				 'total' : 0,
-   				'current_page' : 0, 
+   				'current_page' : 0,
                 'per_page' : 0,
                 'last_page' : 0,
                 'from' : 0,
@@ -136,8 +136,8 @@
 		methods:{
 			get_productos(id){
 
-				axios.get('http://localhost/pisos_de_venta/public/api/productos-piso-venta/'+id).then(response => {
-					
+				axios.get(location.origin + '/api/productos-piso-venta/'+id).then(response => {
+
 					this.productos = response.data.data;
 					this.pagination = response.data;
 					console.log(response.data);
@@ -147,11 +147,11 @@
 			},
 			getKeeps(page){
 
-				axios.get('http://localhost/pisos_de_venta/public/api/productos-piso-venta/'+this.id+'?page='+page).then(response => {
+				axios.get(location.origin + '/api/productos-piso-venta/'+this.id+'?page='+page).then(response => {
 					console.log(response.data)
 					this.productos = response.data.data;
 					this.pagination = response.data;
-			
+
 				}).catch(e => {
 					console.log(e.response)
 				});

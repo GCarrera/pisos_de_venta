@@ -11,6 +11,16 @@
 |
 */
 
+Route::get('/respaldo', function(){
+	// shell_exec('mysql -u "$MYSQL_USERNAME" -p "$MYSQL_PASSWORD" "$MYSQL_DATABASE"');
+	$dbusername = config('database.connections.mysql.username');
+	$dbpassword = config('database.connections.mysql.password');
+	$dbdatabase = config('database.connections.mysql.database');
+
+	shell_exec("mysqldump -u $dbusername -p$dbpassword $dbdatabase > respaldo.sql");
+	return response()->download(public_path('respaldo.sql'));
+});
+
 Route::get('/', function () {
     return view('index');
 })->name('index');
@@ -30,7 +40,7 @@ Route::get('/compras', 'ComprasController@index')->name('compras.index')->middle
 //DESPACHOS ALMACEN
 Route::get('/despachos-almacen', 'DespachosController@index_almacen')->name('despachos.almacen.index')->middleware('session');
 Route::get('/despachos/create', 'DespachosController@create')->name('despachos.create');
-//Route::post('/despachos-almacen', 'DespachosController@store')->name('despachos.store'); 
+//Route::post('/despachos-almacen', 'DespachosController@store')->name('despachos.store');
 //SOLICITUDES
 Route::get('/solicitudes', 'PisoVentasController@solicitudes')->name('solicitudes.index');
 

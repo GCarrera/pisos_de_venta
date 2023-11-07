@@ -225,7 +225,7 @@
 						} else {
 							this.prodState = true;
 
-							axios.post('http://localhost/pisos_de_venta/public/api/store-solicitud',
+							axios.post(location.origin + '/api/store-solicitud',
 							{
 								nombre: this.nombre,
 								telefono: this.telefono,
@@ -259,7 +259,7 @@
 					}
 
 					//TODAS LAS SOLICITUDES MAYORES AL ID-EXTRA WEB
-					axios.post('http://localhost/pisos_de_venta/public/api/last-solicitud', {id: this.id, idExtra: idExtra}).then(response => {
+					axios.post(location.origin + '/api/last-solicitud', {id: this.id, idExtra: idExtra}).then(response => {
 						console.log(response);
 						if (response.data != 0) {
 							//SE REGISTRAN LAS SOLICITUDES NUEVAS
@@ -274,7 +274,7 @@
 										var data = 0;
 									}
 									//BORRAR LAS SOLICITUDES EN LOCAL
-									axios.post('http://localhost/pisos_de_venta/public/api/finish-solicitud', {data: data}).then(response => {
+									axios.post(location.origin + '/api/finish-solicitud', {data: data}).then(response => {
 										console.log(response);
 										this.sincro_exitosa = true;
 										this.cambiar()
@@ -304,7 +304,7 @@
 									var data = 0;
 								}
 								//BORRAR LAS SOLICITUDES EN LOCAL
-								axios.post('http://localhost/pisos_de_venta/public/api/finish-solicitud', {data: data}).then(response => {
+								axios.post(location.origin + '/api/finish-solicitud', {data: data}).then(response => {
 									console.log(response);
 									this.sincro_exitosa = true;
 									this.cambiar()
@@ -343,7 +343,7 @@
 			},
 			get_piso_venta(){
 
-				axios.get('http://localhost/pisos_de_venta/public/api/get-piso-venta').then(response =>{
+				axios.get(location.origin + '/api/get-piso-venta').then(response =>{
 					this.piso_venta_selected = response.data.piso_venta;
 					this.id = response.data.piso_venta.id;
 					this.sincronizacion = response.data.sincronizacion.created_at;
@@ -355,7 +355,7 @@
 			},
 			get_solicitud(){
 
-				axios.get('http://localhost/pisos_de_venta/public/api/get-solicitudes', {params:{search: this.search}}).then(response => {
+				axios.get(location.origin + '/api/get-solicitudes', {params:{search: this.search}}).then(response => {
 					console.log('solicitudes');
 					console.log(response);
 					this.per_page = response.data.per_page;
@@ -368,7 +368,7 @@
 			},
 			paginar(event){
 
-				axios.get('http://localhost/pisos_de_venta/public/api/get-solicitudes?page='+event).then(response => {
+				axios.get(location.origin + '/api/get-solicitudes?page='+event).then(response => {
 					console.log(response.data)
 					this.per_page = response.data.per_page;
 					this.total_paginas = response.data.total;

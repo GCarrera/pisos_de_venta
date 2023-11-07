@@ -157,10 +157,10 @@
 		        loading: false
 			}
 		},
-		methods:{			
+		methods:{
 			resumen(){
 
-				axios.get('http://localhost/pisos_de_venta/public/api/resumen').then(response => {
+				axios.get(location.origin + '/api/resumen').then(response => {
 					//console.log(response);
 					this.count = response.data;
 
@@ -169,7 +169,7 @@
 				});
 			},
 			get_id(){
-				axios.get('http://localhost/pisos_de_venta/public/api/get-id').then(response => {
+				axios.get(location.origin + '/api/get-id').then(response => {
 					this.id = response.data;
 				}).catch(e => {
 					console.log(e.response);
@@ -177,7 +177,7 @@
 			},
 			get_piso_venta(){
 
-				axios.get('http://localhost/pisos_de_venta/public/api/get-piso-venta').then(response =>{
+				axios.get(location.origin + '/api/get-piso-venta').then(response =>{
 					console.log(response)
 					this.piso_venta_selected = response.data.piso_venta;
 					this.sincronizacion = response.data.sincronizacion.created_at;
@@ -190,7 +190,7 @@
 			},
 			vaciar_caja(){
 
-				axios.post('http://localhost/pisos_de_venta/public/api/vaciar-caja').then(response => {
+				axios.post(location.origin + '/api/vaciar-caja').then(response => {
 
 					console.log(response.data);
 
@@ -208,7 +208,7 @@
 				//VENTAS
 
 				//OBTENEMOS MI ID DE PISO DE VENTA
-				axios.get('http://localhost/pisos_de_venta/public/api/get-piso-venta-id').then(response => {
+				axios.get(location.origin + '/api/get-piso-venta-id').then(response => {
 					let piso_venta_id = response.data;
 					//console.log(piso_venta_id)
 					//OBTENEMOS DE LA WEB LA ULTIMA VENTA QUE TIENE REGISTRADA CON NUESTRO PISO DE VENTA
@@ -218,7 +218,7 @@
 						//console.log(ultima_venta)
 
 						//OBTENEMOS TODAS LAS VENTAS QUE SEAN MAYOR AL ID_EXTRA QUE ACABO DE CONSEGUIR
-						axios.get('http://localhost/pisos_de_venta/public/api/ventas-sin-registrar/'+piso_venta_id+'/'+ultima_venta).then(response => {
+						axios.get(location.origin + '/api/ventas-sin-registrar/'+piso_venta_id+'/'+ultima_venta).then(response => {
 
 							console.log(response.data)
 							let ventas = response.data
@@ -290,7 +290,7 @@
 						ultima_caja = 0;
 					}
 					//SOLICITAMOS LAS VACIADAS QUE TENGO EN LOCAL
-					axios.get('http://localhost/pisos_de_venta/public/api/ultima-vaciada-caja-local/'+ultima_caja.id_extra).then(response => {
+					axios.get(location.origin + '/api/ultima-vaciada-caja-local/'+ultima_caja.id_extra).then(response => {
 
 						console.log(response)
 						let cajas = response.data;
@@ -336,7 +336,7 @@
 
 
 				//SICRONIZACION
-				axios.post('http://localhost/pisos_de_venta/public/api/sincronizacion', {id: this.id}).then(response => {
+				axios.post(location.origin + '/api/sincronizacion', {id: this.id}).then(response => {
 					console.log(response);
 
 					axios.post('http://mipuchito.com/api/sincronizacion', {id: this.id}).then(response => {//WEB
@@ -378,7 +378,7 @@
 						ultima_caja = 0;
 					}
 					//SOLICITAMOS LAS VACIADAS QUE TENGO EN LOCAL
-					axios.get('http://localhost/pisos_de_venta/public/api/ultima-vaciada-caja-local/'+ultima_caja.id_extra).then(response => {
+					axios.get(location.origin + '/api/ultima-vaciada-caja-local/'+ultima_caja.id_extra).then(response => {
 
 						console.log(response)
 						let cajas = response.data;
@@ -410,7 +410,7 @@
 				let ventas = [];
 				//ANULADOS
 				//OBTENEMOS LOS PRODCUTOS QUE HALLAN SIDO ANULADOS
-				axios.get('http://localhost/pisos_de_venta/public/api/get-ventas-anuladas').then(response => {
+				axios.get(location.origin + '/api/get-ventas-anuladas').then(response => {
 					console.log(response)
 					let ventas = response.data;
 					console.log(ventas.length)
@@ -420,7 +420,7 @@
 
 							console.log(response);
 							//VOLVEMOS A ACTUALIZAR EN LOCAL
-							axios.post('http://localhost/pisos_de_venta/public/api/actualizar-anulados-local').then(response => {
+							axios.post(location.origin + '/api/actualizar-anulados-local').then(response => {
 								//SINC
 								this.sincron.anulados = true
 								console.log(response)

@@ -1,13 +1,13 @@
 <template>
-	<div>	
+	<div>
 		<div class="container">
 			<div class="card">
 				<div class="card-body">
 					<h1 class="text-center">Despachos-almacen</h1>
 					<div class="mb-3">
 						<div class="row justify-content-between">
-							<div class="col-12 col-md-4">			
-					
+							<div class="col-12 col-md-4">
+
 							</div>
 							<div class="col-12 col-md-4">
 								<div class="ml-auto">
@@ -16,11 +16,11 @@
 									</button>
 									<button type="button" class="btn btn-danger" @click="showModalRetiro">Retirar</button>
 								</div>
-							</div>		
-							
+							</div>
+
 						</div>
 					</div>
-					
+
 					<table class="table table-bordered table-sm table-hover table-striped">
 						<thead>
 							<tr>
@@ -35,7 +35,7 @@
 							<tr v-for="(despacho, index) in despachos" :key="index">
 								<td>{{despacho.created_at}} {{despacho.id}}</td>
 								<td>{{despacho.piso_venta.nombre}}</td>
-								<th>{{despacho.type == 1? "despacho" : "retiro"}}</th>		
+								<th>{{despacho.type == 1? "despacho" : "retiro"}}</th>
 								<td v-if="despacho.confirmado == null" class="small font-weight-bold">No se ah confirmado</td>
 								<td v-else class="small font-weight-bold">{{despacho.confirmado == 1 ? "confirmado" : "negado"}}</td>
 								<td>
@@ -54,7 +54,7 @@
 								        		</button>
 								      		</div>
 								      		<div class="modal-body">
-								        	
+
 								      		<table class="table table-bordered">
 											<thead>
 												<tr>
@@ -94,9 +94,9 @@
 
 		<!-- Modal NUEVO DESPACHO-->
 		<b-modal id="modal-nuevo" size="lg" title="Realizar un nuevo despacho" hide-footer>
-		
+
 		      		<form action="/despachos-almacen" method="post" @submit.prevent="despachar()"><!--Formulario-->
-			      	
+
 				        <select class="form-control" v-model="piso_venta">
 						  <option value="">Seleccione un piso de venta</option>
 						  <option v-for="(piso, index) in piso_ventas" :key="index" :value="piso.id">{{piso.nombre}}</option>
@@ -142,7 +142,7 @@
 								</tr>
 							</tbody>
 						</table>
-			      	
+
 			      	<div class="modal-footer">
 			        	<button type="submit" class="btn btn-primary" data-dismiss="modal">Despachar</button>
 			      	</div>
@@ -153,9 +153,9 @@
 
 		<!-- Modal RETIRO DESPACHO-->
 		<b-modal id="modal-retiro" size="lg" title="Retirar productos de algun piso de venta" hide-footer>
-		
+
 		      		<form action="/despachos-almacen" method="post" @submit.prevent="retirar()"><!--Formulario-->
-			      	
+
 				        <select class="form-control" v-model="piso_venta_retiro" @change="buscar_inventario">
 						  <option value="">Seleccione un piso de venta</option>
 						  <option v-for="(piso, index) in piso_ventas" :key="index" :value="piso.id">{{piso.nombre}}</option>
@@ -204,7 +204,7 @@
 								</tr>
 							</tbody>
 						</table>
-			      	
+
 			      	<div class="modal-footer">
 			        	<button type="submit" class="btn btn-primary" data-dismiss="modal">Retirar</button>
 			      	</div>
@@ -252,7 +252,7 @@
 		methods:{
 			get_despachos(){
 
-				axios.get('http://localhost/pisos_de_venta/public/api/get-despachos-almacen').then(response => {
+				axios.get(location.origin + '/api/get-despachos-almacen').then(response => {
 					//console.log(response.data);
 					this.per_page = response.data.per_page;
 					this.total_paginas = response.data.total;
@@ -265,7 +265,7 @@
 			},
 			get_datos(){
 				//SOLICITO LOS PISOS DE VENTAS Y PRODUCTOS
-				axios.get('http://localhost/pisos_de_venta/public/api/despachos-datos-create').then(response => {
+				axios.get(location.origin + '/api/despachos-datos-create').then(response => {
 
 					console.log(response);
 					this.piso_ventas = response.data.piso_ventas
@@ -290,14 +290,14 @@
 
 					this.productos_retirar.push(this.articulo_retiro)
 					this.articulo_retiro = {id: "", nombre: "", cantidad: ""};
-				}else{	
+				}else{
 					this.productos.push(this.articulo);
-					
+
 					//console.log(this.productos)
 					this.articulo = {id: 0, nombre: "", cantidad: ""};
 				}
 
-				
+
 			},
 			eliminar(index, retiro){
 				if (retiro == "retiro") {
@@ -308,13 +308,13 @@
 				}
 			},
 			showModalNuevo(){
-				
+
 				this.get_datos();
 				this.$bvModal.show("modal-nuevo")
 			},
 			despachar(){
 
-				axios.post('http://localhost/pisos_de_venta/public/api/despachos', {productos: this.productos, piso_venta: this.piso_venta}).then(response => {
+				axios.post(location.origin + '/api/despachos', {productos: this.productos, piso_venta: this.piso_venta}).then(response => {
 					console.log(response)
 					this.articulo = {id: 0, nombre: "", cantidad: ""};
 					this.despachos.splice(0,0, response.data);
@@ -328,7 +328,7 @@
 			},
 			retirar(){
 
-				axios.post('http://localhost/pisos_de_venta/public/api/despachos', {productos: this.productos, piso_venta: this.piso_venta}).then(response => {
+				axios.post(location.origin + '/api/despachos', {productos: this.productos, piso_venta: this.piso_venta}).then(response => {
 					console.log(response)
 					this.articulo = {id: 0, nombre: "", cantidad: ""};
 					this.despachos.splice(0,0, response.data);
@@ -342,12 +342,12 @@
 			},
 			paginar(event){
 
-				axios.get('http://localhost/pisos_de_venta/public/api/get-despachos-almacen?page='+event).then(response => {
+				axios.get(location.origin + '/api/get-despachos-almacen?page='+event).then(response => {
 					console.log(response.data)
 					this.per_page = response.data.per_page;
 					this.total_paginas = response.data.total;
 					this.despachos = response.data.data
-			
+
 				}).catch(e => {
 					console.log(e.response)
 				});
@@ -363,7 +363,7 @@
 			},
 			retirar(){
 
-				axios.post('http://localhost/pisos_de_venta/public/api/despachos-retiro', {productos: this.productos_retirar, piso_venta: this.piso_venta_retiro}).then(response => {
+				axios.post(location.origin + '/api/despachos-retiro', {productos: this.productos_retirar, piso_venta: this.piso_venta_retiro}).then(response => {
 					console.log(response)
 					this.articulo_retiro = {id: "", nombre: "", cantidad: ""};
 					this.despachos.splice(0,0, response.data);
@@ -377,8 +377,8 @@
 			},
 			buscar_inventario(){
 				//console.log(this.piso_venta_retiro)
-				
-				axios.get('http://localhost/pisos_de_venta/public/api/inventario-piso-venta/'+this.piso_venta_retiro).then(response => {
+
+				axios.get(location.origin + '/api/inventario-piso-venta/'+this.piso_venta_retiro).then(response => {
 					console.log(response)
 					this.inventario_piso_venta = response.data
 					this.disab = false;
@@ -386,7 +386,7 @@
 				}).catch(e => {
 					console.log(e.response)
 				});
-				
+
 			},
 			establecer_nombre_retiro(id){
 

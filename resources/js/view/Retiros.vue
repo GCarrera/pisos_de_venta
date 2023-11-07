@@ -162,7 +162,7 @@
      get_datos(){
        console.log("get_datos");
 			 //SOLICITO LOS PISOS DE VENTAS Y PRODUCTOS
-			 axios.get('http://localhost/pisos_de_venta/public/api/ventas-datos-create').then(response => {
+			 axios.get(location.origin + '/api/ventas-datos-create').then(response => {
 
         //this.inventario = response.data
         //this.inventario_compra = response.data
@@ -182,7 +182,7 @@
 			 });
      },
      get_id(){
-       axios.get('http://localhost/pisos_de_venta/public/api/get-id').then(response => {
+       axios.get(location.origin + '/api/get-id').then(response => {
          this.id = response.data;
          console.log(this.id);
        }).catch(e => {
@@ -235,7 +235,7 @@
 
        console.log(this.productos);
 
-       axios.post('http://localhost/pisos_de_venta/public/api/despachos-retiro', {productos: this.productos, piso_venta: this.id}).then(response => {
+       axios.post(location.origin + '/api/despachos-retiro', {productos: this.productos, piso_venta: this.id}).then(response => {
          console.log(response)
          var idlocal = response.data;
          window.location="http://localhost/pisos_de_venta/public/despachos";
@@ -244,7 +244,7 @@
            var idextra = response.data;
            //this.despachos.splice(0,0, response.data);
 
-             axios.post('http://localhost/pisos_de_venta/public/api/id-extra-retiro', {despacho: idextra, local: idlocal}).then(response => {
+             axios.post(location.origin + '/api/id-extra-retiro', {despacho: idextra, local: idlocal}).then(response => {
 
                this.articulo = {id: 0, nombre: "", cantidad: ""};
                this.productos = [];

@@ -166,7 +166,7 @@
 				let despachosSinConfirmar = [];
 				let despachosConfirmados = [];
 				//ULTIMO DESPACHO RECIBIDO
-				axios.get('http://localhost/pisos_de_venta/public/api/ultimo-despacho').then(response => {
+				axios.get(location.origin + '/api/ultimo-despacho').then(response => {
 					//ID_EXTRA DEL ULTIMO DESPACHO REGISTRADO
 					console.log("Ultimo id_extra");
 					console.log(response);
@@ -191,7 +191,7 @@
 
 							console.log("hay despachos por registrar");
 							//REGISTRAR LOS DESPACHOS RECIBIDOS
-							axios.post('http://localhost/pisos_de_venta/public/api/registrar-despachos-piso-venta', {despachos: nuevosDespachos}).then(response => {//
+							axios.post(location.origin + '/api/registrar-despachos-piso-venta', {despachos: nuevosDespachos}).then(response => {//
 								console.log('registrar-despachos-piso-venta');
 								console.log(response);//SI REGISTRA DEBERIA DAR TRUE
 								if (response.data == true) {
@@ -229,7 +229,7 @@
 						if (despachosSinConfirmar.length > 0) {
 							console.log("Hay despachos sin confirmar en web");
 							//PEDIR LOS DATOS EN LOCAL DE LOS QUE NO ESTAN CONFIRMADOS EN LA WEB
-							axios.post('http://localhost/pisos_de_venta/public/api/get-despachos-confirmados', {despachos: despachosSinConfirmar}).then(response => {//
+							axios.post(location.origin + '/api/get-despachos-confirmados', {despachos: despachosSinConfirmar}).then(response => {//
 								console.log("despachos confirmados por pv");
 								console.log(response);
 								despachosConfirmados = response.data
@@ -253,7 +253,7 @@
 
 										if (ultimoretiro.created_at != null) {
 											console.log("hay un retiro en la web");
-											axios.post('http://localhost/pisos_de_venta/public/api/get-retiros-web', {id: ultimoretiro}).then(response => {
+											axios.post(location.origin + '/api/get-retiros-web', {id: ultimoretiro}).then(response => {
 
 												console.log("retiros nuevos");
 												console.log(response);
@@ -285,7 +285,7 @@
 
 										}
 
-										axios.get('http://localhost/pisos_de_venta/public/api/get-despachos-guardados/').then(response => {
+										axios.get(location.origin + '/api/get-despachos-guardados/').then(response => {
 											console.log(response);
 											var despachosGuardados = response.data;
 											console.log("despachos guardados en pv");
@@ -297,7 +297,7 @@
 													var despachosNoguardados = response.data
 													console.log(despachosNoguardados);
 
-													axios.post('http://localhost/pisos_de_venta/public/api/actualizar-despachos-guardados', {despachos: despachosNoguardados}).then(response => {														
+													axios.post(location.origin + '/api/actualizar-despachos-guardados', {despachos: despachosNoguardados}).then(response => {
 														console.log(response);
 													}).catch(e => {
 														console.log(e.response)
@@ -319,7 +319,7 @@
 
 										console.log("fuera del if si hay retiros en la web");
 										axios.post('http://www.mipuchito.com/api/sincronizacion', {id: this.id}).then(response => {
-											axios.post('http://localhost/pisos_de_venta/public/api/sincronizacion', {id: this.id}).then(response => {
+											axios.post(location.origin + '/api/sincronizacion', {id: this.id}).then(response => {
 
 												this.cambiar()
 												//console.log(response);
@@ -364,7 +364,7 @@
 						} else {
 							console.log("no hay despachos sin confirmar");
 
-							axios.get('http://localhost/pisos_de_venta/public/api/get-despachos-guardados/'+this.id).then(response => {
+							axios.get(location.origin + '/api/get-despachos-guardados/'+this.id).then(response => {
 								var despachosGuardados = response.data;
 								console.log("despachos guardados en pv");
 								console.log(despachosGuardados);
@@ -376,7 +376,7 @@
 										var despachosNoguardados = response.data
 										console.log(despachosNoguardados);
 
-										axios.post('http://localhost/pisos_de_venta/public/api/actualizar-despachos-guardados', {despachos: despachosNoguardados}).then(response => {														
+										axios.post(location.origin + '/api/actualizar-despachos-guardados', {despachos: despachosNoguardados}).then(response => {
 											console.log(response);
 										}).catch(e => {
 											console.log(e.response)
@@ -397,7 +397,7 @@
 							});
 
 							axios.post('http://www.mipuchito.com/api/sincronizacion', {id: this.id}).then(response => {
-								axios.post('http://localhost/pisos_de_venta/public/api/sincronizacion', {id: this.id}).then(response => {
+								axios.post(location.origin + '/api/sincronizacion', {id: this.id}).then(response => {
 									//console.log("No hay despachos sin confirmar");
 									this.cambiar()
 									this.sincron.despachos = true;
@@ -451,7 +451,7 @@
 			},
 			get_piso_venta(){
 
-				axios.get('http://localhost/pisos_de_venta/public/api/get-piso-venta').then(response =>{
+				axios.get(location.origin + '/api/get-piso-venta').then(response =>{
 					console.log(response)
 					this.piso_venta_selected = response.data.piso_venta;
 					this.sincronizacion = response.data.sincronizacion.created_at;
@@ -462,7 +462,7 @@
 			},
 			get_despachos(){
 
-				axios.get('http://localhost/pisos_de_venta/public/api/get-despachos').then(response => {
+				axios.get(location.origin + '/api/get-despachos').then(response => {
 					console.log('get_despachos');
 					console.log(response);
 					this.per_page = response.data.per_page;
@@ -477,7 +477,7 @@
 			},
 			paginar(event){
 
-				axios.get('http://localhost/pisos_de_venta/public/api/get-despachos?page='+event).then(response => {
+				axios.get(location.origin + '/api/get-despachos?page='+event).then(response => {
 					console.log(response.data)
 					this.per_page = response.data.per_page;
 					this.total_paginas = response.data.total;
@@ -494,7 +494,7 @@
 				console.log("confirmar despacho");
 				console.log(id);
 
-				axios.post('http://localhost/pisos_de_venta/public/api/confirmar-despacho', {id: id}).then(response => {
+				axios.post(location.origin + '/api/confirmar-despacho', {id: id}).then(response => {
 
 					console.log(response)
 					this.despachos.splice(index, 1, response.data);
@@ -508,7 +508,7 @@
 
 				this.cambiar_des();
 
-				axios.post('http://localhost/pisos_de_venta/public/api/negar-despacho', {id: id}).then(response => {
+				axios.post(location.origin + '/api/negar-despacho', {id: id}).then(response => {
 
 					console.log(response.data)
 					this.despachos.splice(index, 1, response.data);
@@ -520,17 +520,17 @@
 			},
 			get_id(){
 
-				axios.get('http://localhost/pisos_de_venta/public/api/get-id').then(response => {
+				axios.get(location.origin + '/api/get-id').then(response => {
 
 					this.id = response.data;
 
 				}).catch(e => {
 					console.log(e.response)
 				});
-			},			
+			},
 			sinconfirmacion(){
 				//PEDIR DE LA WEB LOS DESPACHOS QUE NO ESTAN CONFIRMADOS
-							axios.get('http://localhost/pisos_de_venta/public/api/get-despachos-sin-confirmacion/'+this.id).then(response => {
+							axios.get(location.origin + '/api/get-despachos-sin-confirmacion/'+this.id).then(response => {
 
 								console.log(response);
 

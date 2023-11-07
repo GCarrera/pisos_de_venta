@@ -21,7 +21,7 @@
 			<tbody>
 				<tr v-for="(despacho, index) in despachos" :key="index">
 					<td>{{despacho.created_at}} {{despacho.id}}</td>
-					<th>{{despacho.type == 1? "despacho" : "retiro"}}</th>		
+					<th>{{despacho.type == 1? "despacho" : "retiro"}}</th>
 					<td v-if="despacho.confirmado == null" class="small font-weight-bold">No se ah confirmado</td>
 					<td v-else class="small font-weight-bold">{{despacho.confirmado == 1 ? "confirmado" : "negado"}}</td>
 					<td>
@@ -39,7 +39,7 @@
 					        		</button>
 					      		</div>
 					      		<div class="modal-body">
-					        	
+
 					      		<table class="table table-bordered">
 								<thead>
 									<tr>
@@ -102,7 +102,7 @@
 				despachos: [],
 				pagination: {//PAGINACION DE RIMORSOFT
 				 'total' : 0,
-   				'current_page' : 0, 
+   				'current_page' : 0,
                 'per_page' : 0,
                 'last_page' : 0,
                 'from' : 0,
@@ -116,7 +116,7 @@
 		methods:{
 			get_despachos(id){
 
-				axios.get('http://localhost/pisos_de_venta/public/api/despachos-retiros/'+id, {params:{fecha_i: this.fecha_inicial, fecha_f: this.fecha_final}}).then(response => {
+				axios.get(location.origin + '/api/despachos-retiros/'+id, {params:{fecha_i: this.fecha_inicial, fecha_f: this.fecha_final}}).then(response => {
 
 					this.despachos = response.data.data;
 					this.pagination = response.data;
@@ -126,11 +126,11 @@
 			},
 			getKeeps(page){
 
-				axios.get('http://localhost/pisos_de_venta/public/api/despachos-retiros/'+this.id+'?page='+page, {params:{fecha_i: this.fecha_inicial, fecha_f: this.fecha_final}}).then(response => {
+				axios.get(location.origin + '/api/despachos-retiros/'+this.id+'?page='+page, {params:{fecha_i: this.fecha_inicial, fecha_f: this.fecha_final}}).then(response => {
 					console.log(response.data)
 					this.despachos = response.data.data;
 					this.pagination = response.data;
-			
+
 				}).catch(e => {
 					console.log(e.response)
 				});
